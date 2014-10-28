@@ -1,4 +1,4 @@
-<h1>tune-api-java</h1>
+<h2>tune-api-java</h2>
 <h2>Tune API SDK for Java 1.6</h2>
 <h3>Incorporate Tune API services.</h3>
 <h4>Update:  2014-10-27</h4>
@@ -47,7 +47,7 @@ To use SDK, it requires you to [Generate API Key](http://developers.mobileapptra
 
 Run the following script to view execution of all examples:
 ```bash
-    $ ./tune_examples.sh [API_KEY]
+    $ ./scripts/tune_examples.sh [API_KEY]
 ```
 
 <a name="sdk_unittests"></a>
@@ -55,8 +55,7 @@ Run the following script to view execution of all examples:
 
 Run the following script to view execution of all unittests:
 ```bash
-cd unittests/
-    $ ./tune_unittests.sh [API_KEY]
+    $ ./scripts/tune_tests.sh [API_KEY]
 ```
 
 <a name="license"></a>
