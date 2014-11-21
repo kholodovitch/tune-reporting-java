@@ -2,7 +2,7 @@
 tune-api-java
 Tune API SDK for Java 1.6
 Incorporate Tune API services.
-Update:  2014-10-27
+Update:  $Date: 2014-11-21 14:12:20 $
 Version: 0.9.0
 ****************************************
 
@@ -42,7 +42,6 @@ http://developers.mobileapptracking.com/generate-api-key/
 Installation
 =============
 
-
 -------------
 Via ZIP file:
 -------------
@@ -63,7 +62,7 @@ SDK Examples
 
 Run the following script to view execution of all examples:
 ```
-    $ ./scripts/tune_examples.sh [API_KEY]
+    $ make api_key=[API_KEY] examples
 ```
 
 -------------
@@ -72,7 +71,22 @@ SDK Unittests
 
 Run the following script to view execution of all unittests:
 ```
-    $ ./scripts/tune_tests.sh [API_KEY]
+    $ make api_key=[API_KEY] tests
+```
+
+-------------
+SDK Documentation
+-------------
+
+The following will generate [Javadoc](http://en.wikipedia.org/wiki/Javadoc) from java codebase:
+
+```
+    $ make docs-javadoc
+```
+The following will generate [Doxygen](http://en.wikipedia.org/wiki/Doxygen) from java codebase:
+
+```
+    $ make docs-doxygen
 ```
 
 =============
