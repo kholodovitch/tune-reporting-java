@@ -1,3 +1,5 @@
+package com.tune.sdk.management.shared.service;
+
 /**
  * QueryStringBuilder.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.shared.service
+ * @package   com.tune.sdk.management.shared.service
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-19 07:02:45 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.management.shared.service;
 
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
@@ -131,6 +131,9 @@ public class QueryStringBuilder {
 
     /**
      * URL query string element's name and value
+     *
+     * @param name
+     * @param value
      */
     private void encode(String name, String value) {
         try {
@@ -146,10 +149,19 @@ public class QueryStringBuilder {
         }
     }
 
+    /**
+     * Get query string.
+     * @return String
+     */
     public String getQuery() {
         return this.query_string;
     }
 
+    /**
+     * Get a String object representing this object.
+     *
+     * @return
+     */
     public String toString() {
         return this.getQuery();
     }

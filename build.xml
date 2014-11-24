@@ -1,9 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!--
 build.xml
-Tune_API_Java
-
-Example code using Tune SDK and how to handle Service Failures.
 
 Copyright (c) 2014 Tune, Inc
 All rights reserved.
@@ -13,10 +10,10 @@ of this software and associated documentation files (the "Software"), to deal
 in the Software without restriction, including without limitation the rights
 to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
 copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions: 
+furnished to do so, subject to the following conditions:
 
 The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software. 
+all copies or substantial portions of the Software.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -25,14 +22,16 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
-   
+
 tune-api-java
 Tune API SDK for Java 1.6
 Incorporate Tune API services.
-Update:  $Date: 2014-11-21 14:24:58 $
+Update:  $Date: 2014-11-24 13:38:13 $
 Version: 0.9.0
 -->
-<project basedir="." default="build" name="Tune_API_Java">
+<project basedir="."
+	 default="build"
+	 name="tune-java-sdk">
 	<property name="major-version-number" value="1" />
 	<property name="project-name" value="${ant.project.name}" />
 	<property environment="env"/>
@@ -40,24 +39,19 @@ Version: 0.9.0
 	<property name="debuglevel" value="source,lines,vars"/>
 	<property name="target" value="1.6"/>
 	<property name="source" value="1.6"/>
-	<property file="build.properties"/>
+
 	<property name="dir.main" value="./src/main/java" />
 	<property name="dir.test" value="./src/test/java" />
-	<property name="dir.example" value="./src/example/java" />
 	<property name="dir.javadoc" value="./docs/javadoc" />
 	<property name="dir.lib" value="./lib" />
-        
-	<property name="javadoc.version" value="0.9.0" />
+
+	<property name="build.name" value="tune-java-sdk" />
+	<property name="build.major.number" value="0" />
+	<property name="build.minor.number" value="9" />
+	<property name="build.revision.number" value="0" />
+
         <property name="javadoc.name" value="Tune API SDK for Java" />
-	<!--
-    <target name="increment">
-        <propertyfile file="build.properties">
-            <entry key="build.revision.number" type="int" operation="+" default="0"/>
-        </propertyfile>
-        <property file="build.properties"/>
-        <echo message="Build number is ${build.revision.number}"/>
-    </target>
-    -->
+
 	<path id="JUnit.libraryclasspath">
 		<pathelement location="lib/junit-4.10.jar"/>
 	</path>
@@ -71,9 +65,6 @@ Version: 0.9.0
 		<mkdir dir="dist"/>
 		<copy includeemptydirs="false" todir="bin">
 			<fileset dir="${dir.main}" excludes="**/*.launch, **/*.java"/>
-		</copy>
-		<copy includeemptydirs="false" todir="bin">
-			<fileset dir="${dir.example}" excludes="**/*.launch, **/*.java"/>
 		</copy>
 		<copy includeemptydirs="false" todir="bin">
 			<fileset dir="${dir.test}" excludes="**/*.launch, **/*.java"/>
@@ -113,16 +104,6 @@ Version: 0.9.0
 		       source="${source}"
 		       target="${target}"
 		       includeantruntime="false" >
-			<src path="${dir.example}"/>
-			<classpath refid="Tune_API_Java.classpath"/>
-			<compilerarg value="-Xlint:all"/>
-		</javac>
-		<javac debug="true"
-		       debuglevel="${debuglevel}"
-		       destdir="bin"
-		       source="${source}"
-		       target="${target}"
-		       includeantruntime="false" >
 			<src path="${dir.test}"/>
 			<classpath refid="Tune_API_Java.classpath"/>
 			<compilerarg value="-Xlint:all"/>
@@ -149,58 +130,58 @@ Version: 0.9.0
 	</target>
 	<!-- Run all example. -->
 	<target name="example">
-		<java classname="com.tune.sdk.ExampleClientAccountUsers"
+		<java classname="com.tune.sdk.examples.ExampleClientAccountUsers"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleItemsAccountUsers" failonerror="true" fork="yes">
+		<java classname="com.tune.sdk.examples.ExampleItemsAccountUsers" failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportActuals"
+		<java classname="com.tune.sdk.examples.ExampleReportActuals"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportClicks"
+		<java classname="com.tune.sdk.examples.ExampleReportClicks"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportCohort"
+		<java classname="com.tune.sdk.examples.ExampleReportCohort"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportEventItems"
+		<java classname="com.tune.sdk.examples.ExampleReportEventItems"
 		      failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportEvents"
+		<java classname="com.tune.sdk.examples.ExampleReportEvents"
 		      failonerror="true"
 		      fork="yes">
 		    <classpath refid="Tune_API_Java.classpath"/>
 		    <arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportInstalls"
+		<java classname="com.tune.sdk.examples.ExampleReportInstalls"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportPostbacks"
+		<java classname="com.tune.sdk.examples.ExampleReportPostbacks"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
-		<java classname="com.tune.sdk.ExampleReportRetention"
+		<java classname="com.tune.sdk.examples.ExampleReportRetention"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
@@ -209,7 +190,7 @@ Version: 0.9.0
 	</target>
 	<!-- Run specific example. -->
 	<target name="ExampleClientAccountUsers">
-		<java classname="com.tune.sdk.ExampleClientAccountUsers"
+		<java classname="com.tune.sdk.examples.ExampleClientAccountUsers"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
@@ -217,7 +198,7 @@ Version: 0.9.0
 		</java>
 	</target>
 	<target name="ExampleItemsAccountUsers">
-		<java classname="com.tune.sdk.ExampleItemsAccountUsers"
+		<java classname="com.tune.sdk.examples.ExampleItemsAccountUsers"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
@@ -225,7 +206,7 @@ Version: 0.9.0
 		</java>
 	</target>
 	<target name="ExampleReportActuals">
-		<java classname="com.tune.sdk.ExampleReportActuals"
+		<java classname="com.tune.sdk.examples.ExampleReportActuals"
 		      failonerror="true"
 		      fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
@@ -233,35 +214,35 @@ Version: 0.9.0
 		</java>
 	</target>
 	<target name="ExampleReportClicks">
-		<java classname="com.tune.sdk.ExampleReportClicks"
+		<java classname="com.tune.sdk.examples.ExampleReportClicks"
 		      failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
 	</target>
 	<target name="ExampleReportCohort">
-		<java classname="com.tune.sdk.ExampleReportCohort"
+		<java classname="com.tune.sdk.examples.ExampleReportCohort"
 		      failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
 	</target>
 	<target name="ExampleReportEventItems">
-		<java classname="com.tune.sdk.ExampleReportEventItems"
+		<java classname="com.tune.sdk.examples.ExampleReportEventItems"
 		      failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
 	</target>
 	<target name="ExampleReportEvents">
-		<java classname="com.tune.sdk.ExampleReportEvents"
+		<java classname="com.tune.sdk.examples.ExampleReportEvents"
 		      failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
 	</target>
 	<target name="ExampleReportInstalls">
-		<java classname="com.tune.sdk.ExampleReportInstalls"
+		<java classname="com.tune.sdk.examples.ExampleReportInstalls"
 		      failonerror="true"
 		      fork="yes"
 		      >
@@ -270,14 +251,14 @@ Version: 0.9.0
 		</java>
 	</target>
 	<target name="ExampleReportPostbacks">
-		<java classname="com.tune.sdk.ExampleReportPostbacks"
+		<java classname="com.tune.sdk.examples.ExampleReportPostbacks"
 		      failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
 		</java>
 	</target>
 	<target name="ExampleReportRetention">
-		<java classname="com.tune.sdk.ExampleReportRetention"
+		<java classname="com.tune.sdk.examples.ExampleReportRetention"
 		      failonerror="true" fork="yes">
 			<classpath refid="Tune_API_Java.classpath"/>
 			<arg value="${API_KEY}"/>
@@ -473,10 +454,10 @@ Version: 0.9.0
                          overview="README.html"
                          sourcepath="${dir.main}"
                          destdir="${dir.javadoc}"
-                         packagenames='*.*' 
-                         windowtitle='${javadoc.name} ${javadoc.version}'
-                         header='${javadoc.name} ${javadoc.version}'
-                         doctitle='${javadoc.name} ${javadoc.version}'
+                         packagenames='*.*'
+                         windowtitle='${javadoc.name} -- ${build.name}-${build.major.number}.${build.minor.number}.${build.revision.number}'
+                         header='${javadoc.name} -- ${build.name}-${build.major.number}.${build.minor.number}.${build.revision.number}'
+                         doctitle='${javadoc.name} -- ${build.name}-${build.major.number}.${build.minor.number}.${build.revision.number}'
                          linksource='true'
                          >
                     <classpath>

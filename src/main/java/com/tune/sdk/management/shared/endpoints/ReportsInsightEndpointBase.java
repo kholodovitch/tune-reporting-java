@@ -1,3 +1,5 @@
+package com.tune.sdk.management.shared.endpoints;
+
 /**
  * ReportsInsightEndpointBase.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.shared.endpoints
+ * @package   com.tune.sdk.management.shared.endpoints
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-21 11:11:02 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.management.shared.endpoints;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -188,7 +188,15 @@ public class ReportsInsightEndpointBase extends ReportsEndpointBase {
         );
     }
 
+    /**
+     * Validate value is expected cohort type.
+     *
+     * @param cohort_type
+     * @return
+     * @throws IllegalArgumentException
+     */
     public static Boolean validateCohortType(String cohort_type)
+    		throws IllegalArgumentException
     {
         if ((null == cohort_type) || cohort_type.isEmpty()) {
             throw new IllegalArgumentException(
@@ -205,7 +213,15 @@ public class ReportsInsightEndpointBase extends ReportsEndpointBase {
         return true;
     }
 
+    /**
+     * Validate value is expected cohort interval.
+     *
+     * @param cohort_interval
+     * @return
+     * @throws IllegalArgumentException
+     */
     public static Boolean validateCohortInterval(String cohort_interval)
+    		throws IllegalArgumentException
     {
         if ((null == cohort_interval) || cohort_interval.isEmpty()) {
             throw new IllegalArgumentException(
@@ -222,7 +238,15 @@ public class ReportsInsightEndpointBase extends ReportsEndpointBase {
         return true;
     }
 
+    /**
+     * Validate value is valid aggregation type.
+     *
+     * @param aggregation_type
+     * @return
+     * @throws IllegalArgumentException
+     */
     public static Boolean validateAggregationTypes(String aggregation_type)
+    		throws IllegalArgumentException
     {
         if ((null == aggregation_type) || aggregation_type.isEmpty()) {
             throw new IllegalArgumentException(
@@ -243,8 +267,9 @@ public class ReportsInsightEndpointBase extends ReportsEndpointBase {
      * Parse response and gather job identifier.
      *
      * @param response
-     * @return String job identifier.
+     * @return
      * @throws TuneServiceException
+     * @throws TuneSdkException
      */
     public static String parseResponseReportJobId(
         TuneManagementResponse response
@@ -290,6 +315,14 @@ public class ReportsInsightEndpointBase extends ReportsEndpointBase {
         return report_job_id;
     }
 
+    /**
+     * Parse response and gather report url.
+     *
+     * @param response
+     * @return
+     * @throws TuneSdkException
+     * @throws TuneServiceException
+     */
     public static String parseResponseReportUrl(
         TuneManagementResponse response
     ) throws TuneSdkException, TuneServiceException {

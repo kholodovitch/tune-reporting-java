@@ -1,3 +1,5 @@
+package com.tune.sdk.management.shared.service;
+
 /**
  * Response.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.shared.service
+ * @package   com.tune.sdk.management.shared.service
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-19 21:21:08 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.management.shared.service;
 
 import org.json.JSONObject;
 import org.json.JSONArray;
@@ -142,7 +142,9 @@ public class TuneManagementResponse {
     }
 
     /**
-     * @return mixed
+     * HTTP code returned within Tune Management API reponse.
+     *
+     * @return int
      */
     public int getHttpCode()
     {
@@ -154,7 +156,9 @@ public class TuneManagementResponse {
     }
 
     /**
-     * @return mixed
+     * HTTP headers returned within Tune Management API reponse.
+     *
+     * @return Map
      */
     public Map<String, List<String>> getHeaders()
     {
@@ -166,7 +170,9 @@ public class TuneManagementResponse {
     }
 
     /**
-     * @return string
+     * Get raw representing only the "data" response from Tune Management API.
+     *
+     * @return String
      */
     public String toStringRaw()
     {
@@ -187,7 +193,9 @@ public class TuneManagementResponse {
     }
 
     /**
-     * @return string
+     * Get a String object representing this response.
+     *
+     * @return String
      */
     public String toString()
     {
@@ -242,7 +250,9 @@ public class TuneManagementResponse {
     }
 
     /**
-     * @return mixed
+     * Return "data" contents of Tune Management API JSON response.
+     *
+     * @return JSONObject
      */
     public Object getData()
     {
@@ -260,7 +270,9 @@ public class TuneManagementResponse {
     }
 
     /**
-     * @return mixed
+     * Return "response_size" contents of Tune Management API JSON response.
+     *
+     * @return int
      */
     public int getResponseSize()
     {
@@ -276,7 +288,9 @@ public class TuneManagementResponse {
     }
 
     /**
-     * @return Integer
+     * Return "status_code" contents of Tune Management API JSON response.
+     *
+     * @return int
      */
     public int getStatusCode()
     {
@@ -292,6 +306,8 @@ public class TuneManagementResponse {
     }
 
     /**
+     * Return "errors" contents of Tune Management API JSON response.
+     *
      * @return String
      */
     public String getErrors()
@@ -324,9 +340,10 @@ public class TuneManagementResponse {
         return null;
     }
 
-
     /**
-     * @return mixed
+     * Return "debug" contents of Tune Management API JSON response.
+     *
+     * @return String
      */
     public String getDebugs()
     {

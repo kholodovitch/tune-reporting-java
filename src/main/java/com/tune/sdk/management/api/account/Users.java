@@ -1,3 +1,5 @@
+package com.tune.sdk.management.api.account;
+
 /**
  * Users.java
  *
@@ -25,22 +27,21 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.api.account
+ * @package   com.tune.sdk.management.api.account
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-04 14:57:37 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
 
-package com.tune.sdk.management.api.account;
-
 import com.tune.sdk.management.shared.endpoints.ItemsEndpointBase;
-
 
 /**
  * Tune Management API endpoint '/account/users/'
+ *
+ * @example ExampleItemsAccountUsers.java
  */
 public class Users extends ItemsEndpointBase {
 

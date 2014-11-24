@@ -1,3 +1,5 @@
+package com.tune.sdk.management.api.advertiser;
+
 /**
  * Stats.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.api.advertiser
+ * @package   com.tune.sdk.management.api.advertiser
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-19 21:21:08 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.management.api.advertiser;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -42,7 +42,9 @@ import java.util.HashSet;
 import com.tune.sdk.management.shared.endpoints.ReportsActualsEndpointBase;
 
 /**
+ * Tune Management API endpoint 'advertiser/stats'
  *
+ * @example ExampleReportActuals.java
  */
 public class Stats extends ReportsActualsEndpointBase {
     /**

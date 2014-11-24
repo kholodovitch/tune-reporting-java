@@ -1,3 +1,5 @@
+package com.tune.sdk.management.api.advertiser.stats;
+
 /**
  * Retention.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.api.advertiser.stats
+ * @package   com.tune.sdk.management.api.advertiser.stats
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-19 21:21:08 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.management.api.advertiser.stats;
 
 import java.util.Arrays;
 import java.util.Set;
@@ -50,6 +50,8 @@ import com.tune.sdk.shared.TuneServiceException;
 
 /**
  * Tune Management API endpoint 'advertiser/stats/retention'
+ *
+ * @example ExampleReportRetention.java
  */
 public class Retention extends ReportsInsightEndpointBase {
 

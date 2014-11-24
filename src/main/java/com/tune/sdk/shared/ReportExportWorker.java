@@ -1,3 +1,5 @@
+package com.tune.sdk.shared;
+
 /**
  * ReportExportWorker.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.shared
+ * @package   com.tune.sdk.shared
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-19 21:21:08 $
+ * @version   $Date: 2014-11-21 17:34:43 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.shared;
 
 import org.json.*;
 
