@@ -1,3 +1,5 @@
+package com.tune.sdk.management.shared.service;
+
 /**
  * TuneManagementClient.java
  *
@@ -25,20 +27,17 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.shared.service
+ * @package   com.tune.sdk.management.shared.service
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-19 21:21:08 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
 
-package com.tune.sdk.management.shared.service;
-
 import java.util.Map;
 import com.tune.sdk.shared.*;
-
 
 /**
  * Tune MobileAppTracking Management API access class
@@ -78,13 +77,14 @@ public final class TuneManagementClient {
      * @param action                Tune Management API endpoint's action name
      * @param api_key               Tune MobileAppTracking API Key
      * @param query_string_dict     Action's query string parameters
+     * @throws IllegalArgumentException
      */
     public TuneManagementClient(
         String controller,
         String action,
         String api_key,
         Map<String, String> query_string_dict
-    ) {
+    ) throws IllegalArgumentException {
         // controller
         if ( (null == controller) || controller.isEmpty() ) {
             throw new IllegalArgumentException("Parameter 'controller' is not defined.");
@@ -113,8 +113,7 @@ public final class TuneManagementClient {
      * Call Tune Management API Service with provided request.
      *
      * @return Boolean
-     * @throws \TuneSdkException
-     * @throws \Exception
+     * @throws TuneSdkException
      */
     public Boolean call() throws TuneSdkException
     {

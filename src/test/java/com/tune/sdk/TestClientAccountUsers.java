@@ -1,3 +1,5 @@
+package com.tune.sdk;
+
 /**
  * TestClientAccountUsers.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.tests
+ * @package   com.tune.sdk
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-04 17:53:13 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk;
 
 import java.util.*;
 
@@ -44,7 +44,7 @@ import com.tune.sdk.management.shared.service.*;
 import junit.framework.TestCase;
 
 /**
- *
+ * Test TuneManagementClient to connect with 'account/users'
  */
 public class TestClientAccountUsers extends TestCase {
 
@@ -65,7 +65,7 @@ public class TestClientAccountUsers extends TestCase {
 
     /**
      *
-     * Test access to application configuration file.
+     * Test provided api_key is not null.
      */
     public void test_ApiKey()
     {
@@ -73,7 +73,7 @@ public class TestClientAccountUsers extends TestCase {
     }
 
     /**
-     *
+     * Test client
      */
     public void test_Client() {
 

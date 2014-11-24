@@ -1,3 +1,5 @@
+package com.tune.sdk.shared;
+
 /**
  * ReportReaderBase.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.shared
+ * @package   com.tune.sdk.shared
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-21 11:11:02 $
+ * @version   $Date: 2014-11-21 17:34:43 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.shared;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import java.util.Map;
 import java.util.HashMap;
 
 /**
- *
+ * Base abstract class for handling report reading.
  */
 public abstract class ReportReaderBase {
 
@@ -67,8 +67,6 @@ public abstract class ReportReaderBase {
     /**
      * Using report data pulled from remote file referenced by download URL,
      * pretty print all its contents.
-     *
-     * @return void
      */
     public void prettyPrint() {
         this.prettyPrint(0);
@@ -78,9 +76,7 @@ public abstract class ReportReaderBase {
      * Using report data pulled from remote file referenced by download URL,
      * pretty print some of it's contents.
      *
-     * @param int $limit Limit the number of rows to print.
-     *
-     * @return void
+     * @param limit Limit the number of rows to print.
      */
     public void prettyPrint(int limit) {
         int max_limit = this.report_map_list.size();

@@ -26,29 +26,43 @@
 # author    Jeff Tanner <jefft@tune.com>
 # copyright 2014 Tune (http://www.tune.com)
 # license   http://opensource.org/licenses/MIT The MIT License (MIT)
-# version   $Date: 2014-11-21 14:12:20 $
+# version   $Date: 2014-11-24 13:38:13 $
 # link      https://developers.mobileapptracking.com
 #
 
-.PHONY: clean build dist examples tests docs-doxygen docs-javadoc 
+.PHONY: ant-clean ant-build ant-examples ant-tests maven-clean maven-tests maven-package maven-gpg-sign maven-deploy docs-doxygen docs-javadoc
 
-clean:
+ant-clean:
 	sudo rm -fR ./docs/javadoc/*
 	sudo rm -fR ./docs/doxygen/*
 	sudo rm -fR ./junit/*
 	ant clean
 
-build:
+ant-build:
 	ant build
 
-dist:
-	ant dist
-
-examples:
+ant-examples:
 	ant example -DAPI_KEY=$(api_key)
 
-tests:
+ant-tests:
 	ant test -DAPI_KEY=$(api_key)
+
+maven-gpg-sign:
+	find src/ -name \*.asc -exec rm {} \;
+	find src/ -name \*.java -exec gpg --passphrase '$(passphrase)' -ab {} \;
+	find src/ -name \*.asc -exec gpg --verify {} \;
+
+maven-clean:
+	mvn clean
+
+maven-tests:
+	mvn test -DAPI_KEY=$(api_key)
+
+maven-package:
+	mvn package -DAPI_KEY=$(api_key)
+
+maven-deploy:
+	mvn clean deploy -e -Dgpg.passphrase=$(passphrase) -DAPI_KEY=$(api_key)
 
 docs-doxygen:
 	sudo rm -fR ./docs/doxygen/*

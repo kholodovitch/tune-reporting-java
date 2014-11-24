@@ -1,3 +1,5 @@
+package com.tune.sdk.management.shared.service;
+
 /**
  * Request.java
  *
@@ -25,16 +27,15 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.shared.service
+ * @package   com.tune.sdk.management.shared.service
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-19 07:02:45 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
 
-package com.tune.sdk.management.shared.service;
 import java.util.Map;
 
 import com.tune.sdk.shared.TuneSdkException;
@@ -98,7 +99,7 @@ public class TuneManagementRequest {
         Map<String, String> query_string_dict,
         String              api_url_base,
         String              api_url_version
-    ){
+    ) {
         // -----------------------------------------------------------------
         // validate inputs
         // -----------------------------------------------------------------

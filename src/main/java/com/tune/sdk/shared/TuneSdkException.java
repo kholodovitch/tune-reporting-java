@@ -1,11 +1,7 @@
+package com.tune.sdk.shared;
+
 /**
  * TuneSdkException.java
- * Tune_API_Java
- *
- * This Exception is thrown when the SDK detects an unexpected error within its code.
- *
- * @version  0.9.0
- * @link     http://www.tune.com
  *
  * Copyright (c) 2014 Tune, Inc
  * All rights reserved.
@@ -28,11 +24,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  *
+ * Java Version 1.6
+ *
+ * @category  Tune
+ * @package   com.tune.sdk.shared
+ * @author    Jeff Tanner <jefft@tune.com>
+ * @copyright 2014 Tune (http://www.tune.com)
+ * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
+ * @version   $Date: 2014-11-21 17:34:43 $
+ * @link      https://developers.mobileapptracking.com @endlink
+ *
  */
 
-package com.tune.sdk.shared;
-
-// TODO: Auto-generated Javadoc
 /**
  * TuneSdkException is thrown when the Tune SDK has detected an error within its code, regardless of any given Request.
  */

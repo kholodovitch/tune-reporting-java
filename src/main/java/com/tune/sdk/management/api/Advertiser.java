@@ -1,3 +1,5 @@
+package com.tune.sdk.management.api;
+
 /**
  * Advertiser.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.api
+ * @package   com.tune.sdk.management.api
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-04 14:57:37 $
+ * @version   $Date: 2014-11-21 17:34:43 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.management.api;
 
 import com.tune.sdk.management.shared.endpoints.*;
 
