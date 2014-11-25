@@ -1,5 +1,7 @@
+package com.tune.sdk.examples;
+
 /**
- * ExampleReportPostbacks.java
+ * ExampleReportCohort.java
  *
  * Copyright (c) 2014 Tune, Inc
  * All rights reserved.
@@ -25,27 +27,24 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.examples
+ * @package   com.tune.sdk
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-21 11:11:02 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
 
-package com.tune.sdk;
-
-import java.util.Set;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.GregorianCalendar;
-import java.util.Date;
-import java.util.Calendar;
-
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
-import com.tune.sdk.management.api.advertiser.stats.Postbacks;
+import com.tune.sdk.management.api.advertiser.stats.LTV;
 import com.tune.sdk.management.shared.endpoints.EndpointBase;
 import com.tune.sdk.management.shared.service.TuneManagementResponse;
 
@@ -54,11 +53,10 @@ import com.tune.sdk.shared.TuneServiceException;
 import com.tune.sdk.shared.ReportReaderCSV;
 import com.tune.sdk.shared.ReportReaderJSON;
 
-
 /**
- * Example of tune.management.api.advertiser.stats.Postbacks.
+ * Example of tune.management.api.advertiser.stats.LTV.
  */
-public class ExampleReportPostbacks {
+public class ExampleReportCohort {
 
     /**
      * The main method.
@@ -84,6 +82,10 @@ public class ExampleReportPostbacks {
         System.out.println( String.format("api_key = '%s'", api_key) );
 
         Date now = new Date();
+        GregorianCalendar calendar_week_ago = new GregorianCalendar();
+        calendar_week_ago.setTime(now);
+        calendar_week_ago.add(Calendar.DATE, -8);
+        Date week_ago = calendar_week_ago.getTime();
 
         GregorianCalendar calendar_yesterday = new GregorianCalendar();
         calendar_yesterday.setTime(now);
@@ -92,23 +94,23 @@ public class ExampleReportPostbacks {
 
         SimpleDateFormat date_format = new SimpleDateFormat( "yyyy-MM-dd" );
 
-        String start_date = date_format.format( yesterday );
+        String start_date = date_format.format( week_ago );
         start_date = String.format("%s 00:00:00", start_date);
 
         String end_date = date_format.format( yesterday );
         end_date = String.format("%s 23:59:59", end_date);
 
         System.out.println( "\n============================================" );
-        System.out.println(   "= Tune Management Reports Postbacks (Logs)    =" );
+        System.out.println(   "= Tune Management Reports LTV (Cohort)     =" );
         System.out.println(   "============================================" );
 
-        Postbacks reports_logs_postbacks = new Postbacks(api_key, true);
+        LTV reports_cohort = new LTV(api_key, true);
 
         System.out.println( "======================================================" );
-        System.out.println( " Fields of Reports Postbacks DEFAULT.                 " );
+        System.out.println( " Fields of Reports LTV (Cohort) DEFAULT.              " );
         System.out.println( "======================================================" );
 
-        Set<String> set_fields_default = reports_logs_postbacks.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
+        Set<String> set_fields_default = reports_cohort.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
         if ((null != set_fields_default) && !set_fields_default.isEmpty()) {
             for (String field : set_fields_default) {
                 System.out.println(field);
@@ -118,10 +120,10 @@ public class ExampleReportPostbacks {
         }
 
         System.out.println( "======================================================" );
-        System.out.println( " Fields of Reports Postbacks RECOMMENDED.                " );
+        System.out.println( " Fields of Reports LTV (Cohort) RECOMMENDED.          " );
         System.out.println( "======================================================" );
 
-        Set<String> set_fields_recommended = reports_logs_postbacks.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+        Set<String> set_fields_recommended = reports_cohort.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
         if ((null != set_fields_recommended) && !set_fields_recommended.isEmpty()) {
             for (String field : set_fields_recommended) {
                 System.out.println(field);
@@ -131,13 +133,16 @@ public class ExampleReportPostbacks {
         }
 
         System.out.println( "======================================================" );
-        System.out.println( " Count Reports Postbacks records.                        " );
+        System.out.println( " Count Reports LTV (Cohort) records.                  " );
         System.out.println( "======================================================" );
 
-        TuneManagementResponse response = reports_logs_postbacks.count(
+        TuneManagementResponse response = reports_cohort.count(
             start_date,
             end_date,
-            null,           // filter
+            "click",                // cohort_type
+            "year_day",             // cohort_interval
+            "site_id,publisher_id", // group
+            "(publisher_id > 0)",   // filter
             "America/Los_Angeles"
         );
 
@@ -149,8 +154,6 @@ public class ExampleReportPostbacks {
 
         System.out.println( "= TuneManagementResponse:" );
         System.out.println( response.toString());
-
-        System.out.println( String.format("api_key = '%s'", api_key) );
 
         Object data = response.getData();
         if (null == data) {
@@ -165,25 +168,29 @@ public class ExampleReportPostbacks {
         System.out.println( String.format("= Count: '%d'", count ));
 
         System.out.println( "======================================================" );
-        System.out.println( " Find Reports Postbacks records.                         " );
+        System.out.println( " Find Reports LTV (Cohort) records.                   " );
         System.out.println( "======================================================" );
 
         // build sort
         Map<String, String> sort = new HashMap<String, String> ();
-        sort.put("created", "DESC");
+        sort.put("year_day", "ASC");
+        sort.put("install_publisher_id", "ASC");
 
-        // build fields
-        String str_fields_recommended = reports_logs_postbacks.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+        String str_fields_recommended = reports_cohort.getFields(LTV.TUNE_FIELDS_RECOMMENDED);
 
-        response = reports_logs_postbacks.find(
+        response = reports_cohort.find(
             start_date,
             end_date,
-            str_fields_recommended,	// fields
-            null,			// filter
-            5,           		// limit
-            0,       			// page
-            sort,
-            "America/Los_Angeles"   	// response_timezone
+            "click",                // cohort_type
+            "year_day",             // cohort_interval
+            "cumulative",           // aggregation_type
+            str_fields_recommended, // fields
+            "site_id,publisher_id", // group
+            "(publisher_id > 0)",   // filter
+            5,                      // limit
+            0,                      // page
+            null,                   // sort
+            "America/Los_Angeles"   // response_timezone
         );
 
         if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
@@ -196,35 +203,38 @@ public class ExampleReportPostbacks {
         System.out.println( response.toString());
 
         System.out.println( "======================================================" );
-        System.out.println( " Export Reports Postbacks CSV report.                     " );
+        System.out.println( " Export Cohort (LTV) CSV report.                      " );
         System.out.println( "======================================================" );
 
-        response = reports_logs_postbacks.export(
+        response = reports_cohort.export(
             start_date,
             end_date,
-            str_fields_recommended,		// fields
-            null,				// filter
-            "csv",                           	// format
-            "America/Los_Angeles"   		// response_timezone
+            "click",                // cohort_type
+            "year_day",             // cohort_interval
+            "cumulative",           // aggregation_type
+            str_fields_recommended, // fields
+            "site_id,publisher_id", // group
+            "(publisher_id > 0)",   // filter
+            "America/Los_Angeles"   // response_timezone
         );
 
         if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
             throw new Exception(
-                String.format("Failed: %d: '%s'", response.getHttpCode(), response.toString())
+                String.format("Failed: %d: %s", response.getHttpCode(), response.toString())
             );
         }
 
         System.out.println( "= TuneManagementResponse:" );
         System.out.println( response.toString());
 
-        String csv_job_id = Postbacks.parseResponseReportJobId(response);
+        String csv_job_id = LTV.parseResponseReportJobId(response);
         System.out.println(String.format("= CSV Job ID: '%s'", csv_job_id));
 
         System.out.println( "======================================================" );
-        System.out.println( " Fetching Reports Postbacks CSV report.                   " );
+        System.out.println( " Fetching Cohort (LTV) CSV report.                    " );
         System.out.println( "======================================================" );
 
-        response = reports_logs_postbacks.fetch(
+        response = reports_cohort.fetch(
             csv_job_id,                     // Job ID
             true,                           // verbose
             10                              // sleep in seconds
@@ -239,11 +249,11 @@ public class ExampleReportPostbacks {
         System.out.println( "= TuneManagementResponse:" );
         System.out.println( response.toString());
 
-        String str_csv_report_url = Postbacks.parseResponseReportUrl(response);
+        String str_csv_report_url = LTV.parseResponseReportUrl(response);
         System.out.println(String.format("= CSV Report URL: '%s'", str_csv_report_url));
 
-        System.out.println( "======================================================" );
-        System.out.println( " Print Items Reports Postbacks CSV report.                " );
+	System.out.println( "======================================================" );
+        System.out.println( " Print Cohort (LTV) CSV report.                       " );
         System.out.println( "======================================================" );
 
         ReportReaderCSV csv_reader = new ReportReaderCSV(str_csv_report_url);
@@ -251,62 +261,7 @@ public class ExampleReportPostbacks {
         csv_reader.prettyPrint(5);
 
         System.out.println( "======================================================" );
-        System.out.println( " Export Account Users JSON report.                    " );
+        System.out.println( " End Cohort (LTV) example.                            " );
         System.out.println( "======================================================" );
-
-        response = reports_logs_postbacks.export(
-            start_date,
-            end_date,
-            str_fields_recommended,		// fields
-            null,				// filter
-            "json",                           	// format
-            "America/Los_Angeles"   		// response_timezone
-        );
-
-        if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
-            throw new Exception(
-                String.format("Failed: %d: '%s'", response.getHttpCode(), response.toString())
-            );
-        }
-
-        System.out.println( "= TuneManagementResponse:" );
-        System.out.println( response.toString());
-
-        String json_job_id = Postbacks.parseResponseReportJobId(response);
-        System.out.println(String.format("= JSON Job ID: '%s'", json_job_id));
-
-        System.out.println( "======================================================" );
-        System.out.println( " Fetching Account Users JSON report.                  " );
-        System.out.println( "======================================================" );
-
-        response = reports_logs_postbacks.fetch(
-            json_job_id,                    // Job ID
-            true,                           // verbose
-            10                              // sleep in seconds
-        );
-
-        if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
-            throw new Exception(
-                String.format("Failed: %d: '%s'", response.getHttpCode(), response.toString())
-            );
-        }
-
-        System.out.println( "= TuneManagementResponse:" );
-        System.out.println( response.toString());
-
-        String str_json_report_url = Postbacks.parseResponseReportUrl(response);
-        System.out.println(String.format("= JSON Report URL: '%s'", str_json_report_url));
-
-        System.out.println( "======================================================" );
-        System.out.println( " Print Items Account Users JSON report.               " );
-        System.out.println( "======================================================" );
-
-        ReportReaderJSON json_reader = new ReportReaderJSON(str_json_report_url);
-        json_reader.read();
-        json_reader.prettyPrint(5);
-
-        System.out.println(   "============================================" );
-        System.out.println(   "=   The End                                =" );
-        System.out.println(   "============================================" );
     }
 }

@@ -1,3 +1,5 @@
+package com.tune.sdk;
+
 /**
  * TestReportPostbacks.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.tests
+ * @package   com.tune.sdk
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-21 11:11:02 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk;
 
 import java.io.StringWriter;
 import java.io.PrintWriter;
@@ -62,7 +62,7 @@ import com.tune.sdk.shared.TuneServiceException;
 import junit.framework.TestCase;
 
 /**
- *
+ * Test of tune.management.api.advertiser.stats.Postbacks.
  */
 public class TestReportPostbacks extends TestCase {
 
@@ -107,13 +107,16 @@ public class TestReportPostbacks extends TestCase {
 
     /**
      *
-     * Test access to application configuration file.
+     * Test provided api_key is not null.
      */
     public void test_ApiKey()
     {
         TestCase.assertNotNull(this.api_key);
     }
 
+    /**
+     * Test action "count".
+     */
     public void test_Count()
     {
         TuneManagementResponse response = null;
@@ -144,6 +147,9 @@ public class TestReportPostbacks extends TestCase {
         TestCase.assertNull(response.getErrors());
     }
 
+    /**
+     * Test endpoint's default fields.
+     */
     public void test_Fields_Default()
     {
         String str_fields_default = null;
@@ -167,6 +173,9 @@ public class TestReportPostbacks extends TestCase {
         TestCase.assertFalse(str_fields_default.isEmpty());
     }
 
+    /**
+     * Test endpoint's recommended fields.
+     */
     public void test_Fields_Recommended()
     {
         String str_fields_recommended = null;
@@ -190,6 +199,9 @@ public class TestReportPostbacks extends TestCase {
         TestCase.assertFalse(str_fields_recommended.isEmpty());
     }
 
+    /**
+     * Test this endpoint's action "find"
+     */
     public void test_Find()
     {
         TuneManagementResponse response = null;
@@ -231,6 +243,9 @@ public class TestReportPostbacks extends TestCase {
         TestCase.assertNull(response.getErrors());
     }
 
+    /**
+     * Test this endpoint's action "export".
+     */
     public void test_Export()
     {
         TuneManagementResponse response = null;

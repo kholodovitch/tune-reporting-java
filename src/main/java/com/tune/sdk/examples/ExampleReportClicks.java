@@ -1,5 +1,7 @@
+package com.tune.sdk.examples;
+
 /**
- * ExampleReportInstalls.java
+ * ExampleReportClicks.java
  *
  * Copyright (c) 2014 Tune, Inc
  * All rights reserved.
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.examples
+ * @package   com.tune.sdk
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-21 11:11:02 $
+ * @version   $Date: 2014-11-21 17:34:43 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk;
 
 import java.util.Set;
 import java.util.Map;
@@ -45,7 +45,7 @@ import java.util.Calendar;
 
 import java.text.SimpleDateFormat;
 
-import com.tune.sdk.management.api.advertiser.stats.Installs;
+import com.tune.sdk.management.api.advertiser.stats.Clicks;
 import com.tune.sdk.management.shared.endpoints.EndpointBase;
 import com.tune.sdk.management.shared.service.TuneManagementResponse;
 
@@ -56,9 +56,9 @@ import com.tune.sdk.shared.ReportReaderJSON;
 
 
 /**
- * Example of tune.management.api.advertiser.stats.Installs.
+ * Example of tune.management.api.advertiser.stats.Clicks.
  */
-public class ExampleReportInstalls {
+public class ExampleReportClicks {
 
     /**
      * The main method.
@@ -99,16 +99,16 @@ public class ExampleReportInstalls {
         end_date = String.format("%s 23:59:59", end_date);
 
         System.out.println( "\n============================================" );
-        System.out.println(   "= Tune Management Reports Installs (Logs)    =" );
+        System.out.println(   "= Tune Management Reports Clicks (Logs)    =" );
         System.out.println(   "============================================" );
 
-        Installs reports_logs_installs = new Installs(api_key, true);
+        Clicks reports_logs_clicks = new Clicks(api_key, true);
 
         System.out.println( "======================================================" );
-        System.out.println( " Fields of Reports Installs DEFAULT.                    " );
+        System.out.println( " Fields of Reports Clicks DEFAULT.                    " );
         System.out.println( "======================================================" );
 
-        Set<String> set_fields_default = reports_logs_installs.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
+        Set<String> set_fields_default = reports_logs_clicks.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
         if ((null != set_fields_default) && !set_fields_default.isEmpty()) {
             for (String field : set_fields_default) {
                 System.out.println(field);
@@ -118,10 +118,10 @@ public class ExampleReportInstalls {
         }
 
         System.out.println( "======================================================" );
-        System.out.println( " Fields of Reports Installs RECOMMENDED.                " );
+        System.out.println( " Fields of Reports Clicks RECOMMENDED.                " );
         System.out.println( "======================================================" );
 
-        Set<String> set_fields_recommended = reports_logs_installs.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+        Set<String> set_fields_recommended = reports_logs_clicks.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
         if ((null != set_fields_recommended) && !set_fields_recommended.isEmpty()) {
             for (String field : set_fields_recommended) {
                 System.out.println(field);
@@ -131,10 +131,10 @@ public class ExampleReportInstalls {
         }
 
         System.out.println( "======================================================" );
-        System.out.println( " Count Reports Installs records.                        " );
+        System.out.println( " Count Reports Clicks records.                        " );
         System.out.println( "======================================================" );
 
-        TuneManagementResponse response = reports_logs_installs.count(
+        TuneManagementResponse response = reports_logs_clicks.count(
             start_date,
             end_date,
             null,           // filter
@@ -165,7 +165,7 @@ public class ExampleReportInstalls {
         System.out.println( String.format("= Count: '%d'", count ));
 
         System.out.println( "======================================================" );
-        System.out.println( " Find Reports Installs records.                         " );
+        System.out.println( " Find Reports Clicks records.                         " );
         System.out.println( "======================================================" );
 
         // build sort
@@ -173,9 +173,9 @@ public class ExampleReportInstalls {
         sort.put("created", "DESC");
 
         // build fields
-        String str_fields_recommended = reports_logs_installs.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+        String str_fields_recommended = reports_logs_clicks.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-        response = reports_logs_installs.find(
+        response = reports_logs_clicks.find(
             start_date,
             end_date,
             str_fields_recommended,	// fields
@@ -196,10 +196,10 @@ public class ExampleReportInstalls {
         System.out.println( response.toString());
 
         System.out.println( "======================================================" );
-        System.out.println( " Export Reports Installs CSV report.                     " );
+        System.out.println( " Export Reports Clicks CSV report.                    " );
         System.out.println( "======================================================" );
 
-        response = reports_logs_installs.export(
+        response = reports_logs_clicks.export(
             start_date,
             end_date,
             str_fields_recommended,		// fields
@@ -217,14 +217,14 @@ public class ExampleReportInstalls {
         System.out.println( "= TuneManagementResponse:" );
         System.out.println( response.toString());
 
-        String csv_job_id = Installs.parseResponseReportJobId(response);
+        String csv_job_id = Clicks.parseResponseReportJobId(response);
         System.out.println(String.format("= CSV Job ID: '%s'", csv_job_id));
 
         System.out.println( "======================================================" );
-        System.out.println( " Fetching Reports Installs CSV report.                   " );
+        System.out.println( " Fetching Reports Clicks CSV report.                  " );
         System.out.println( "======================================================" );
 
-        response = reports_logs_installs.fetch(
+        response = reports_logs_clicks.fetch(
             csv_job_id,                     // Job ID
             true,                           // verbose
             10                              // sleep in seconds
@@ -239,11 +239,11 @@ public class ExampleReportInstalls {
         System.out.println( "= TuneManagementResponse:" );
         System.out.println( response.toString());
 
-        String str_csv_report_url = Installs.parseResponseReportUrl(response);
+        String str_csv_report_url = Clicks.parseResponseReportUrl(response);
         System.out.println(String.format("= CSV Report URL: '%s'", str_csv_report_url));
 
         System.out.println( "======================================================" );
-        System.out.println( " Print Items Reports Installs CSV report.                " );
+        System.out.println( " Print Items Reports Clicks CSV report.               " );
         System.out.println( "======================================================" );
 
         ReportReaderCSV csv_reader = new ReportReaderCSV(str_csv_report_url);
@@ -254,7 +254,7 @@ public class ExampleReportInstalls {
         System.out.println( " Export Account Users JSON report.                    " );
         System.out.println( "======================================================" );
 
-        response = reports_logs_installs.export(
+        response = reports_logs_clicks.export(
             start_date,
             end_date,
             str_fields_recommended,		// fields
@@ -272,14 +272,14 @@ public class ExampleReportInstalls {
         System.out.println( "= TuneManagementResponse:" );
         System.out.println( response.toString());
 
-        String json_job_id = Installs.parseResponseReportJobId(response);
+        String json_job_id = Clicks.parseResponseReportJobId(response);
         System.out.println(String.format("= JSON Job ID: '%s'", json_job_id));
 
         System.out.println( "======================================================" );
         System.out.println( " Fetching Account Users JSON report.                  " );
         System.out.println( "======================================================" );
 
-        response = reports_logs_installs.fetch(
+        response = reports_logs_clicks.fetch(
             json_job_id,                    // Job ID
             true,                           // verbose
             10                              // sleep in seconds
@@ -294,7 +294,7 @@ public class ExampleReportInstalls {
         System.out.println( "= TuneManagementResponse:" );
         System.out.println( response.toString());
 
-        String str_json_report_url = Installs.parseResponseReportUrl(response);
+        String str_json_report_url = Clicks.parseResponseReportUrl(response);
         System.out.println(String.format("= JSON Report URL: '%s'", str_json_report_url));
 
         System.out.println( "======================================================" );

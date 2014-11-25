@@ -7,20 +7,29 @@
         <h2>tune-api-java</h2>
         <h2>Tune API SDK for Java 1.6</h2>
         <h3>Incorporate Tune API services.</h3>
-        <h4>Update:  $Date: 2014-11-21 14:12:20 $</h4>
+        <h4>Update:  $Date: 2014-11-24 09:34:47 $</h4>
         <h4>Version: 0.9.0</h4>
         <hr />
 
         <h3>Overview</h3>
-        Tune API client for PHP developers.
+        <p>Java helper library for Tune API services.</p>
 
-        The utility focus of the SDKs is upon the Advertiser Reporting endpoints. Even though the the breadth of the Management API goes beyond just reports, it is these endpoints that our customers primarily access. The second goal of the SDKs is to assure that our customers’ developers are using best practices in gathering reports in the most optimal way.
+        <p>The utility focus of this SDK is upon the Advertiser Reporting
+        endpoints.</p>
+
+        <p>Even though the the breadth of the Management API goes
+        beyond just reports, it is these endpoints that our customers primarily
+        access.</p>
+
+        <p>The second goal of the SDKs is to assure that our customers’
+        developers are using best practices in gathering reports in the most
+        optimal way.</p>
 
         <h3>Documentation</h3>
 
-        Please see documentation here:
+        <p>Please see documentation here:</p>
 
-        [Tune API SDKs](https://developers.mobileapptracking.com/tune-api-sdks/)
+        <a href="https://developers.mobileapptracking.com/tune-api-sdks/" target="_blank">Tune API SDKs</a>
 
         <a name="sdk_requirements"></a>
         <h3>SDK Requirements</h3>
@@ -38,9 +47,33 @@
         <a name="sdk_installation"></a>
         <h3>Installation</h3>
 
+        <h4>Maven:</h4>
+
+        <p><b>Tune API SDK for Java</b> is available using Maven. At present the jar is available from a public <a href="http://maven.apache.org/download.html" target="_blank">Maven</a> repository.<p>
+
+        <p>Use the following dependency in your project:</p>
+
+        <pre lang="xml">
+            <dependency>
+               <groupId>com.tune.sdk</groupId>
+               <artifactId>tune-java-sdk</artifactId>
+               <version>0.9.0</version>
+               <scope>compile</scope>
+            </dependency>
+        </pre>
+
+        <h4>Github Compile:</h4>
+
+        <p>If you want to compile it yourself, here's how:</p>
+
+        <pre lang="bash">
+            $ git clone git@github.com:MobileAppTracking/tune-api-java
+            $ cd tune-api-java
+            $ mvn install       # Requires maven, download from http://maven.apache.org/download.html
+        </pre>
 
         <a name="sdk_installation_zip"></a>
-        <h4>Via ZIP file:
+        <h4>Via ZIP file:</h4>
 
         <p><a href="https://github.com/MobileAppTracking/tune-api-java/archive/master.zip" target="_blank" >Click here to download the source code (.zip)</a> for `tune-api-java`.</p>
 
@@ -48,9 +81,9 @@
         <h3>Code Samples</h3>
 
         <a name="sdk_examples"></a>
-        <h4>SDK Examples</h4>
+        <h3>SDK Examples</h3>
 
-        </>Run the following script to view execution of all examples:</p>
+        <p>Run the following script to view execution of all examples:</p>
 
         <pre lang="bash">
             $ make API_KEY=[API_KEY] examples

@@ -1,3 +1,5 @@
+package com.tune.sdk.management.shared.endpoints;
+
 /**
  * EndpointBase.java
  *
@@ -25,16 +27,14 @@
  * Java Version 1.6
  *
  * @category  Tune
- * @package   tune.management.shared.endpoints
+ * @package   com.tune.sdk.management.shared.endpoints
  * @author    Jeff Tanner <jefft@tune.com>
  * @copyright 2014 Tune (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-11-21 11:11:02 $
+ * @version   $Date: 2014-11-24 09:34:47 $
  * @link      https://developers.mobileapptracking.com @endlink
  *
  */
-
-package com.tune.sdk.management.shared.endpoints;
 
 import java.util.Set;
 import java.util.HashSet;
@@ -221,11 +221,22 @@ public class EndpointBase {
     /**
      * Provide complete definition for this endpoint.
      */
+    /**
+     * Provide complete definition for this endpoint.
+     * @return Tune
+     * @throws Exception
+     */
     public TuneManagementResponse getDefine() throws Exception
     {
         return this.call("define", null);
     }
 
+    /**
+     *
+     * @return
+     * @throws TuneSdkException
+     * @throws TuneServiceException
+     */
     public String getFields() throws TuneSdkException, TuneServiceException {
         return this.getFields(TUNE_FIELDS_ALL);
     }
@@ -570,7 +581,6 @@ public class EndpointBase {
     {
         return this.validateFields(group);
     }
-
     public String validateGroup(String group) throws Exception
     {
         return this.validateFields(group);
@@ -723,7 +733,17 @@ public class EndpointBase {
         return String.format("(%s)", filter);
     }
 
+    /**
+     * Validates that provided date time is either "yyyy-MM-dd"
+     * or "yyyy-MM-dd HH:mm:ss".
+     *
+     * @param param_name
+     * @param date_time
+     * @return
+     * @throws IllegalArgumentException
+     */
     public static String validateDateTime(String param_name, String date_time)
+    		throws IllegalArgumentException
     {
         if ((null == param_name) || param_name.isEmpty()) {
             throw new IllegalArgumentException(
@@ -884,8 +904,9 @@ public class EndpointBase {
      * Parse response and gather job identifier.
      *
      * @param response
-     * @return String job identifier.
+     * @return
      * @throws TuneServiceException
+     * @throws TuneSdkException
      */
     public static String parseResponseReportJobId(
         TuneManagementResponse response
@@ -902,13 +923,21 @@ public class EndpointBase {
         }
         job_id = jdata.toString();
         if ((null == job_id) || job_id.isEmpty()) {
-            throw new IllegalArgumentException(
+            throw new TuneSdkException(
                 "Parameter 'job_id' is not defined."
             );
         }
         return job_id;
     }
 
+    /**
+     * Parse response and gather report url.
+     *
+     * @param response
+     * @return
+     * @throws TuneSdkException
+     * @throws TuneServiceException
+     */
     public static String parseResponseReportUrl(
         TuneManagementResponse response
     ) throws TuneSdkException, TuneServiceException {
