@@ -1,7 +1,9 @@
+[![Build Status](https://secure.travis-ci.org/MobileAppTracking/tune-api-java.png?branch=master)](https://travis-ci.org/MobileAppTracking/tune-api-java)
+
 <h2>tune-api-java</h2>
 <h2>Tune API SDK for Java 1.6</h2>
 <h3>Incorporate Tune API services.</h3>
-<h4>Update:  $Date: 2014-11-24 09:34:47 $</h4>
+<h4>Update:  $Date: 2014-12-02 12:00:00 $</h4>
 <h4>Version: 0.9.0</h4>
 ===
 

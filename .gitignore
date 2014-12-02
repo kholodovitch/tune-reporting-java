@@ -1,10 +1,10 @@
 # Make sure to ignore Eclipse files
-.classpath
-.project
-.settings
+*.classpath
+*.project
+*.settings
 
 # Ignore Eclipse files
-.komodoproject
+*.komodoproject
 
 # Ignore JUnit and Documentation files
 junit/*
