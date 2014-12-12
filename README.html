@@ -4,15 +4,15 @@
     <TITLE>API Overview</TITLE>
   </HEAD>
   <BODY>
-        <h2>tune-api-java</h2>
-        <h2>Tune API SDK for Java 1.6</h2>
-        <h3>Incorporate Tune API services.</h3>
-        <h4>Update:  $Date: 2014-11-24 09:34:47 $</h4>
-        <h4>Version: 0.9.0</h4>
+        <h2>tune-reporting</h2>
+        <h2>Tune Reporting API SDK for Java 1.6</h2>
+        <h3>Incorporate Tune Reporting API services.</h3>
+        <h4>Update:  $Date: 2014-12-12 05:24:55 $</h4>
+        <h4>Version: 0.9.1</h4>
         <hr />
 
         <h3>Overview</h3>
-        <p>Java helper library for Tune API services.</p>
+        <p>Java helper library for Tune Reporting API services.</p>
 
         <p>The utility focus of this SDK is upon the Advertiser Reporting
         endpoints.</p>
@@ -29,7 +29,7 @@
 
         <p>Please see documentation here:</p>
 
-        <a href="https://developers.mobileapptracking.com/tune-api-sdks/" target="_blank">Tune API SDKs</a>
+        <a href="https://developers.mobileapptracking.com/tune-api-sdks/" target="_blank">Tune Reporting API SDKs</a>
 
         <a name="sdk_requirements"></a>
         <h3>SDK Requirements</h3>
@@ -49,15 +49,15 @@
 
         <h4>Maven:</h4>
 
-        <p><b>Tune API SDK for Java</b> is available using Maven. At present the jar is available from a public <a href="http://maven.apache.org/download.html" target="_blank">Maven</a> repository.<p>
+        <p><b>Tune Reporting API SDK for Java</b> is available using Maven. At present the jar is available from a public <a href="http://maven.apache.org/download.html" target="_blank">Maven</a> repository.<p>
 
         <p>Use the following dependency in your project:</p>
 
         <pre lang="xml">
             <dependency>
-               <groupId>com.tune.sdk</groupId>
-               <artifactId>tune-java-sdk</artifactId>
-               <version>0.9.0</version>
+               <groupId>com.tune.reporting</groupId>
+               <artifactId>tune-reporting</artifactId>
+               <version>0.9.1</version>
                <scope>compile</scope>
             </dependency>
         </pre>
@@ -67,15 +67,15 @@
         <p>If you want to compile it yourself, here's how:</p>
 
         <pre lang="bash">
-            $ git clone git@github.com:MobileAppTracking/tune-api-java
-            $ cd tune-api-java
+            $ git clone git@github.com:MobileAppTracking/tune-reporting
+            $ cd tune-reporting
             $ mvn install       # Requires maven, download from http://maven.apache.org/download.html
         </pre>
 
         <a name="sdk_installation_zip"></a>
         <h4>Via ZIP file:</h4>
 
-        <p><a href="https://github.com/MobileAppTracking/tune-api-java/archive/master.zip" target="_blank" >Click here to download the source code (.zip)</a> for `tune-api-java`.</p>
+        <p><a href="https://github.com/MobileAppTracking/tune-reporting/archive/master.zip" target="_blank" >Click here to download the source code (.zip)</a> for `tune-reporting`.</p>
 
         <a name="sdk_code_samples"></a>
         <h3>Code Samples</h3>
@@ -86,7 +86,7 @@
         <p>Run the following script to view execution of all examples:</p>
 
         <pre lang="bash">
-            $ make API_KEY=[API_KEY] examples
+            $ make api_key=[API_KEY] ant-examples
         </pre>
 
         <a name="sdk_unittests"></a>
@@ -95,7 +95,11 @@
         Run the following script to view execution of all unittests:
 
         <pre lang="bash">
-            $ make API_KEY=[API_KEY] tests
+            $ make api_key=[API_KEY] ant-tests
+        </pre>
+
+        <pre lang="bash">
+            $ make api_key=[API_KEY] maven-tests
         </pre>
 
         <a name="sdk_documentation"></a>
@@ -121,7 +125,7 @@
         <a name="sdk_reporting_issues"></a>
         <h3>Reporting Issues</h3>
 
-        <p>Report issues using the <a href="https://github.com/MobileAppTracking/tune-api-java/issues" target="_blank">Github Issue Tracker</a></p>
+        <p>Report issues using the <a href="https://github.com/MobileAppTracking/tune-reporting/issues" target="_blank">Github Issue Tracker</a></p>
         <p>or</p>
         <p>Email <a href="mailto:sdk@tune.com">sdk@tune.com</a></p>
 </BODY>
