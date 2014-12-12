@@ -1,10 +1,8 @@
-[![Build Status](https://secure.travis-ci.org/MobileAppTracking/tune-reporting.png?branch=master)](https://travis-ci.org/MobileAppTracking/tune-reporting)
-
 <h2>tune-reporting</h2>
 <h2>Tune Reporting API SDK for Java 1.6</h2>
 <h3>Incorporate Tune Reporting API services.</h3>
-<h4>Update:  $Date: 2014-12-12 05:24:55 $</h4>
-<h4>Version: 0.9.1</h4>
+<h4>Update:  $Date: 2014-12-12 13:00:00 $</h4>
+<h4>Version: 0.9.2</h4>
 ===
 
 ### Overview
@@ -21,7 +19,7 @@ The second goal of the SDKs is to assure that our customers’ developers are us
 
 Please see documentation here:
 
-[Tune Reporting API SDKs](https://developers.mobileapptracking.com/tune-api-sdks/)
+[Tune Reporting API SDKs](https://developers.mobileapptracking.com/tune-reporting-sdks/)
 
 <a name="sdk_requirements"></a>
 ### SDK Requirements
@@ -49,7 +47,7 @@ Use the following dependency in your project:
        <dependency>
           <groupId>com.tune.reporting</groupId>
           <artifactId>tune-reporting</artifactId>
-          <version>0.9.1</version>
+          <version>0.9.2</version>
           <scope>compile</scope>
        </dependency>
 ```
@@ -75,7 +73,7 @@ the latest version and download this jar file:
 ##### Via ZIP file:
 
 [Click here to download the source code
-(.zip)](https://github.com/MobileAppTracking/tune-reporting/archive/master.zip) for `tune-reporting`.
+(.zip)](https://github.com/MobileAppTracking/tune-reporting-java/archive/master.zip) for `tune-reporting`.
 
 
 <a name="sdk_examples"></a>
@@ -123,4 +121,4 @@ The following will generate [Doxygen](http://en.wikipedia.org/wiki/Doxygen) from
 <a name="sdk_reporting_issues"></a>
 ### Reporting Issues
 
-Report issues using the [Github Issue Tracker](https://github.com/MobileAppTracking/tune-reporting/issues) or Email [sdk@tune.com](mailto:sdk@tune.com).
+Report issues using the [Github Issue Tracker](https://github.com/MobileAppTracking/tune-reporting-java/issues) or Email [sdk@tune.com](mailto:sdk@tune.com).

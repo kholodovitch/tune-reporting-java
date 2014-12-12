@@ -2,8 +2,8 @@
 tune-reporting
 Tune Reporting API SDK for Java 1.6
 Incorporate Tune Reporting API services.
-Update:  $Date: 2014-12-12 05:24:55 $
-Version: 0.9.1
+Update:  $Date: 2014-12-12 13:00:00 $
+Version: 0.9.2
 ****************************************
 
 =============
@@ -26,7 +26,7 @@ Documentation
 
 Please see documentation here:
 
-https://developers.mobileapptracking.com/tune-api-sdks/
+https://developers.mobileapptracking.com/tune-reporting-sdks/
 
 =============
 Requirements
@@ -54,17 +54,19 @@ Installation
  Maven
 ------------------------
 
-*Tune Reporting API SDK for Java* is available using Maven.  At present the jars *are* available from a public [maven](http://maven.apache.org/download.html) repository.
+*Tune Reporting API SDK for Java* is available using Maven.
+
+At present the jars *are* available from a public [maven](http://maven.apache.org/download.html) repository.
 
 Use the following dependency in your project:
 
 ```
-       <dependency>
-          <groupId>com.tune.reporting</groupId>
-          <artifactId>tune-reporting</artifactId>
-          <version>0.9.1</version>
-          <scope>compile</scope>
-       </dependency>
+      <dependency>
+         <groupId>com.tune.reporting</groupId>
+         <artifactId>tune-reporting</artifactId>
+         <version>0.9.2</version>
+         <scope>compile</scope>
+      </dependency>
 ```
 
 ------------------------
@@ -73,18 +75,21 @@ Use the following dependency in your project:
 
 If you want to compile it yourself, here's how:
 
+Requires *maven*, download from http://maven.apache.org/download.html
+
 ```
-    $ git clone git@github.com:MobileAppTracking/tune-reporting
+    $ git clone git@github.com:MobileAppTracking/tune-reporting-java.git
     $ cd tune-reporting
-    $ mvn install       # Requires maven, download from http://maven.apache.org/download.html
+    $ mvn install       
 ```
 
 ------------------------
  Pre-built Jar
 ------------------------
 
-Pre-built jars are available [here](http://search.maven.org/#browse%7C-1416163511). Select the directory for
-the latest version and download this jar file:
+Pre-built jars are available [tune-reporting](http://search.maven.org/#search%7Cga%7C1%7Cg%3A%22com.tune.reporting%22).
+
+Select the directory for the latest version and download this jar file:
 
 * tune-reporting-x.x.x.jar
 
@@ -94,7 +99,7 @@ the latest version and download this jar file:
 
 Download the source code for `tune-reporting`:
 
-https://github.com/MobileAppTracking/tune-reporting/archive/master.zip
+https://github.com/MobileAppTracking/tune-reporting-java/archive/master.zip
 
 -------------
 SDK Examples

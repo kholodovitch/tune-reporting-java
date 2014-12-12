@@ -10,7 +10,7 @@ Internal Beta release on November 21, 2014
 * Tune Management API Client for Java 1.6
 
 
-Version 0.9.1
+Version 0.9.2
 --------------
 
 Beta release on December 21, 2014
