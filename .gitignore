@@ -3,7 +3,7 @@
 *.project
 *.settings
 
-# Ignore Eclipse files
+# Ignore Komodo files
 *.komodoproject
 
 # Ignore JUnit and Documentation files
@@ -12,8 +12,9 @@ docs/javadoc/
 docs/doxygen/
 
 # Where maven compiles by default
-target
-bin
+target/
+classes/
+build/
 
 # Java Files that should be ignored
 *.class
