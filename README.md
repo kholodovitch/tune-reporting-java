@@ -27,7 +27,7 @@
             </li>
             <li><a href="#sdk_install_choices">Choices</a>
                 <ul>
-                    <li><a href="#sdk_install_method_composer">Composer</a></li>
+                    <li><a href="#sdk_install_method_maven">Composer</a></li>
                     <li><a href="#sdk_install_method_zip">ZIP</a></li>
                     <li><a href="#sdk_prerequisites_api_key">Environment</a></li>
                 </ul>
@@ -180,7 +180,7 @@ To use SDK to access Advertiser Reporting endpoints of Tune Management API, it r
 
 You can install this either via **Maven** or by downloading the **ZIP** source.
 
-<a id="sdk_install_method_composer" name="sdk_install_method_composer"></a>
+<a id="sdk_install_method_maven" name="sdk_install_method_maven"></a>
 ##### Via Maven:
 
 *Tune Reporting SDK for Java* is available using Maven.
@@ -190,12 +190,12 @@ At present the jar is available from a public [maven](http://maven.apache.org/do
 Use the following dependency in your project:
 
 ```xml
-       <dependency>
-          <groupId>com.tune.reporting</groupId>
-          <artifactId>tune-reporting</artifactId>
-          <version>0.9.2</version>
-          <scope>compile</scope>
-       </dependency>
+    <dependency>
+       <groupId>com.tune.reporting</groupId>
+       <artifactId>tune-reporting</artifactId>
+       <version>0.9.2</version>
+       <scope>compile</scope>
+    </dependency>
 ```
 
 <a id="sdk_install_method_zip" name="sdk_install_method_zip"></a>
@@ -376,11 +376,11 @@ File **Makefile** provides shortcuts for executing examples and tests.
 
 File **TuneReporting.java** is the root of this Library.
 
-Library folder **src** contains the key functionality related to **Advertiser Reporting classes** are defined within folder **/src/TuneReporting/Api/**.
+Library folder **src** contains the key functionality related to **Advertiser Reporting classes** are defined within folder **com.tune.reporting.api**.
 
-Client classes that connect with the **Tune Management API Service** are defined within folder **/src/TuneReporting/Base/Service/**.
+Client classes that connect with the **Tune Management API Service** are defined within folder **com.tune.reporting.base.service**.
 
-Helper class for both the Library and Examples are defined within folder **/src/TuneReporting/Helpers/**.
+Helper class for both the Library and Examples are defined within folder **com.tune.reporting.helpers**.
 ```
 src/main/java/
 └── com
