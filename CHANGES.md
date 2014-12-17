@@ -13,5 +13,5 @@ Internal Beta release on November 21, 2014
 Version 0.9.2
 --------------
 
-Beta release on December 21, 2014
+Beta release on December 12, 2014
 * Refactored to become Tune Reporting API for Java
