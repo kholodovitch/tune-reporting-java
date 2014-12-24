@@ -1,16 +1,16 @@
 ****************************************
 tune-reporting
-Tune Reporting API SDK for Java 1.6
-Incorporate Tune Reporting API services.
-Update:  $Date: 2014-12-12 13:00:00 $
-Version: 0.9.2
+TUNE Reporting API SDK for Java 1.6
+Incorporate TUNE Reporting API services.
+Update:  $Date: 2014-12-24 13:23:15 $
+Version: 0.9.4
 ****************************************
 
 =============
 Overview
 =============
 
-Java helper library for Tune Reporting API services.
+Java helper library for TUNE Reporting API services.
 
 The utility focus of this SDK is upon the Advertiser Reporting endpoints.
 
@@ -54,7 +54,7 @@ Installation
  Maven
 ------------------------
 
-*Tune Reporting API SDK for Java* is available using Maven.
+*TUNE Reporting API SDK for Java* is available using Maven.
 
 At present the jars *are* available from a public [maven](http://maven.apache.org/download.html) repository.
 
@@ -64,7 +64,7 @@ Use the following dependency in your project:
       <dependency>
          <groupId>com.tune.reporting</groupId>
          <artifactId>tune-reporting</artifactId>
-         <version>0.9.2</version>
+         <version>0.9.4</version>
          <scope>compile</scope>
       </dependency>
 ```
@@ -80,7 +80,7 @@ Requires *maven*, download from http://maven.apache.org/download.html
 ```
     $ git clone git@github.com:MobileAppTracking/tune-reporting-java.git
     $ cd tune-reporting
-    $ mvn install       
+    $ mvn install
 ```
 
 ------------------------

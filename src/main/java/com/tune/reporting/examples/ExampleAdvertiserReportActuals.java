@@ -4,7 +4,7 @@ package com.tune.reporting.examples;
  * ExampleAdvertiserReportActuals.java
  *
  * <p>
- * Copyright (c) 2014 Tune, Inc
+ * Copyright (c) 2014 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,9 +38,9 @@ package com.tune.reporting.examples;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 Tune (http://www.tune.com)
+ * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-12 05:24:55 $
+ * @version   $Date: 2014-12-24 13:23:15 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -84,13 +84,11 @@ public class ExampleAdvertiserReportActuals {
       if (!apiKey.matches("[a-zA-Z0-9]+")) {
         throw new IllegalArgumentException(
           String.format("Invalid [apiKey]: '%s'", apiKey)
-       );
+        );
       }
     } else {
       throw new IllegalArgumentException("Missing [apiKey]");
     }
-
-    System.out.println(String.format("apiKey = '%s'", apiKey));
 
     Date now = new Date();
     GregorianCalendar calendarWeekAgo = new GregorianCalendar();
@@ -111,15 +109,15 @@ public class ExampleAdvertiserReportActuals {
     String endDate = dateFormat.format(dateYesterday);
     endDate = String.format("%s 23:59:59", endDate);
 
-    System.out.println("============================================");
-    System.out.println(" Begin Advertiser Report Actuals    ");
-    System.out.println("============================================");
+    System.out.println("\033[34m" + "============================================" + "\033[0m");
+    System.out.println("\033[34m" + " Begin TUNE Advertiser Report Actuals       " + "\033[0m");
+    System.out.println("\033[34m" + "============================================" + "\033[0m");
 
     AdvertiserReportActuals reportsActuals
         = new AdvertiserReportActuals(apiKey, true);
 
     System.out.println("====================================================");
-    System.out.println(" Fields Advertiser Report Actuals DEFAULT.   ");
+    System.out.println(" Fields Advertiser Report Actuals DEFAULT.          ");
     System.out.println("====================================================");
 
     Set<String> setFieldsDefault
@@ -133,7 +131,7 @@ public class ExampleAdvertiserReportActuals {
     }
 
     System.out.println("====================================================");
-    System.out.println(" Fields Advertiser Report Actuals RECOMMENDED.   ");
+    System.out.println(" Fields Advertiser Report Actuals RECOMMENDED.      ");
     System.out.println("====================================================");
 
     Set<String> setFieldsRecommended
@@ -155,7 +153,7 @@ public class ExampleAdvertiserReportActuals {
         "site_id,publisher_id",   // group
         "(publisher_id > 0)",   // filter
         "America/Los_Angeles"   // responseTimezone
-   );
+    );
 
     if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
       throw new Exception(
@@ -205,21 +203,21 @@ public class ExampleAdvertiserReportActuals {
         sort,
         "datehour",                 // timestamp
         "America/Los_Angeles"       // responseTimezone
-   );
+    );
 
     if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
         )
-     );
+      );
     }
 
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
     System.out.println("====================================================");
-    System.out.println(" Export Advertiser Report Actuals CSV report.   ");
+    System.out.println(" Export Advertiser Report Actuals CSV   ");
     System.out.println("====================================================");
 
     response = reportsActuals.export(
@@ -231,14 +229,14 @@ public class ExampleAdvertiserReportActuals {
         "datehour",                 // timestamp
         "csv",                      // report format
         "America/Los_Angeles"       // responseTimezone
-   );
+    );
 
     if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
         )
-     );
+      );
     }
 
     System.out.println(" TuneManagementResponse:");
@@ -249,14 +247,14 @@ public class ExampleAdvertiserReportActuals {
     System.out.println(String.format(" CSV Job ID: '%s'", csvJobId));
 
     System.out.println("====================================================");
-    System.out.println(" Fetching Advertiser Report Actuals CSV report.   ");
+    System.out.println(" Fetching Advertiser Report Actuals CSV   ");
     System.out.println("====================================================");
 
     response = reportsActuals.fetch(
         csvJobId,       // Job ID
         true,         // verbose
         10        // sleep in seconds
-   );
+    );
 
     if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
       throw new Exception(
@@ -274,7 +272,7 @@ public class ExampleAdvertiserReportActuals {
     System.out.println(String.format(" CSV Report URL: '%s'", csvReportUrl));
 
     System.out.println("====================================================");
-    System.out.println(" Print Advertiser Report Actuals CSV report.    ");
+    System.out.println(" Print Advertiser Report Actuals CSV    ");
     System.out.println("====================================================");
 
     ReportReaderCsv csvReader = new ReportReaderCsv(csvReportUrl);
@@ -282,7 +280,7 @@ public class ExampleAdvertiserReportActuals {
     csvReader.prettyPrint(5);
 
     System.out.println("====================================================");
-    System.out.println(" Export Advertiser Report Actuals JSON report.  ");
+    System.out.println(" Export Advertiser Report Actuals JSON  ");
     System.out.println("====================================================");
 
     response = reportsActuals.export(
@@ -294,7 +292,7 @@ public class ExampleAdvertiserReportActuals {
         "datehour",                 // timestamp
         "json",                     // report format
         "America/Los_Angeles"       // responseTimezone
-   );
+    );
 
     if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
       throw new Exception(
@@ -312,14 +310,14 @@ public class ExampleAdvertiserReportActuals {
     System.out.println(String.format(" CSV Job ID: '%s'", csvJobId));
 
     System.out.println("====================================================");
-    System.out.println(" Fetching Advertiser Report Actuals JSON report.  ");
+    System.out.println(" Fetching Advertiser Report Actuals JSON  ");
     System.out.println("====================================================");
 
     response = reportsActuals.fetch(
         jsonJobId,      // Job ID
         true,           // verbose
         10              // sleep in seconds
-   );
+    );
 
     if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
       throw new Exception(
@@ -328,7 +326,7 @@ public class ExampleAdvertiserReportActuals {
           response.getHttpCode(),
           response.toString()
         )
-     );
+      );
     }
 
     System.out.println(" TuneManagementResponse:");
@@ -341,15 +339,15 @@ public class ExampleAdvertiserReportActuals {
     );
 
     System.out.println("====================================================");
-    System.out.println(" Print Advertiser Report Actuals JSON report.   ");
+    System.out.println(" Print Advertiser Report Actuals JSON   ");
     System.out.println("====================================================");
 
     ReportReaderJson jsonReader = new ReportReaderJson(jsonReportUrl);
     jsonReader.read();
     jsonReader.prettyPrint(5);
 
-    System.out.println("====================================================");
-    System.out.println(" End Advertiser Report Actuals example.     ");
-    System.out.println("====================================================");
+    System.out.println("\033[32m" + "=====================" + "\033[0m");
+    System.out.println("\033[32m" + " End Example         " + "\033[0m");
+    System.out.println("\033[32m" + "=====================" + "\033[0m");
   }
 }

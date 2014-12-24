@@ -1,8 +1,8 @@
 <h2>tune-reporting-java</h2>
-<h2>Tune Reporting SDK for Java 1.6</h2>
-<h3>Incorporate Tune Reporting services.</h3>
-<h4>Update:  $Date: 2014-12-16 12:00:00 $
-<h4>Version: 0.9.2
+<h2>TUNE Reporting SDK for Java 1.6</h2>
+<h3>Incorporate TUNE Reporting services.</h3>
+<h4>Update:  $Date: 2014-12-24 13:23:15 $
+<h4>Version: 0.9.4
 ===
 
 <a id="TOP"></a>
@@ -11,8 +11,8 @@
 <ul>
     <li><a href="#sdk_overview">Overview</a>
         <ul>
-            <li><a href="#sdk_overview_available">Available Tune Reporting SDKs</a></li>
-            <li><a href="#sdk_overview_mobile">Tune SDKs for Mobile Apps</a></li>
+            <li><a href="#sdk_overview_available">Available TUNE Reporting SDKs</a></li>
+            <li><a href="#sdk_overview_mobile">TUNE SDKs for Mobile Apps</a></li>
             <li><a href="#sdk_overview_dev_community">Developers Community</a></li>
         </ul>
     </li>
@@ -59,7 +59,7 @@
 
     <li><a href="#sdk_classes">SDK Classes</a>
         <ul>
-            <li><a href="#sdk_classes_service">Tune Management Service Classes</a></li>
+            <li><a href="#sdk_classes_service">TUNE Management Service Classes</a></li>
             <li><a href="#sdk_report_readers">Helper Classes</a></li>
             <li><a href="#sdk_classes_exceptions">Exception Classes</a></li>
         </ul>
@@ -109,16 +109,16 @@
 <a id="sdk_overview" name="sdk_overview"></a>
 ### Overview
 
-The **Tune Reporting SDKs** addressed in this posting are for creating hosted applications which require handling requests to **Tune Management API services** with utility focus is upon Advertiser Reporting endpoints.
+The **TUNE Reporting SDKs** addressed in this posting are for creating hosted applications which require handling requests to **TUNE Management API services** with utility focus is upon Advertiser Reporting endpoints.
 
 Even though the the breadth of the Management API goes beyond just reports, it is these reporting endpoints that our customers primarily access.
 
 The second goal of the SDKs is to assure that our customers’ developers are using best practices in gathering reports in the most optimal way.
 
 <a id="sdk_overview_available" name="sdk_overview_available"></a>
-#### Available Tune Reporting SDKs
+#### Available TUNE Reporting SDKs
 
-Supported programming languages for Tune Reporting SDKs are:
+Supported programming languages for TUNE Reporting SDKs are:
 
 <ul>
     <li><b>PHP</b>: <a href="https://github.com/MobileAppTracking/tune-reporting-php" target="_blank">tune-reporting-php</a></li>
@@ -130,11 +130,11 @@ Supported programming languages for Tune Reporting SDKs are:
 </ul>
 
 <a id="sdk_overview_mobile" name="sdk_overview_mobile"></a>
-#### Tune SDKs for Mobile Apps
+#### TUNE SDKs for Mobile Apps
 
-The **Tune Reporting SDKs** should absolutely not be included within Mobile Apps.
+The **TUNE Reporting SDKs** should absolutely not be included within Mobile Apps.
 
-All information pertaining to **Tune SDKs for Mobile Apps** are found [here](http://developers.mobileapptracking.com/sdks/).
+All information pertaining to **TUNE SDKs for Mobile Apps** are found [here](http://developers.mobileapptracking.com/sdks/).
 
 <a id="sdk_overview_dev_community" name="sdk_overview_dev_community"></a>
 #### Developers Community
@@ -143,7 +143,7 @@ Developer Community portal for MobileAppTracking™ (MAT), the industry leader i
 
 [https://developers.mobileapptracking.com](https://developers.mobileapptracking.com)
 
-Additional positions on Tune Reporting SDKs can be found here:
+Additional positions on TUNE Reporting SDKs can be found here:
 
 [https://developers.mobileapptracking.com/tune-reporting-sdks/](https://developers.mobileapptracking.com/tune-reporting-sdks/)
 
@@ -173,7 +173,7 @@ These are the basic requirements to use this SDK:
 <a id="sdk_install_prereq_apikey" name="sdk_install_prereq_apikey"></a>
 ##### Generate API Key
 
-To use SDK to access Advertiser Reporting endpoints of Tune Management API, it requires a MobileAppTracking API Key: [Generate API Key](http://developers.mobileapptracking.com/generate-api-key/).
+To use SDK to access Advertiser Reporting endpoints of TUNE Management API, it requires a MobileAppTracking API Key: [Generate API Key](http://developers.mobileapptracking.com/generate-api-key/).
 
 <a id="sdk_install_choices" name="sdk_install_choices"></a>
 #### Installation Choices
@@ -183,7 +183,7 @@ You can install this either via **Maven** or by downloading the **ZIP** source.
 <a id="sdk_install_method_maven" name="sdk_install_method_maven"></a>
 ##### Via Maven:
 
-*Tune Reporting SDK for Java* is available using Maven.
+*TUNE Reporting SDK for Java* is available using Maven.
 
 At present the jar is available from a public [maven](http://maven.apache.org/download.html) repository.
 
@@ -193,7 +193,7 @@ Use the following dependency in your project:
     <dependency>
        <groupId>com.tune.reporting</groupId>
        <artifactId>tune-reporting</artifactId>
-       <version>0.9.2</version>
+       <version>0.9.4</version>
        <scope>compile</scope>
     </dependency>
 ```
@@ -237,7 +237,7 @@ This code documentation generation requires installation of [Doxygen](http://www
 ```
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/TuneReporting_Java_Doxygen.png">
-<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/TuneReporting_Java_Doxygen-400x213.png" alt="Tune-Reporting Java Doxygen Generated" width="400" height="213">
+<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/TuneReporting_Java_Doxygen-400x213.png" alt="TUNE-Reporting Java Doxygen Generated" width="400" height="213">
 </a>
 
 <a id="sdk_gendoc_javadoc" name="sdk_gen_doc_javadoc"></a>
@@ -252,7 +252,7 @@ This code documentation generation may require installation of [Javadoc](http://
 </pre>
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/TuneReporting_Java_Javadoc.png">
-<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/TuneReporting_Java_Javadoc-400x222.png" alt="Tune-Reporting Java Javadoc Generated" width="400" height="222">
+<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/TuneReporting_Java_Javadoc-400x222.png" alt="TUNE-Reporting Java Javadoc Generated" width="400" height="222">
 </a>
 
 <p>
@@ -268,7 +268,7 @@ This code documentation generation may require installation of [Javadoc](http://
 The utility focus of the SDKs is upon the <a href="/advertiser-reporting-endpoints/">Advertiser Reporting endpoints</a>. Even though the the breadth of the Management API goes beyond just reports, it is these endpoints that our customers primarily access. The second goal of the SDKs is to assure that our customers' developers are using best practices in gathering reports in the most optimal way.
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_advertiser_reporting_classes.png">
-<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_advertiser_reporting_classes.png" alt="Tune Advertiser Reporting Classes" width="500" height="350" /></a>
+<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_advertiser_reporting_classes.png" alt="TUNE Advertiser Reporting Classes" width="500" height="350" /></a>
 
 The endpoints interfaced by TUNE API SDKs provide access in gathering four types of reports:
 
@@ -279,11 +279,11 @@ Log reports provide measurement records for each Click, Install, Event, Event It
 
 Advertiser Reporting classes that perform Log Reports are:
 <ul>
-    <li><code>AdvertiserReportClicks</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__clicks/">/advertiser/stats/clicks/</a></li>
-    <li><code>AdvertiserReportEventItems</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__event__items/">/advertiser/stats/event/items/</a></li>
-    <li><code>AdvertiserReportEvents</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__events/">/advertiser/stats/events/</a></li>
-    <li><code>AdvertiserReportInstalls</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__installs/">/advertiser/stats/installs/</a></li>
-    <li><code>AdvertiserReportPostbacks</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__postbacks/">/advertiser/stats/postbacks/</a></li>
+    <li><code>AdvertiserReportLogClicks</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__clicks/">/advertiser/stats/clicks/</a></li>
+    <li><code>AdvertiserReportLogEventItems</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__event__items/">/advertiser/stats/event/items/</a></li>
+    <li><code>AdvertiserReportLogEvents</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__events/">/advertiser/stats/events/</a></li>
+    <li><code>AdvertiserReportLogInstalls</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__installs/">/advertiser/stats/installs/</a></li>
+    <li><code>AdvertiserReportLogPostbacks</code>:<a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__postbacks/">/advertiser/stats/postbacks/</a></li>
 </ul>
 
 </dd>
@@ -304,22 +304,22 @@ The Cohort report analyzes user behavior back to click date time (Cohort by Clic
 
 Advertiser Reporting class that perform Cohort Reports is:
 <ul>
-    <li><code>AdvertiserReportCohort</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__ltv">/advertiser/stats/ltv</a></li>
+    <li><code>AdvertiserReportCohortValue</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__ltv">/advertiser/stats/ltv</a></li>
 </ul>
 </dd>
 <dt>Retention Report</dt>
 <dd>
-The Retention report shows you how many of your installed users open or engage with your app over time (how users continue to get value from the app). AdvertiserReportRetention reports are particularly good for evaluating the quality of users as opposed to the quantity of users (as in the case of user acquisition campaigns). For more information about retention reports, please visit <a href="http://support.mobileapptracking.com/entries/42179044-Running-AdvertiserReportRetention-Reports">Running AdvertiserReportRetention Reports</a>.
+The Retention report shows you how many of your installed users open or engage with your app over time (how users continue to get value from the app). AdvertiserReportCohortRetention reports are particularly good for evaluating the quality of users as opposed to the quantity of users (as in the case of user acquisition campaigns). For more information about retention reports, please visit <a href="http://support.mobileapptracking.com/entries/42179044-Running-AdvertiserReportCohortRetention-Reports">Running AdvertiserReportCohortRetention Reports</a>.
 
 Advertiser Reporting class that perform Retention Reports are:
 <ul>
-    <li><code>AdvertiserReportRetention</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__retention">/advertiser/stats/retention</a></li>
+    <li><code>AdvertiserReportCohortRetention</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__retention">/advertiser/stats/retention</a></li>
 </ul>
 </dd>
 </dl>
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_management_service_reporting_endpoints.png">
-<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_management_service_reporting_endpoints.png" alt="Management API Advertiser Reports covered by Tune Reporting SDKs." width="592" height="292" /></a>
+<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_management_service_reporting_endpoints.png" alt="Management API Advertiser Reports covered by TUNE Reporting SDKs." width="592" height="292" /></a>
 
 <p>
 <a href="#TOP">
@@ -336,7 +336,7 @@ Logs and Actuals reports all request an export using action <code>find_export_qu
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-api-report-exports1.png">
 <img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-api-report-exports1-600x569.png" alt="Exporting logs and actuals reports." width="600" height="569" /></a>
 
-Cohort and AdvertiserReportRetention reports all request an export using action <code>export.json</code>, which also returns a <code>job_id</code>. You then pass the <code>job_id</code> onto another action <code>status.json</code>, which performs the status checking and report URL retrieval.
+Cohort and AdvertiserReportCohortRetention reports all request an export using action <code>export.json</code>, which also returns a <code>job_id</code>. You then pass the <code>job_id</code> onto another action <code>status.json</code>, which performs the status checking and report URL retrieval.
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-api-insight-report-exports.png">
 <img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-api-insight-report-exports-600x459.png" alt="Export cohort and retention reports." width="600" height="459" /></a>
@@ -378,7 +378,7 @@ File **TuneReporting.java** is the root of this Library.
 
 Library folder **src** contains the key functionality related to **Advertiser Reporting classes** are defined within folder **com.tune.reporting.api**.
 
-Client classes that connect with the **Tune Management API Service** are defined within folder **com.tune.reporting.base.service**.
+Client classes that connect with the **TUNE Management API Service** are defined within folder **com.tune.reporting.base.service**.
 
 Helper class for both the Library and Examples are defined within folder **com.tune.reporting.helpers**.
 ```
@@ -388,20 +388,20 @@ src/main/java/
         └── reporting
             ├── api
             │   ├── AdvertiserReportActuals.java
-            │   ├── AdvertiserReportClicks.java
-            │   ├── AdvertiserReportCohort.java
-            │   ├── AdvertiserReportEventItems.java
-            │   ├── AdvertiserReportEvents.java
-            │   ├── AdvertiserReportInstalls.java
-            │   ├── AdvertiserReportPostbacks.java
-            │   ├── AdvertiserReportRetention.java
+            │   ├── AdvertiserReportLogClicks.java
+            │   ├── AdvertiserReportCohortValue.java
+            │   ├── AdvertiserReportLogEventItems.java
+            │   ├── AdvertiserReportLogEvents.java
+            │   ├── AdvertiserReportLogInstalls.java
+            │   ├── AdvertiserReportLogPostbacks.java
+            │   ├── AdvertiserReportCohortRetention.java
             │   └── Export.java
             ├── base
             │   ├── endpoints
             │   │   ├── AdvertiserReportActualsBase.java
             │   │   ├── AdvertiserReportBase.java
-            │   │   ├── AdvertiserReportInsightBase.java
-            │   │   ├── AdvertiserReportLogsBase.java
+            │   │   ├── AdvertiserReportCohortBase.java
+            │   │   ├── AdvertiserReportLogBase.java
             │   │   └── EndpointBase.java
             │   └── service
             │       ├── QueryStringBuilder.java
@@ -435,13 +435,13 @@ src/test/java/
         └── reporting
             └── examples
                 ├── ExampleAdvertiserReportActuals.java
-                ├── ExampleAdvertiserReportClicks.java
-                ├── ExampleAdvertiserReportCohort.java
-                ├── ExampleAdvertiserReportEventItems.java
-                ├── ExampleAdvertiserReportEvents.java
-                ├── ExampleAdvertiserReportInstalls.java
-                ├── ExampleAdvertiserReportPostbacks.java
-                ├── ExampleAdvertiserReportRetention.java
+                ├── ExampleAdvertiserReportLogClicks.java
+                ├── ExampleAdvertiserReportCohortValue.java
+                ├── ExampleAdvertiserReportLogEventItems.java
+                ├── ExampleAdvertiserReportLogEvents.java
+                ├── ExampleAdvertiserReportLogInstalls.java
+                ├── ExampleAdvertiserReportLogPostbacks.java
+                ├── ExampleAdvertiserReportCohortRetention.java
                 └── ExampleTuneManagementClient.java
 ```
 
@@ -462,13 +462,13 @@ src/test/java/
     └── tune
         └── reporting
             ├── TestAdvertiserReportActuals.java
-            ├── TestAdvertiserReportClicks.java
-            ├── TestAdvertiserReportCohort.java
-            ├── TestAdvertiserReportEventItems.java
-            ├── TestAdvertiserReportEvents.java
-            ├── TestAdvertiserReportInstalls.java
-            ├── TestAdvertiserReportPostbacks.java
-            ├── TestAdvertiserReportRetention.java
+            ├── TestAdvertiserReportLogClicks.java
+            ├── TestAdvertiserReportCohortValue.java
+            ├── TestAdvertiserReportLogEventItems.java
+            ├── TestAdvertiserReportLogEvents.java
+            ├── TestAdvertiserReportLogInstalls.java
+            ├── TestAdvertiserReportLogPostbacks.java
+            ├── TestAdvertiserReportCohortRetention.java
             └── TestTuneManagementClient.java
 ```
 
@@ -482,13 +482,13 @@ src/test/java/
 <a id="sdk_classes" name="sdk_classes"></a>
 ### SDK Classes
 
-<!-- Tune Management API Service -->
+<!-- TUNE Management API Service -->
 <a id="sdk_classes_service" name="sdk_classes_service"></a>
-#### Tune Management API Service Classes
+#### TUNE Management API Service Classes
 
 <ul>
-    <li><code>TuneManagementClient</code> - Connects with <a href="http://developers.mobileapptracking.com/management-api/" target="_blank">Tune Management API Service</a></li>
-    <li><code>TuneManagementRequest</code> - Defines request to Tune Management API Service containing:
+    <li><code>TuneManagementClient</code> - Connects with <a href="http://developers.mobileapptracking.com/management-api/" target="_blank">TUNE Management API Service</a></li>
+    <li><code>TuneManagementRequest</code> - Defines request to TUNE Management API Service containing:
         <ul>
             <li>Controller / Endpoint</li>
             <li>Action</li>
@@ -499,7 +499,7 @@ src/test/java/
             </li>
         </ul>
     </li>
-    <li><code>TuneManagementResponse</code> - Complete response from Tune Management API Service containing:
+    <li><code>TuneManagementResponse</code> - Complete response from TUNE Management API Service containing:
         <ul>
             <li>Status Code</li>
             <li>Data</li>
@@ -509,7 +509,7 @@ src/test/java/
 </ul>
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_service_classes.png">
-<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_service_classes.png" alt="Tune Management Service Classes" width="217" height="163" /></a>
+<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_service_classes.png" alt="TUNE Management Service Classes" width="217" height="163" /></a>
 
 <!-- Example Helpers -->
 <a id="sdk_report_readers" name="sdk_report_readers"></a>
@@ -528,8 +528,8 @@ src/test/java/
 #### Custom Exceptions Classes
 
 <ul>
-    <li><code>TuneSdkException</code> - Exception thrown if error occurs within Tune Reporting SDK.</li>
-    <li><code>TuneServiceException</code> - Exception thrown if error condition is returned from Tune Management Service.</li>
+    <li><code>TuneSdkException</code> - Exception thrown if error occurs within TUNE Reporting SDK.</li>
+    <li><code>TuneServiceException</code> - Exception thrown if error condition is returned from TUNE Management Service.</li>
 </ul>
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_exceptions.png">
@@ -539,9 +539,9 @@ src/test/java/
 <a id="sdk_methods" name="sdk_methods"></a>
 ### Advertiser Reporting Methods
 
-<strong>Important to note on Sample Code:</strong> The example provided pertain to only Advertiser Reports class <code>AdvertiserReportClicks</code>. The fields used theses sample primarily pertain to the available fields for the record and related records for the the associated endpoint <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__clicks/">/advertiser/stats/clicks</a> of this class. Do not expect that these fields will be available if used with other Advertiser Records classes.
+<strong>Important to note on Sample Code:</strong> The example provided pertain to only Advertiser Reports class <code>AdvertiserReportLogClicks</code>. The fields used theses sample primarily pertain to the available fields for the record and related records for the the associated endpoint <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__clicks/">/advertiser/stats/clicks</a> of this class. Do not expect that these fields will be available if used with other Advertiser Records classes.
 
-The benefit of using Tune API SDKs is it provides the same interface across all advertiser reports. The following class diagram lists what are all the expected functions. The signature of the expected parameters for each function will be consistent with the action it is interfacing.
+The benefit of using TUNE API SDKs is it provides the same interface across all advertiser reports. The following class diagram lists what are all the expected functions. The signature of the expected parameters for each function will be consistent with the action it is interfacing.
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-sdk-class.png">
 <img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-sdk-class-600x262.png" alt="Report classes available methods." width="600" height="262" title="Click to Expand" /></a>
@@ -549,16 +549,16 @@ The benefit of using Tune API SDKs is it provides the same interface across all 
 <a id="sdk_method_count" name="sdk_method_count"></a>
 ##### Method <code>count()</code>
 
-Finds all existing records matching provided filter criteria and returns total count. It returns a populated instance of <code>class Response</code>, class of Tune API SDK, with <strong>record count</strong>.
+Finds all existing records matching provided filter criteria and returns total count. It returns a populated instance of <code>class Response</code>, class of TUNE API SDK, with <strong>record count</strong>.
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-api-action-count.png">
 <img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/management-api-action-count-700x247.png" alt="Function count()" width="700" height="247" title="Click to Expand" /></a>
 
 <!-- Java -->
 ```java
-    AdvertiserReportClicks reportLogsClicks
-        = new AdvertiserReportClicks(apiKey, true);
-        
+    AdvertiserReportLogClicks reportLogsClicks
+        = new AdvertiserReportLogClicks(apiKey, true);
+
     TuneManagementResponse response = reportLogsClicks.count(
         startDate,
         endDate,
@@ -600,8 +600,8 @@ Gathers all existing records that match filter criteria and returns an array of 
 
 <!-- Java -->
 ```java
-    AdvertiserReportClicks reportLogsClicks
-        = new AdvertiserReportClicks(apiKey, true);
+    AdvertiserReportLogClicks reportLogsClicks
+        = new AdvertiserReportLogClicks(apiKey, true);
     String strFieldsRecommended
         = reportLogsClicks.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
@@ -638,8 +638,8 @@ Provides the same signature as function find(), accept parameters <code>limit</c
 
 <!-- Java -->
 ```java
-    AdvertiserReportClicks reportLogsClicks
-        = new AdvertiserReportClicks(apiKey, true);
+    AdvertiserReportLogClicks reportLogsClicks
+        = new AdvertiserReportLogClicks(apiKey, true);
     TuneManagementResponse response = reportLogsClicks.export(
         startDate,
         endDate,
@@ -660,7 +660,7 @@ Provides the same signature as function find(), accept parameters <code>limit</c
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String csvJobId = AdvertiserReportClicks.parseResponseReportJobId(response);
+    String csvJobId = AdvertiserReportLogClicks.parseResponseReportJobId(response);
     System.out.println(String.format(" CSV Job ID: '%s'", csvJobId));
 ```
 
@@ -668,7 +668,7 @@ Provides the same signature as function find(), accept parameters <code>limit</c
 ##### Method <code>status()</code>
 
 
-As discussed in <a href="#exporting-reports">Exporting Advertise Reports</a>, for gathering report export status records' classes <strong>Cohort (AdvertiserReportCohorts)</strong> and <strong>AdvertiserReportRetention</strong> uses it own method <code>status()</code>. Its purpose is the same as method <code>Export::download()</code>.
+As discussed in <a href="#exporting-reports">Exporting Advertise Reports</a>, for gathering report export status records' classes <strong>Cohort (AdvertiserReportCohorts)</strong> and <strong>AdvertiserReportCohortRetention</strong> uses it own method <code>status()</code>. Its purpose is the same as method <code>Export::download()</code>.
 
 
 <a id="sdk_method_fetch" name="sdk_method_fetch"></a>
@@ -681,8 +681,8 @@ A helper function that creates a threaded worker that handles the status request
 
 <!-- Java -->
 ```java
-    AdvertiserReportClicks reportLogsClicks
-        = new AdvertiserReportClicks(apiKey, true);
+    AdvertiserReportLogClicks reportLogsClicks
+        = new AdvertiserReportLogClicks(apiKey, true);
     TuneManagementResponse response = reportLogsClicks.fetch(
         csvJobId,     // Job ID
         true,         // verbose
@@ -700,11 +700,11 @@ A helper function that creates a threaded worker that handles the status request
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String csvReportUrl = AdvertiserReportClicks.parseResponseReportUrl(response);
+    String csvReportUrl = AdvertiserReportLogClicks.parseResponseReportUrl(response);
     System.out.println(String.format(" CSV Report URL: '%s'", csvReportUrl));
 
     System.out.println("====================================================");
-    System.out.println(" Print Advertiser Report Clicks CSV report.   ");
+    System.out.println(" Print Advertiser Report Clicks CSV   ");
     System.out.println("====================================================");
 
     ReportReaderCsv csvReader = new ReportReaderCsv(csvReportUrl);
@@ -719,8 +719,8 @@ Method <strong>fields()</strong> returns a listing of all the fields that can be
 
 <!-- Java -->
 ```java
-    AdvertiserReportClicks reportLogsClicks
-        = new AdvertiserReportClicks(apiKey, true);
+    AdvertiserReportLogClicks reportLogsClicks
+        = new AdvertiserReportLogClicks(apiKey, true);
     Set<String> setFieldsRecommended
         = reportLogsClicks.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
     if ((null != setFieldsRecommended) && !setFieldsRecommended.isEmpty()) {
@@ -739,8 +739,8 @@ Method <strong>define()</strong> returns the complete meta-data of an endpoint. 
 
 <!-- Java -->
 ```java
-    AdvertiserReportClicks reportLogsClicks
-        = new AdvertiserReportClicks(apiKey, true);
+    AdvertiserReportLogClicks reportLogsClicks
+        = new AdvertiserReportLogClicks(apiKey, true);
     TuneManagementResponse response = reportLogsClicks.define()
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
@@ -771,14 +771,14 @@ Another tool is to pre-build your request using <a href="/management-api/explore
 <img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/api_explorer_record_fields-600x436.png" alt="API Explorer -- Record and Related Record&#039;s Fields for a specific endpoint." width="600" height="436" title="Click to Expand" /></a>
 
 <ul>
-    <li>AdvertiserReportClicks' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__clicks/">/advertiser/stats/clicks fields</a></li>
-    <li>AdvertiserReportEventItems' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__event__items/">/advertiser/stats/event/items fields</a></li>
-    <li>AdvertiserReportEvents' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__events/">/advertiser/stats/events fields</a></li>
-    <li>AdvertiserReportInstalls' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__installs/">/advertiser/stats/installs fields</a></li>
-    <li>AdvertiserReportPostbacks' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__postbacks/">/advertiser/stats/postbacks fields</a></li>
+    <li>AdvertiserReportLogClicks' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__clicks/">/advertiser/stats/clicks fields</a></li>
+    <li>AdvertiserReportLogEventItems' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__event__items/">/advertiser/stats/event/items fields</a></li>
+    <li>AdvertiserReportLogEvents' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__events/">/advertiser/stats/events fields</a></li>
+    <li>AdvertiserReportLogInstalls' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__installs/">/advertiser/stats/installs fields</a></li>
+    <li>AdvertiserReportLogPostbacks' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__postbacks/">/advertiser/stats/postbacks fields</a></li>
     <li>AdvertiserReportActuals' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats/">/advertiser/stats fields</a></li>
     <li>AdvertiserReportCohorts' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__ltv/">/advertiser/stats/ltv fields</a></li>
-    <li>AdvertiserReportRetention' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__retention/">/advertiser/stats/retention fields</a></li>
+    <li>AdvertiserReportCohortRetention' fields: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__retention/">/advertiser/stats/retention fields</a></li>
 </ul>
 
 <p>

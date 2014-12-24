@@ -4,7 +4,7 @@ package com.tune.reporting.base.endpoints;
  * EndpointBase.java
  *
  * <p>
- * Copyright (c) 2014 Tune, Inc
+ * Copyright (c) 2014 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,9 +38,9 @@ package com.tune.reporting.base.endpoints;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 Tune (http://www.tune.com)
+ * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-12 05:24:55 $
+ * @version   $Date: 2014-12-24 13:23:15 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -70,7 +70,7 @@ import java.util.Stack;
 
 
 /**
- * Base class for all Tune Mangement API endpoints.
+ * Base class for all TUNE Mangement API endpoints.
  */
 public class EndpointBase {
 
@@ -86,7 +86,7 @@ public class EndpointBase {
   public static final int TUNE_FIELDS_RECOMMENDED = 8;
 
   /**
-   * Tune Management API Endpoint.
+   * TUNE Management API Endpoint.
    */
   protected String controller = null;
 
@@ -96,7 +96,7 @@ public class EndpointBase {
   protected String apiKey = null;
 
   /**
-   * Tune Management API Endpoint's fields.
+   * TUNE Management API Endpoint's fields.
    */
   protected Map<String, Map<String, String>> endpointFields = null;
 
@@ -166,7 +166,7 @@ public class EndpointBase {
   /**
    * Constructor.
    *
-   * @param controller    Tune Management API Endpoint
+   * @param controller    TUNE Management API Endpoint
    * @param apiKey       MobileAppTracking API Key
    * @param validateFields   Validate fields used by actions' parameters.
    */
@@ -210,9 +210,9 @@ public class EndpointBase {
   }
 
   /**
-   * Call Tune Management API service for this controller.
+   * Call TUNE Management API service for this controller.
    *
-   * @param action          Tune Management API endpoint's action name
+   * @param action          TUNE Management API endpoint's action name
    * @param mapQueryString  Action's query string parameters
    *
    * @return TuneManagementResponse

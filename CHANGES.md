@@ -7,11 +7,24 @@ Version 0.9.0
 --------------
 
 Internal Beta release on November 21, 2014
-* Tune Management API Client for Java 1.6
+* TUNE Management API Client for Java 1.6
 
 
 Version 0.9.2
 --------------
 
 Beta release on December 12, 2014
-* Refactored to become Tune Reporting API for Java
+* Refactored to become TUNE Reporting API for Java
+
+Version 0.9.3
+--------------
+
+Beta release on December 21, 2014
+* /advertiser/stats/ltv as Value reporting.
+
+Version 0.9.4
+--------------
+
+Beta public release on December 24, 2014
+* Refactor Log and Cohort classes
+* TUNE Management API request contains SDK type and version.

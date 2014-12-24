@@ -4,7 +4,7 @@ package com.tune.reporting.base.service;
  * Proxy.java
  *
  * <p>
- * Copyright (c) 2014 Tune, Inc
+ * Copyright (c) 2014 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,9 +38,9 @@ package com.tune.reporting.base.service;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 Tune (http://www.tune.com)
+ * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-12 05:24:55 $
+ * @version   $Date: 2014-12-24 13:23:15 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -123,7 +123,7 @@ public class TuneManagementProxy {
   }
 
   /**
-   * Post request to Tune Management API Service
+   * Post request to TUNE Management API Service
    *
    * @return Boolean True if successful posting request, else False.
    * @throws TuneSdkException If fails to post request.

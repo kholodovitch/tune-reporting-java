@@ -4,7 +4,7 @@ package com.tune.reporting.base.service;
  * Response.java
  *
  * <p>
- * Copyright (c) 2014 Tune, Inc
+ * Copyright (c) 2014 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,9 +38,9 @@ package com.tune.reporting.base.service;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 Tune (http://www.tune.com)
+ * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-12 05:24:55 $
+ * @version   $Date: 2014-12-24 13:23:15 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -55,46 +55,46 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * Tune Management API Response.
+ * TUNE Management API Response.
  */
 public class TuneManagementResponse {
 
   /**
-   * Tune Management API request URL.
+   * TUNE Management API request URL.
    */
   private String    requestUrl;
 
   /**
-   * @var Tune Management API Service response.
+   * @var TUNE Management API Service response.
    */
   private String    responseRaw;
 
   /**
    * Property of full JSON response returned from service of
-   * Tune Management API.
+   * TUNE Management API.
    */
   private JSONObject  responseJson;
 
   /**
    * Property of HTTP response code returned from curl after completion for
-   * Tune Management API request.
+   * TUNE Management API request.
    */
   private int     responseHttpCode;
 
   /**
    * Property of HTTP response headers returned from curl after completion for
-   * Tune Management API request.
+   * TUNE Management API request.
    */
   private Map<String, List<String>> responseHeaders;
 
   /**
    * Constructor.
    *
-   * @param responseRaw      Tune Management API Service full response.
-   * @param responseJson     Tune Management API Service response JSON.
-   * @param responseHttpCode Tune Management API Service response HTTP code.
-   * @param responseHeaders  Tune Management API Service response HTTP headers.
-   * @param requestUrl       Tune Management API request URL
+   * @param responseRaw      TUNE Management API Service full response.
+   * @param responseJson     TUNE Management API Service response JSON.
+   * @param responseHttpCode TUNE Management API Service response HTTP code.
+   * @param responseHeaders  TUNE Management API Service response HTTP headers.
+   * @param requestUrl       TUNE Management API request URL
    */
   public TuneManagementResponse(
       final String                    responseRaw,
@@ -119,22 +119,22 @@ public class TuneManagementResponse {
 
   /**
    * Set request URL.
-   * @param requestUrl       Tune Management API request URL
+   * @param requestUrl       TUNE Management API request URL
    */
   public final void setRequestUrl(final String requestUrl) {
     this.requestUrl = requestUrl;
   }
 
   /**
-   * Get Raw response from Tune Mangement API service.
+   * Get Raw response from TUNE Mangement API service.
    */
   public final String getRaw() {
     return this.responseRaw;
   }
 
   /**
-   * Set Raw response from Tune Mangement API service.
-   * @param responseRaw  Tune Management API Service full response.
+   * Set Raw response from TUNE Mangement API service.
+   * @param responseRaw  TUNE Management API Service full response.
    */
   public final void setRaw(final String responseRaw) {
     this.responseRaw = responseRaw;
@@ -147,22 +147,22 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Get Full JSON response from Tune Mangement API service.
+   * Get Full JSON response from TUNE Mangement API service.
    */
   public final JSONObject getJson() {
     return this.responseJson;
   }
 
   /**
-   * Set Full JSON response from Tune Mangement API service.
-   * @param responseJson Tune Management API Service response JSON.
+   * Set Full JSON response from TUNE Mangement API service.
+   * @param responseJson TUNE Management API Service response JSON.
    */
   public final void setJson(final JSONObject responseJson) {
     this.responseJson = responseJson;
   }
 
   /**
-   * Get HTTP code returned within Tune Management API reponse.
+   * Get HTTP code returned within TUNE Management API reponse.
    *
    * @return int
    */
@@ -171,15 +171,15 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Set HTTP code returned within Tune Management API reponse.
-   * @param responseHttpCode Tune Management API Service response HTTP code.
+   * Set HTTP code returned within TUNE Management API reponse.
+   * @param responseHttpCode TUNE Management API Service response HTTP code.
    */
   public final void setHttpCode(final int responseHttpCode) {
     this.responseHttpCode = responseHttpCode;
   }
 
   /**
-   * Get HTTP headers returned within Tune Management API reponse.
+   * Get HTTP headers returned within TUNE Management API reponse.
    *
    * @return Map
    */
@@ -188,8 +188,8 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Set HTTP headers returned within Tune Management API reponse.
-   * @param responseHeaders  Tune Management API Service response HTTP headers.
+   * Set HTTP headers returned within TUNE Management API reponse.
+   * @param responseHeaders  TUNE Management API Service response HTTP headers.
    */
   public final void setHeaders(
     final Map<String, List<String>> responseHeaders
@@ -198,7 +198,7 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Get raw representing only the "data" response from Tune Management API.
+   * Get raw representing only the "data" response from TUNE Management API.
    *
    * @return String
    */
@@ -277,7 +277,7 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Return "data" contents of Tune Management API JSON response.
+   * Return "data" contents of TUNE Management API JSON response.
    *
    * @return JSONObject
    */
@@ -296,7 +296,7 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Return "response_size" contents of Tune Management API JSON response.
+   * Return "response_size" contents of TUNE Management API JSON response.
    *
    * @return int
    */
@@ -313,7 +313,7 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Return "status_code" contents of Tune Management API JSON response.
+   * Return "status_code" contents of TUNE Management API JSON response.
    *
    * @return int
    */
@@ -330,7 +330,7 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Return "errors" contents of Tune Management API JSON response.
+   * Return "errors" contents of TUNE Management API JSON response.
    *
    * @return String
    */
@@ -365,7 +365,7 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Return "debug" contents of Tune Management API JSON response.
+   * Return "debug" contents of TUNE Management API JSON response.
    *
    * @return String
    */

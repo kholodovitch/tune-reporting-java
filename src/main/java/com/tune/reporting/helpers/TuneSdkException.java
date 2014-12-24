@@ -4,7 +4,7 @@ package com.tune.reporting.helpers;
  * TuneSdkException.java
  *
  * <p>
- * Copyright (c) 2014 Tune, Inc
+ * Copyright (c) 2014 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,15 +38,15 @@ package com.tune.reporting.helpers;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 Tune (http://www.tune.com)
+ * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-12 05:24:55 $
+ * @version   $Date: 2014-12-24 13:23:15 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 /**
- * TuneSdkException is thrown when the Tune SDK has
+ * TuneSdkException is thrown when the TUNE SDK has
  * detected an error within its code, regardless of any given Request.
  */
 public class TuneSdkException extends Exception {
@@ -58,14 +58,14 @@ public class TuneSdkException extends Exception {
   private String message = null;
 
   /**
-   * Instantiates a new Tune sdk exception.
+   * Instantiates a new TUNE sdk exception.
    */
   public TuneSdkException() {
     super();
   }
 
   /**
-   * Instantiates a new Tune sdk exception.
+   * Instantiates a new TUNE sdk exception.
    *
    * @param message the message
    */
@@ -75,7 +75,7 @@ public class TuneSdkException extends Exception {
   }
 
   /**
-   * Instantiates a new Tune sdk exception.
+   * Instantiates a new TUNE sdk exception.
    *
    * @param cause the cause
    */
@@ -84,7 +84,7 @@ public class TuneSdkException extends Exception {
   }
 
   /**
-   * Instantiates a new Tune sdk exception.
+   * Instantiates a new TUNE sdk exception.
    *
    * @param message the message
    * @param cause the cause
@@ -109,5 +109,4 @@ public class TuneSdkException extends Exception {
   public String getMessage() {
     return message;
   }
-
 }
