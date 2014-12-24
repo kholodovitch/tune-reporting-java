@@ -4,7 +4,7 @@ package com.tune.reporting.examples;
  * ExampleTuneManagementClient.java
  *
  * <p>
- * Copyright (c) 2014 Tune, Inc
+ * Copyright (c) 2014 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,9 +38,9 @@ package com.tune.reporting.examples;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 Tune (http://www.tune.com)
+ * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-12 05:24:55 $
+ * @version   $Date: 2014-12-24 13:23:15 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -72,17 +72,15 @@ public class ExampleTuneManagementClient {
       if (!apiKey.matches("[a-zA-Z0-9]+")) {
         throw new IllegalArgumentException(
           String.format("Invalid [apiKey]: '%s'", apiKey)
-       );
+        );
       }
     } else {
       throw new IllegalArgumentException("Missing [apiKey]");
     }
 
-    System.out.println(String.format("apiKey = '%s'", apiKey));
-
-    System.out.println("============================================");
-    System.out.println(" Tune Management Client Account Users   ");
-    System.out.println("============================================");
+    System.out.println("\033[34m" + "============================================" + "\033[0m");
+    System.out.println("\033[34m" + " Begin TUNE Management Client               " + "\033[0m");
+    System.out.println("\033[34m" + "============================================" + "\033[0m");
 
     try {
       String controller = "account/users";
@@ -98,7 +96,7 @@ public class ExampleTuneManagementClient {
           action,
           apiKey,
           mapQueryString
-     );
+      );
 
       client.call();
 
@@ -112,8 +110,8 @@ public class ExampleTuneManagementClient {
       System.out.print("Stack Trace: " + Arrays.toString(e.getStackTrace()));
     }
 
-    System.out.println("============================================");
-    System.out.println("   The End                ");
-    System.out.println("============================================");
+    System.out.println("\033[32m" + "=====================" + "\033[0m");
+    System.out.println("\033[32m" + " End Example         " + "\033[0m");
+    System.out.println("\033[32m" + "=====================" + "\033[0m");
   }
 }

@@ -2,7 +2,7 @@
  * AdvertiserReportActualsBase.java
  *
  * <p>
- * Copyright (c) 2014 Tune, Inc
+ * Copyright (c) 2014 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -36,9 +36,9 @@
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 Tune (http://www.tune.com)
+ * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-12 05:24:55 $
+ * @version   $Date: 2014-12-24 13:23:15 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -57,7 +57,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Base class for Tune Mangement API actuals endpoints.
+ * Base class for TUNE Mangement API actuals endpoints.
  */
 public class AdvertiserReportActualsBase extends AdvertiserReportBase {
 
@@ -74,8 +74,8 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
   /**
    * Constructor.
    *
-   * @param controller        Tune Management API endpoint name.
-   * @param apiKey           Tune MobileAppTracking API Key.
+   * @param controller        TUNE Management API endpoint name.
+   * @param apiKey           TUNE MobileAppTracking API Key.
    * @param filterDebugMode     Remove debug mode information from results.
    * @param filterTestProfileId  Remove test profile information from results.
    * @param validateFields       Validate fields used by actions' parameters.
