@@ -40,12 +40,13 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 12:27:54 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.AdvertiserReportLogBase;
+import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,49 +59,42 @@ public class AdvertiserReportLogEventItems extends AdvertiserReportLogBase {
   /**
    * Constructor.
    *
-   * @param apiKey       TUNE MobileAppTracking API Key.
-   * @param validateFields   Validate fields used by actions' parameters.
    */
-  public AdvertiserReportLogEventItems(
-      final String apiKey,
-      final Boolean validateFields
- ) {
+  public AdvertiserReportLogEventItems() throws TuneSdkException {
     super(
       "advertiser/stats/event/items",
-      apiKey,
       false,
-      true,
-      validateFields
-   );
+      true
+    );
 
     /*
      * Fields recommended in suggested order.
      */
-    this.setFieldsRecommended = new HashSet<String>(Arrays.asList(
-      "id",
-      "created",
-      "site_id",
-      "site.name",
-      "campaign_id",
-      "campaign.name",
-      "site_event_id",
-      "site_event.name",
-      "site_event_item_id",
-      "site_event_item.name",
-      "quantity",
-      "value_usd",
-      "country_id",
-      "country.name",
-      "region_id",
-      "region.name",
-      "agency_id",
-      "agency.name",
-      "advertiser_sub_site_id",
-      "advertiser_sub_site.name",
-      "advertiser_sub_campaign_id",
-      "advertiser_sub_campaign.name",
-      "currency_code",
-      "value"
-   ));
+    this.setFieldsRecommended(new HashSet<String>(Arrays.asList(
+        "id",
+        "created",
+        "site_id",
+        "site.name",
+        "campaign_id",
+        "campaign.name",
+        "site_event_id",
+        "site_event.name",
+        "site_event_item_id",
+        "site_event_item.name",
+        "quantity",
+        "value_usd",
+        "country_id",
+        "country.name",
+        "region_id",
+        "region.name",
+        "agency_id",
+        "agency.name",
+        "advertiser_sub_site_id",
+        "advertiser_sub_site.name",
+        "advertiser_sub_campaign_id",
+        "advertiser_sub_campaign.name",
+        "currency_code",
+        "value"
+    )));
   }
 }

@@ -40,7 +40,7 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-21 22:34:43 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -62,26 +62,31 @@ import java.util.Map;
 /**
  * Read remote CSV report.
  */
-public class ReportReaderCsv extends ReportReaderBase {
+public final class ReportReaderCsv extends ReportReaderBase {
   /**
    * Constructor.
    *
    * @param reportUrl Report URL provide upon completion on Export queue.
    */
   public ReportReaderCsv(
-      String reportUrl
- ) {
+      final String reportUrl
+  ) {
     super(
       reportUrl
-   );
+    );
   }
 
   /**
-  * Returns a null when the input stream is empty.
-  */
+   * Parse CSV file.
+   *
+   * @param csvBufferReader Buffered contents of CSV file.
+   *
+   * @return List Lines from CSV file.
+   * @throws Exception If failure to parse CSV file into lines.
+   */
   public static List<String> parseLine(
-      BufferedReader csvBufferReader
- ) throws Exception {
+      final BufferedReader csvBufferReader
+  ) throws Exception {
     int ch = csvBufferReader.read();
     while (ch == '\r') {
       ch = csvBufferReader.read();
@@ -99,7 +104,7 @@ public class ReportReaderCsv extends ReportReaderBase {
         if (ch == '\"') {
           inquotes = false;
         } else {
-          curVal.append((char)ch);
+          curVal.append((char) ch);
         }
       } else {
         if (ch == '\"') {
@@ -119,7 +124,7 @@ public class ReportReaderCsv extends ReportReaderBase {
           //end of a line, break out
           break;
         } else {
-          curVal.append((char)ch);
+          curVal.append((char) ch);
         }
       }
       ch = csvBufferReader.read();
@@ -133,6 +138,8 @@ public class ReportReaderCsv extends ReportReaderBase {
    * to the content's format.
    *
    * @return Boolean  If successful in reading remote report returns true.
+   *
+   * @throws TuneSdkException If error occurs when reading exported report.
    */
   public Boolean read()
     throws TuneSdkException {

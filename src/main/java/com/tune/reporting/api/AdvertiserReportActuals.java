@@ -40,12 +40,13 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 12:27:54 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.AdvertiserReportActualsBase;
+import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -57,42 +58,35 @@ public class AdvertiserReportActuals extends AdvertiserReportActualsBase {
   /**
    * Constructor.
    *
-   * @param apiKey       TUNE MobileAppTracking API Key.
-   * @param validateFields   Validate fields used by actions' parameters.
    */
-  public AdvertiserReportActuals(
-      final String apiKey,
-      final Boolean validateFields
- ) {
+  public AdvertiserReportActuals() throws TuneSdkException {
     super(
       "advertiser/stats",
-      apiKey,
       true,
-      true,
-      validateFields
-   );
+      true
+    );
 
     /*
      * Fields recommended in suggested order.
      */
-    this.setFieldsRecommended = new HashSet<String>(Arrays.asList(
-      "site_id",
-      "site.name",
-      "publisher_id",
-      "publisher.name",
-      "ad_impressions",
-      "ad_impressions_unique",
-      "ad_clicks",
-      "ad_clicks_unique",
-      "paid_installs",
-      "paid_installs_assists",
-      "non_installs_assists",
-      "paid_events",
-      "paid_events_assists",
-      "non_events_assists",
-      "paid_opens",
-      "paid_opens_assists",
-      "non_opens_assists"
-   ));
+    this.setFieldsRecommended(new HashSet<String>(Arrays.asList(
+        "site_id",
+        "site.name",
+        "publisher_id",
+        "publisher.name",
+        "ad_impressions",
+        "ad_impressions_unique",
+        "ad_clicks",
+        "ad_clicks_unique",
+        "paid_installs",
+        "paid_installs_assists",
+        "non_installs_assists",
+        "paid_events",
+        "paid_events_assists",
+        "non_events_assists",
+        "paid_opens",
+        "paid_opens_assists",
+        "non_opens_assists"
+    )));
   }
 }

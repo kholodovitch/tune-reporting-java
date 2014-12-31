@@ -26,7 +26,7 @@
 # author    Jeff Tanner <jefft@tune.com>
 # copyright 2014 Tune (http://www.tune.com)
 # license   http://opensource.org/licenses/MIT The MIT License (MIT)
-# version   $Date: 2014-12-12 05:24:55 $
+# version   $Date: 2014-12-31 13:59:48 $
 # link      https://developers.mobileapptracking.com
 #
 
@@ -35,9 +35,13 @@
 # ANT
 
 ant-clean:
+	find src/ -name \*.asc -exec rm {} \;
 	sudo rm -fR ./docs/javadoc/*
 	sudo rm -fR ./docs/doxygen/*
 	sudo rm -fR ./junit/*
+	sudo rm -fR ./files/*
+	sudo rm -fR ./build/*
+	sudo rm overview-frame.html
 	ant clean
 	
 ant-lint:
@@ -52,8 +56,7 @@ ant-examples:
 ant-tests:
 	ant test -DAPI_KEY=$(api_key)
 
-# Maven
-
+# Maven sign java classes #1
 mvn-gpg-sign:
 	find src/ -name \*.asc -exec rm {} \;
 	find src/ -name \*.java -exec gpg --passphrase '$(passphrase)' -ab {} \;
@@ -64,6 +67,7 @@ mvn-lint:
 	mvn site
 
 mvn-clean:
+	sudo rm -fR ./build/*
 	find src/ -name \*.asc -exec rm {} \;
 	mvn clean
 
@@ -73,12 +77,14 @@ mvn-tests:
 mvn-package:
 	mvn package -DAPI_KEY=$(api_key)
 
+# Maven deploy #2
 mvn-deploy:
 	find src/ -name \*.asc -exec rm {} \;
 	find src/ -name \*.java -exec gpg --passphrase '$(passphrase)' -ab {} \;
 	find src/ -name \*.asc -exec gpg --verify {} \;
 	mvn clean deploy -e -DperformRelease=true -Dgpg.passphrase=$(passphrase) -DAPI_KEY=$(api_key) -Dgpg.keyname=$(keyname)
 
+# Maven release #3
 mvn-release:
 	mvn -e nexus-staging:release
 

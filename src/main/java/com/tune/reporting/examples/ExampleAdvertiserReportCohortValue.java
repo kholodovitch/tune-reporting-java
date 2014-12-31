@@ -40,7 +40,7 @@ package com.tune.reporting.examples;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -50,6 +50,7 @@ import com.tune.reporting.base.endpoints.EndpointBase;
 import com.tune.reporting.base.service.TuneManagementResponse;
 
 import com.tune.reporting.helpers.ReportReaderCsv;
+import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneServiceException;
 
 import java.text.SimpleDateFormat;
@@ -65,7 +66,19 @@ import java.util.Set;
 /**
  * Example of tune.reporting.api.AdvertiserReportCohortValue.
  */
-public class ExampleAdvertiserReportCohortValue {
+public final class ExampleAdvertiserReportCohortValue {
+
+  /**
+   * The request has succeeded.
+   */
+  public static final int HTTP_STATUS_OK = 200;
+
+  /**
+   * Constructor.
+   */
+  private ExampleAdvertiserReportCohortValue() {
+    //not called
+  }
 
   /**
    * The main method.
@@ -73,8 +86,9 @@ public class ExampleAdvertiserReportCohortValue {
    * @param args the arguments
    * @throws Exception  If example should fail.
    */
-  public static void main(final String[] args) throws Exception {
-
+  public static void main(
+      final String[] args
+  ) throws Exception {
     String apiKey = null;
 
     if (args.length > 0) {
@@ -82,11 +96,14 @@ public class ExampleAdvertiserReportCohortValue {
       if (!apiKey.matches("[a-zA-Z0-9]+")) {
         throw new IllegalArgumentException(
           String.format("Invalid [apiKey]: '%s'", apiKey)
-       );
+        );
       }
     } else {
       throw new IllegalArgumentException("Missing [apiKey]");
     }
+
+    SdkConfig sdkConfig = SdkConfig.getInstance();
+    sdkConfig.setApiKey(apiKey);
 
     Date now = new Date();
     GregorianCalendar calendarWeekAgo = new GregorianCalendar();
@@ -107,20 +124,25 @@ public class ExampleAdvertiserReportCohortValue {
     String endDate = dateFormat.format(dateYesterday);
     endDate = String.format("%s 23:59:59", endDate);
 
-    System.out.println("\033[34m" + "===============================================" + "\033[0m");
-    System.out.println("\033[34m" + " Begin TUNE Advertiser Report Cohort Value     " + "\033[0m");
-    System.out.println("\033[34m" + "===============================================" + "\033[0m");
+    System.out.println(
+        "\033[34m" + "===============================================" + "\033[0m"
+    );
+    System.out.println(
+        "\033[34m" + " Begin TUNE Advertiser Report Cohort Value  " + "\033[0m"
+    );
+    System.out.println(
+        "\033[34m" + "===============================================" + "\033[0m"
+    );
 
-
-    AdvertiserReportCohortValue reportCohort
-        = new AdvertiserReportCohortValue(apiKey, true);
+    AdvertiserReportCohortValue advertiserReport
+        = new AdvertiserReportCohortValue();
 
     System.out.println("====================================================");
-    System.out.println(" Fields Advertiser Report Cohort Value DEFAULT.    ");
+    System.out.println(" Fields Advertiser Report Cohort Value Default.    ");
     System.out.println("====================================================");
 
     Set<String> setFieldsDefault
-        = reportCohort.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
+        = advertiserReport.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
     if ((null != setFieldsDefault) && !setFieldsDefault.isEmpty()) {
       for (String field : setFieldsDefault) {
         System.out.println(field);
@@ -130,13 +152,13 @@ public class ExampleAdvertiserReportCohortValue {
     }
 
     System.out.println("====================================================");
-    System.out.println(" Fields Advertiser Report Cohort Value RECOMMENDED.  ");
+    System.out.println(" Fields Advertiser Report Cohort Value Recommended.  ");
     System.out.println("====================================================");
 
-    Set<String> setFieldsRecommended
-        = reportCohort.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
-    if ((null != setFieldsRecommended) && !setFieldsRecommended.isEmpty()) {
-      for (String field : setFieldsRecommended) {
+    Set<String> fieldsRecommended
+        = advertiserReport.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+    if ((null != fieldsRecommended) && !fieldsRecommended.isEmpty()) {
+      for (String field : fieldsRecommended) {
         System.out.println(field);
       }
     } else {
@@ -147,7 +169,7 @@ public class ExampleAdvertiserReportCohortValue {
     System.out.println(" Count Advertiser Report Cohort Value records.      ");
     System.out.println("====================================================");
 
-    TuneManagementResponse response = reportCohort.count(
+    TuneManagementResponse response = advertiserReport.count(
         startDate,
         endDate,
         "click",    // cohortType
@@ -157,7 +179,9 @@ public class ExampleAdvertiserReportCohortValue {
         "America/Los_Angeles"
     );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
+        || (null != response.getErrors())
+    ) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
@@ -192,11 +216,11 @@ public class ExampleAdvertiserReportCohortValue {
     sort.put("install_publisher_id", "ASC");
 
     String strFieldsRecommended
-        = reportCohort.getFields(
+        = advertiserReport.getFields(
             AdvertiserReportCohortValue.TUNE_FIELDS_RECOMMENDED
           );
 
-    response = reportCohort.find(
+    response = advertiserReport.find(
         startDate,
         endDate,
         "click",                // cohortType
@@ -211,7 +235,7 @@ public class ExampleAdvertiserReportCohortValue {
         "America/Los_Angeles"   // responseTimezone
     );
 
-    if ((response.getHttpCode() != 200)
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
         || (null != response.getErrors())) {
       throw new Exception(
         String.format(
@@ -227,7 +251,7 @@ public class ExampleAdvertiserReportCohortValue {
     System.out.println(" Export Advertiser Report Cohort Value CSV    ");
     System.out.println("====================================================");
 
-    response = reportCohort.export(
+    response = advertiserReport.export(
         startDate,
         endDate,
         "click",                // cohortType
@@ -239,7 +263,7 @@ public class ExampleAdvertiserReportCohortValue {
         "America/Los_Angeles"   // responseTimezone
     );
 
-    if ((response.getHttpCode() != 200)
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
         || (null != response.getErrors())) {
       throw new Exception(
         String.format(
@@ -251,20 +275,21 @@ public class ExampleAdvertiserReportCohortValue {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String csvJobId = AdvertiserReportCohortValue.parseResponseReportJobId(response);
+    String csvJobId
+        = AdvertiserReportCohortValue.parseResponseReportJobId(response);
     System.out.println(String.format(" CSV Job ID: '%s'", csvJobId));
 
     System.out.println("====================================================");
     System.out.println(" Fetching Advertiser Report Cohort Value CSV  ");
     System.out.println("====================================================");
 
-    response = reportCohort.fetch(
-        csvJobId,       // Job ID
-        true,           // verbose
-        10              // sleep in seconds
-   );
+    response = advertiserReport.fetch(
+        csvJobId       // Job ID
+    );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
+        || (null != response.getErrors())
+    ) {
       throw new Exception(
         String.format(
           "Failed: %d: '%s'", response.getHttpCode(), response.toString()
@@ -275,7 +300,8 @@ public class ExampleAdvertiserReportCohortValue {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String csvReportUrl = AdvertiserReportCohortValue.parseResponseReportUrl(response);
+    String csvReportUrl
+        = AdvertiserReportCohortValue.parseResponseReportUrl(response);
     System.out.println(String.format(" CSV Report URL: '%s'", csvReportUrl));
 
     System.out.println("====================================================");

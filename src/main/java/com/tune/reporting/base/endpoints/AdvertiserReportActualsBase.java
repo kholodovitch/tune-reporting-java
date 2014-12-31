@@ -1,3 +1,5 @@
+package com.tune.reporting.base.endpoints;
+
 /**
  * AdvertiserReportActualsBase.java
  *
@@ -38,12 +40,10 @@
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
-
-package com.tune.reporting.base.endpoints;
 
 import com.tune.reporting.base.service.TuneManagementClient;
 import com.tune.reporting.base.service.TuneManagementResponse;
@@ -57,7 +57,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Base class for TUNE Mangement API actuals endpoints.
+ * Base class for TUNE Management API actuals endpoints.
  */
 public class AdvertiserReportActualsBase extends AdvertiserReportBase {
 
@@ -69,31 +69,25 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
           "date",
           "week",
           "month"
-     ));
+      ));
 
   /**
    * Constructor.
    *
-   * @param controller        TUNE Management API endpoint name.
-   * @param apiKey           TUNE MobileAppTracking API Key.
+   * @param controller          TUNE Management API endpoint name.
    * @param filterDebugMode     Remove debug mode information from results.
-   * @param filterTestProfileId  Remove test profile information from results.
-   * @param validateFields       Validate fields used by actions' parameters.
+   * @param filterTestProfileId Remove test profile information from results.
    */
   public AdvertiserReportActualsBase(
       final String controller,
-      final String apiKey,
       final Boolean filterDebugMode,
-      final Boolean filterTestProfileId,
-      final Boolean validateFields
- ) {
+      final Boolean filterTestProfileId
+  ) throws TuneSdkException {
     super(
       controller,
-      apiKey,
       filterDebugMode,
-      filterTestProfileId,
-      validateFields
-   );
+      filterTestProfileId
+    );
   }
 
   /**
@@ -110,39 +104,39 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public final TuneManagementResponse count(
       final String startDate,
       final String endDate,
-      String group,
-      String filter,
+      final String group,
+      final String filter,
       final String responseTimezone
- ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  ) throws  TuneSdkException,
+            TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
-    if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
-    }
+    String groupV = null;
+    String filterV = null;
+
     if ((null != group) && !group.isEmpty()) {
-      group = super.validateGroup(group);
+      groupV = super.validateGroup(group);
+    }
+    if ((null != filter) && !filter.isEmpty()) {
+      filterV = super.validateFilter(filter);
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("start_date", startDate);
     mapQueryString.put("end_date", endDate);
-    mapQueryString.put("group", group);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("group", groupV);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("response_timezone", responseTimezone);
 
     return super.callRecords(
       "count",
       mapQueryString
-   );
+    );
   }
 
   /**
@@ -167,29 +161,34 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value
-   * is provided to a parameter.
    */
   public final TuneManagementResponse find(
       final String startDate,
       final String endDate,
-      String fields,
-      String group,
-      String filter,
+      final String fields,
+      final String group,
+      final String filter,
       final int limit,
       final int page,
-      Map<String, String> sort,
+      final Map<String, String> sort,
       final String timestamp,
       final String responseTimezone
- ) throws IllegalArgumentException, TuneSdkException, TuneServiceException {
+  ) throws TuneSdkException, TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
+    String fieldsV = null;
+    String groupV = null;
+    String filterV = null;
+
     if ((null != group) && !group.isEmpty()) {
-      group = super.validateGroup(group);
+      groupV = super.validateGroup(group);
     }
     if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
+      filterV = super.validateFilter(filter);
+    }
+    if ((null != fields) && !fields.isEmpty()) {
+      fieldsV = super.validateFields(fields);
     }
 
     String strSort = null;
@@ -201,12 +200,8 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
       strSort = super.validateSort(setFields, sort);
 
       if ((null != setFields) && !setFields.isEmpty()) {
-        fields = EndpointBase.implode(setFields, ",");
+        fieldsV = EndpointBase.implode(setFields, ",");
       }
-    }
-
-    if ((null != fields) && !fields.isEmpty()) {
-      fields = super.validateFields(fields);
     }
 
     // timestamp
@@ -214,16 +209,16 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
       if (!AdvertiserReportActualsBase.TIMESTAMPS.contains(timestamp)) {
         throw new IllegalArgumentException(
           String.format("Parameter 'timestamp' iis invalid: '%s'.", timestamp)
-       );
+        );
       }
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("start_date", startDate);
     mapQueryString.put("end_date", endDate);
-    mapQueryString.put("fields", fields);
-    mapQueryString.put("group", group);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("fields", fieldsV);
+    mapQueryString.put("group", groupV);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("limit", Integer.toString(limit));
     mapQueryString.put("page", Integer.toString(page));
     mapQueryString.put("sort", strSort);
@@ -233,7 +228,7 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
     return super.callRecords(
       "find",
       mapQueryString
-   );
+    );
   }
 
   /**
@@ -242,77 +237,79 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
    * identifier to be provided to action /export/download.json to download
    * completed report.
    *
-   * @param startDate    YYYY-MM-DD HH:MM:SS
-   * @param endDate      YYYY-MM-DD HH:MM:SS
-   * @param fields      No value returns default fields, "*" returns all
-   *                  available fields, or provide specific fields.
-   * @param group       Group results using this endpoint's fields.
-   * @param filter      Filter the results and apply conditions that
-   *                  must be met for records to be included in data.
-   * @param timestamp     Set to breakdown stats by timestamp choices:
-   *                  hour, datehour, date, week, month.
-   * @param format      Export format for downloaded report: json, csv.
-   * @param responseTimezone Setting expected timezone for data.
-   * Default is set by account.
+   * @param startDate         YYYY-MM-DD HH:MM:SS
+   * @param endDate           YYYY-MM-DD HH:MM:SS
+   * @param fields            No value returns default fields, "*" returns all
+   *                          available fields, or provide specific fields.
+   * @param group             Group results using this endpoint's fields.
+   * @param filter            Filter the results and apply conditions that
+   *                          must be met for records to be included in data.
+   * @param timestamp         Set to breakdown stats by timestamp choices:
+   *                          hour, datehour, date, week, month.
+   * @param format            Export format for downloaded report: json, csv.
+   * @param responseTimezone  Setting expected timezone for data.
+   *                          Default is set by account.
    *
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public final TuneManagementResponse export(
       final String startDate,
       final String endDate,
-      String fields,
-      String group,
-      String filter,
+      final String fields,
+      final String group,
+      final String filter,
       final String timestamp,
       final String format,
       final String responseTimezone
- ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  ) throws  TuneSdkException,
+            TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
+    String fieldsV = null;
+    String groupV = null;
+    String filterV = null;
+
     if ((null != group) && !group.isEmpty()) {
-      group = super.validateGroup(group);
+      groupV = super.validateGroup(group);
     }
     if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
+      filterV = super.validateFilter(filter);
     }
     if ((null != fields) && !fields.isEmpty()) {
-      fields = super.validateFields(fields);
+      fieldsV = super.validateFields(fields);
     }
+
     // timestamp
     if ((null != timestamp) && !timestamp.isEmpty()) {
       if (!AdvertiserReportActualsBase.TIMESTAMPS.contains(timestamp)) {
         throw new IllegalArgumentException(
           String.format("Parameter 'timestamp' is invalid: '%s'.", timestamp)
-       );
+        );
       }
     }
     if (!EndpointBase.REPORT_EXPORT_FORMATS.contains(format)) {
       throw new IllegalArgumentException(
         String.format("Parameter 'format' is invalid: '%s'.", format)
-     );
+      );
     }
     if (format.equals("csv") && ((null == fields) || fields.isEmpty())) {
       throw new IllegalArgumentException(
         String.format(
           "Parameter 'fields' needs to be defined if report format is: '%s'.",
           format
-       )
-     );
+        )
+      );
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("start_date", startDate);
     mapQueryString.put("end_date", endDate);
-    mapQueryString.put("fields", fields);
-    mapQueryString.put("group", group);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("fields", fieldsV);
+    mapQueryString.put("group", groupV);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("timestamp", timestamp);
     mapQueryString.put("format", format);
     mapQueryString.put("response_timezone", responseTimezone);
@@ -320,7 +317,7 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
     return super.callRecords(
       "find_export_queue",
       mapQueryString
-   );
+    );
   }
 
   /**
@@ -333,13 +330,13 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    */
-  public TuneManagementResponse status(
-      String jobId
- ) throws TuneSdkException {
+  public final TuneManagementResponse status(
+      final String jobId
+  ) throws TuneSdkException {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
     }
-    if ((null == this.apiKey) || this.apiKey.isEmpty()) {
+    if ((null == this.getApiKey()) || this.getApiKey().isEmpty()) {
       throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
     }
 
@@ -349,9 +346,9 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
     TuneManagementClient client = new TuneManagementClient(
         "export",
         "download",
-        this.apiKey,
+        this.getApiKey(),
         mapQueryString
-   );
+    );
 
     client.call();
 
@@ -361,31 +358,22 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
   /**
    * Helper function for fetching report upon completion.
    *
-   * @param jobId    Job identifier assigned for report export.
-   * @param verbose     For debug purposes to monitor job export
-   * completion status.
-   * @param sleep     Polling delay for checking job completion status.
+   * @param jobId       Job identifier assigned for report export.
    *
    * @return TuneManagementResponse
-   * @throws TuneSdkException If fails to post request.
-   * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
+   * @throws TuneSdkException       If fails to post request.
+   * @throws TuneServiceException   If service fails to handle post request.
    */
   public final TuneManagementResponse fetch(
-      final String jobId,
-      final Boolean verbose,
-      final int sleep
- ) throws IllegalArgumentException, TuneServiceException, TuneSdkException {
+      final String jobId
+  ) throws TuneServiceException, TuneSdkException {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
     }
     return super.fetchRecords(
-        "export",
-        "download",
-        jobId,
-        verbose,
-        sleep
-   );
+      "export",
+      "download",
+      jobId
+    );
   }
 }

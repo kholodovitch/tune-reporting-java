@@ -40,72 +40,228 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.InputStream;
 import java.io.IOException;
 
 import java.util.Properties;
 
-public class SdkConfig {
+/**
+ * Singleton for pulling SDK Configuration.
+ */
+public final class SdkConfig {
 
-    private static SdkConfig _instanceObject = null;
-    private Properties _tune_reporting_sdk_config;
-    private static Object _syncObject = new Object();
+  /**
+   * TUNE Reporting SDK Configuration File.
+   */
+  public static final String SDK_CONFIG_FILENAME
+      = "tune_reporting_sdk_config.properties";
 
-    /**
-     * Instantiates a new sdk config.
-     *
-     * @throws Exception the exception
-     */
-    private SdkConfig() throws Exception {
-        this._tune_reporting_sdk_config = new Properties();
-        String strFilePath = "tune_reporting_sdk_config.properties";
-        try {
-            InputStream inputStream = this.getClass().getResourceAsStream(strFilePath);
-            this._tune_reporting_sdk_config.load(inputStream);
-        } catch ( IOException e ) {
-            throw new TuneSdkException( String.format("IOException: Problems getting SDK configuration resource: '%s', error: '%s'", strFilePath, e.getMessage()), e);
-        } catch ( Exception e ) {
-            throw e;
-        }
+  /**
+   * Instance of this singleton.
+   */
+  private static SdkConfig instance = null;
+
+  /**
+   * Content of SDK Configuration.
+   */
+  private Properties sdkConfig;
+
+  /**
+   * Sync.
+   */
+  private static Object syncObject = new Object();
+
+  /**
+   * Instantiates a new sdk config.
+   *
+   * @throws TuneSdkException Upon failure to read SDK configuration.
+   */
+  private SdkConfig() throws TuneSdkException {
+    this.sdkConfig = new Properties();
+    String srcDirectory = new File("").getAbsolutePath();
+    String strSdkConfigFilePath
+        = srcDirectory + "/" + SDK_CONFIG_FILENAME;
+    File fileSdkConfig = new File(strSdkConfigFilePath);
+    if(!fileSdkConfig.exists() || fileSdkConfig.isDirectory()) {
+      throw new TuneSdkException(
+        String.format(
+          "Tune Reporting SDK configuration file does not exist: '%s'.",
+          strSdkConfigFilePath
+        )
+      );
     }
 
-    /**
-     * Gets the single instance of SdkConfig.
-     *
-     * @return single instance of SdkConfig
-     * @throws Exception the exception
-     */
-    public static SdkConfig getInstance() throws Exception {
+    try {
+      InputStream in = new FileInputStream(fileSdkConfig);
+      this.sdkConfig.load(in);
+    } catch (IOException e) {
+      throw new TuneSdkException(
+        String.format(
+          "IOException: Problems getting SDK configuration: '%s', error: '%s'",
+          strSdkConfigFilePath,
+          e.getMessage()
+        ),
+        e
+      );
+    } catch (Exception e) {
+      throw new TuneSdkException(
+        String.format(
+          "Unexpected: Problems getting SDK configuration: '%s', error: '%s'",
+          strSdkConfigFilePath,
+          e.getMessage()
+        ),
+        e
+      );
+    }
+  }
 
-        if (null == SdkConfig._instanceObject) {
-            synchronized(SdkConfig._syncObject) {
-                if (null == SdkConfig._instanceObject) {
-                    SdkConfig._instanceObject = new SdkConfig();
-                }
-            }
+  /**
+   * Gets the single instance of SdkConfig.
+   *
+   * @return SdkConfig          Singleton instance of SdkConfig.
+   * @throws TuneSdkException   Upon failure to read SDK configuration.
+   */
+  public static SdkConfig getInstance() throws TuneSdkException {
+    if (null == SdkConfig.instance) {
+      synchronized (SdkConfig.syncObject) {
+        if (null == SdkConfig.instance) {
+          SdkConfig.instance = new SdkConfig();
         }
-        return SdkConfig._instanceObject;
+      }
+    }
+    return SdkConfig.instance;
+  }
+
+  /**
+   * Gets the config value.
+   *
+   * @param key     The key to be placed into this property list.
+   * @return the config value
+   */
+  public String getConfigValue(
+      final String key
+  ) {
+    if (null == this.sdkConfig) {
+      throw new NullPointerException("Reference to 'sdkConfig' is null.");
+    }
+    if ((null == key) || key.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'key' is null.");
     }
 
-    /**
-     * Gets the config value.
-     *
-     * @param key the key
-     * @return the config value
-     */
-    public String getConfigValue(String key) {
-        if (null == this._tune_reporting_sdk_config) {
-            throw new NullPointerException( "Reference to '_tune_reporting_sdk_config' is null.");
-        }
-        if ((null == key) || key.isEmpty()) {
-            throw new IllegalArgumentException( "Parameter 'key' is null.");
-        }
+    return this.sdkConfig.getProperty(key);
+  }
 
-        return this._tune_reporting_sdk_config.getProperty(key);
+  /**
+   * Sets the config value.
+   *
+   * @param key     The key to be placed into this property list.
+   * @param value   The value corresponding to key.
+   */
+  public void setConfigValue(
+      final String key,
+      final String value
+  ) {
+    if (null == this.sdkConfig) {
+      throw new NullPointerException("Reference to 'sdkConfig' is null.");
     }
+    if ((null == key) || key.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'key' is not defined.");
+    }
+    if ((null == value) || value.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'value' is not defined.");
+    }
+
+    this.sdkConfig.setProperty(key, value);
+  }
+
+  /**
+   * Get API_KEY from TUNE Reporting SDK configuration.
+   *
+   * @return String   TUNE MobileAppTracking API Key.
+   */
+  public String getApiKey()
+  {
+    String apiKey = this.getConfigValue("tune_reporting_api_key_string");
+
+    if (!apiKey.matches("[a-zA-Z0-9]+")) {
+      throw new IllegalArgumentException(
+        String.format("Invalid 'tune_reporting_api_key_string': '%s'", apiKey)
+      );
+    }
+
+    if (apiKey.equals("API_KEY")) {
+      throw new IllegalArgumentException(
+        String.format("Invalid 'tune_reporting_api_key_string': '%s'", apiKey)
+      );
+    }
+
+    return apiKey;
+  }
+
+  /**
+   * Set API_KEY from TUNE Reporting SDK configuration.
+   *
+   * @param apiKey   TUNE MobileAppTracking API Key.
+   */
+  public void setApiKey(String apiKey)
+  {
+    this.setConfigValue("tune_reporting_api_key_string", apiKey);
+  }
+
+  /**
+   * Get if to validate fields.
+   *
+   * @return Boolean  Validate fields used by parameters.
+   */
+  public Boolean getValidateFields()
+  {
+    String configValue = this.getConfigValue("tune_reporting_validate_fields_boolean");
+    if (configValue.equalsIgnoreCase("true") || configValue.equalsIgnoreCase("false")) {
+      return Boolean.valueOf(configValue);
+    }
+    return false;
+  }
+
+  /**
+   * Get fetch sleep in seconds.
+   *
+   * @return Integer  sleep in seconds.
+   */
+  public Integer getFetchSleep()
+  {
+    String configValue = this.getConfigValue("tune_reporting_export_status_sleep_seconds");
+    return Integer.parseInt(configValue);
+  }
+
+  /**
+   * Get fetch timeout in seconds.
+   *
+   * @return Integer  timeout in seconds.
+   */
+  public Integer getFetchTimeout()
+  {
+    String configValue = this.getConfigValue("tune_reporting_export_status_timeout_seconds");
+    return Integer.parseInt(configValue);
+  }
+
+  /**
+   * Get if to validate fields.
+   *
+   * @return Boolean  Validate fields used by parameters.
+   */
+  public Boolean getFetchVerbose()
+  {
+    String configValue = this.getConfigValue("tune_reporting_export_status_verbose_boolean");
+    if (configValue.equalsIgnoreCase("true") || configValue.equalsIgnoreCase("false")) {
+      return Boolean.valueOf(configValue);
+    }
+    return false;
+  }
 }

@@ -1,8 +1,8 @@
 <h2>tune-reporting-java</h2>
 <h2>TUNE Reporting SDK for Java 1.6</h2>
 <h3>Incorporate TUNE Reporting services.</h3>
-<h4>Update:  $Date: 2014-12-30 08:50:38 $
-<h4>Version: 0.9.5
+<h4>Update:  $Date: 2014-12-31 09:56:30 $</h4>
+<h4>Version: 0.9.6</h4>
 ===
 
 <a id="TOP"></a>
@@ -193,7 +193,7 @@ Use the following dependency in your project:
     <dependency>
        <groupId>com.tune.reporting</groupId>
        <artifactId>tune-reporting</artifactId>
-       <version>0.9.5</version>
+       <version>0.9.6</version>
        <scope>compile</scope>
     </dependency>
 ```
@@ -556,17 +556,17 @@ Finds all existing records matching provided filter criteria and returns total c
 
 <!-- Java -->
 ```java
-    AdvertiserReportLogClicks reportLogsClicks
+    AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
 
-    TuneManagementResponse response = reportLogsClicks.count(
+    TuneManagementResponse response = advertiserReport.count(
         startDate,
         endDate,
         null,     // filter
         "America/Los_Angeles"
     );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK) || (null != response.getErrors())) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
@@ -600,12 +600,12 @@ Gathers all existing records that match filter criteria and returns an array of 
 
 <!-- Java -->
 ```java
-    AdvertiserReportLogClicks reportLogsClicks
+    AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
     String strFieldsRecommended
-        = reportLogsClicks.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+        = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-    TuneManagementResponse response = reportLogsClicks.find(
+    TuneManagementResponse response = advertiserReport.find(
         startDate,
         endDate,
         strFieldsRecommended,  // fields
@@ -616,7 +616,7 @@ Gathers all existing records that match filter criteria and returns an array of 
         "America/Los_Angeles"     // responseTimezone
     );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK) || (null != response.getErrors())) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
@@ -638,9 +638,9 @@ Provides the same signature as function find(), accept parameters <code>limit</c
 
 <!-- Java -->
 ```java
-    AdvertiserReportLogClicks reportLogsClicks
+    AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
-    TuneManagementResponse response = reportLogsClicks.export(
+    TuneManagementResponse response = advertiserReport.export(
         startDate,
         endDate,
         strFieldsRecommended,     // fields
@@ -649,7 +649,7 @@ Provides the same signature as function find(), accept parameters <code>limit</c
         "America/Los_Angeles"     // responseTimezone
     );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK) || (null != response.getErrors())) {
       throw new Exception(
         String.format(
           "Failed: %d: '%s'", response.getHttpCode(), response.toString()
@@ -681,15 +681,15 @@ A helper function that creates a threaded worker that handles the status request
 
 <!-- Java -->
 ```java
-    AdvertiserReportLogClicks reportLogsClicks
+    AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
-    TuneManagementResponse response = reportLogsClicks.fetch(
+    TuneManagementResponse response = advertiserReport.fetch(
         csvJobId,     // Job ID
         true,         // verbose
         10            // sleep in seconds
    );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK) || (null != response.getErrors())) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
@@ -719,12 +719,12 @@ Method <strong>fields()</strong> returns a listing of all the fields that can be
 
 <!-- Java -->
 ```java
-    AdvertiserReportLogClicks reportLogsClicks
+    AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
-    Set<String> setFieldsRecommended
-        = reportLogsClicks.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
-    if ((null != setFieldsRecommended) && !setFieldsRecommended.isEmpty()) {
-      for (String field : setFieldsRecommended) {
+    Set<String> fieldsRecommended
+        = advertiserReport.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+    if ((null != fieldsRecommended) && !fieldsRecommended.isEmpty()) {
+      for (String field : fieldsRecommended) {
         System.out.println(field);
       }
     } else {
@@ -739,9 +739,9 @@ Method <strong>define()</strong> returns the complete meta-data of an endpoint. 
 
 <!-- Java -->
 ```java
-    AdvertiserReportLogClicks reportLogsClicks
+    AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
-    TuneManagementResponse response = reportLogsClicks.define()
+    TuneManagementResponse response = advertiserReport.define()
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 ```

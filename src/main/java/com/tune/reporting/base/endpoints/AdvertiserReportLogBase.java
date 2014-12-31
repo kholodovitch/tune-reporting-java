@@ -40,7 +40,7 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -56,31 +56,25 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Base class for TUNE Mangement API reports logs endpoints.
+ * Base class for TUNE Management API reports logs endpoints.
  */
 public class AdvertiserReportLogBase extends AdvertiserReportBase {
   /**
    * Constructor.
    *
-   * @param controller        TUNE Management API endpoint name.
-   * @param apiKey           TUNE MobileAppTracking API Key.
+   * @param controller          TUNE Management API endpoint name.
    * @param filterDebugMode     Remove debug mode information from results.
-   * @param filterTestProfileId  Remove test profile information from results.
-   * @param validateFields       Validate fields used by actions' parameters.
+   * @param filterTestProfileId Remove test profile information from results.
    */
   public AdvertiserReportLogBase(
       final String controller,
-      final String apiKey,
       final Boolean filterDebugMode,
-      final Boolean filterTestProfileId,
-      final Boolean validateFields
- ) {
+      final Boolean filterTestProfileId
+  ) throws TuneSdkException {
     super(
       controller,
-      apiKey,
       filterDebugMode,
-      filterTestProfileId,
-      validateFields
+      filterTestProfileId
    );
   }
 
@@ -97,28 +91,27 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public final TuneManagementResponse count(
       final String startDate,
       final String endDate,
-      String filter,
+      final String filter,
       final String responseTimezone
- ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  ) throws  TuneSdkException,
+            TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
+    String filterV = null;
+
     if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
+      filterV = super.validateFilter(filter);
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("start_date", startDate);
     mapQueryString.put("end_date", endDate);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("response_timezone", responseTimezone);
 
     return super.callRecords(
@@ -151,26 +144,29 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public final TuneManagementResponse find(
       final String startDate,
       final String endDate,
-      String fields,
-      String filter,
+      final String fields,
+      final String filter,
       final int limit,
       final int page,
       final Map<String, String> sort,
       final String responseTimezone
- ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  ) throws  TuneSdkException,
+            TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
+    String fieldsV = null;
+    String filterV = null;
+
     if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
+      filterV = super.validateFilter(filter);
+    }
+    if ((null != fields) && !fields.isEmpty()) {
+      fieldsV = super.validateFields(fields);
     }
 
     String strSort = null;
@@ -182,19 +178,15 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
       strSort = super.validateSort(setFields, sort);
 
       if ((null != setFields) && !setFields.isEmpty()) {
-        fields = EndpointBase.implode(setFields, ",");
+        fieldsV = EndpointBase.implode(setFields, ",");
       }
-    }
-
-    if ((null != fields) && !fields.isEmpty()) {
-      fields = super.validateFields(fields);
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("start_date", startDate);
     mapQueryString.put("end_date", endDate);
-    mapQueryString.put("fields", fields);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("fields", fieldsV);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("limit", Integer.toString(limit));
     mapQueryString.put("page", Integer.toString(page));
     mapQueryString.put("sort", strSort);
@@ -203,7 +195,7 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
     return super.call(
       "find",
       mapQueryString
-   );
+    );
   }
 
   /**
@@ -225,28 +217,29 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public final TuneManagementResponse export(
       final String startDate,
       final String endDate,
-      String fields,
-      String filter,
+      final String fields,
+      final String filter,
       final String format,
       final String responseTimezone
- ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  ) throws  TuneSdkException,
+            TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
+    String fieldsV = null;
+    String filterV = null;
+
     if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
+      filterV = super.validateFilter(filter);
     }
     if ((null != fields) && !fields.isEmpty()) {
-      fields = super.validateFields(fields);
+      fieldsV = super.validateFields(fields);
     }
+
     if (!EndpointBase.REPORT_EXPORT_FORMATS.contains(format)) {
       throw new IllegalArgumentException(
       String.format("Parameter 'format' is invalid: '%s'.", format)
@@ -257,15 +250,15 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
         String.format(
           "Parameter 'fields' needs to be defined if report format is: '%s'.",
           format
-       )
-     );
+        )
+      );
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("start_date", startDate);
     mapQueryString.put("end_date", endDate);
-    mapQueryString.put("fields", fields);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("fields", fieldsV);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("format", format);
     mapQueryString.put("response_timezone", responseTimezone);
 
@@ -287,11 +280,11 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
    */
   public final TuneManagementResponse status(
       final String jobId
- ) throws TuneSdkException {
+  ) throws TuneSdkException {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
     }
-    if ((null == this.apiKey) || this.apiKey.isEmpty()) {
+    if ((null == this.getApiKey()) || this.getApiKey().isEmpty()) {
       throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
     }
 
@@ -301,9 +294,9 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
     TuneManagementClient client = new TuneManagementClient(
         "export",
         "download",
-        this.apiKey,
+        this.getApiKey(),
         mapQueryString
-   );
+    );
 
     client.call();
 
@@ -313,31 +306,22 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
   /**
    * Helper function for fetching report upon completion.
    *
-   * @param jobId    Job identifier assigned for report export.
-   * @param verbose     For debug purposes to monitor job
-   * export completion status.
-   * @param sleep     Polling delay for checking job completion status.
+   * @param jobId       Job identifier assigned for report export.
    *
    * @return TuneManagementResponse
-   * @throws TuneSdkException If fails to post request.
+   * @throws TuneSdkException     If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public final TuneManagementResponse fetch(
-      final String jobId,
-      final Boolean verbose,
-      final int sleep
- ) throws IllegalArgumentException, TuneServiceException, TuneSdkException {
+      final String jobId
+  ) throws TuneServiceException, TuneSdkException {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
     }
     return super.fetchRecords(
-        "export",
-        "download",
-        jobId,
-        verbose,
-        sleep
-   );
+      "export",
+      "download",
+      jobId
+    );
   }
 }

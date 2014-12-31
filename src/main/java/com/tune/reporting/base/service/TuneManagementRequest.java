@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -50,9 +50,9 @@ import com.tune.reporting.helpers.TuneSdkException;
 import java.util.Map;
 
 /**
- * Contents of a TUNE Mangement API request.
+ * Contents of a TUNE Management API request.
  */
-public class TuneManagementRequest {
+public final class TuneManagementRequest {
 
   /**
    * TUNE Reporting SDK name.
@@ -62,7 +62,7 @@ public class TuneManagementRequest {
   /**
    * TUNE Reporting SDK version.
    */
-  private final String SDK_VERSION = "0.9.4";
+  private final String SDK_VERSION = "0.9.6";
 
   /**
    * TUNE Management API endpoint requested.
@@ -103,12 +103,12 @@ public class TuneManagementRequest {
    * Instantiates a new base request.
    *
    * @param controller    TUNE Management API controller
-   * @param action      TUNE Management API controller's action
-   * @param apiKey       User's API Key provide by their
-   * MobileAppTracking platform account.
-   * @param mapQueryString Query string elements appropriate to
-   * the requested controller's action.
-   * @param apiUrlBase    TUNE Management API base url.
+   * @param action        TUNE Management API controller's action
+   * @param apiKey        User's API Key provide by their
+   *                      MobileAppTracking platform account.
+   * @param mapQueryString  Query string elements appropriate to
+   *                        the requested controller's action.
+   * @param apiUrlBase      TUNE Management API base url.
    * @param apiUrlVersion   TUNE Management API version.
    *
    */
@@ -119,7 +119,7 @@ public class TuneManagementRequest {
       final Map<String, String> mapQueryString,
       final String        apiUrlBase,
       final String        apiUrlVersion
- ) {
+  ) {
     // -----------------------------------------------------------------
     // validate inputs
     // -----------------------------------------------------------------
@@ -151,11 +151,16 @@ public class TuneManagementRequest {
    *
    * @return String
    */
-  public final String getController() {
+  public String getController() {
     return this.controller;
   }
 
-  public final void setController(String controller) {
+  /**
+   * Set controller for this request.
+   *
+   * @param controller Endpoint controller name
+   */
+  public void setController(final String controller) {
     this.controller = controller;
   }
 
@@ -164,18 +169,25 @@ public class TuneManagementRequest {
    *
    * @return String
    */
-  public final String getAction() {
+  public String getAction() {
     return this.action;
   }
 
-  public final void setAction(final String action) {
+  /**
+   * Set controller action for this request.
+   *
+   * @param action Endpoint controller's action name
+   */
+  public void setAction(final String action) {
     this.action = action;
   }
 
   /**
    * Get apiKey property.
+   *
+   * @return String TUNE MobileAppTracking Key
    */
-  public final String getApiKey() {
+  public String getApiKey() {
     return this.apiKey;
   }
 
@@ -189,8 +201,10 @@ public class TuneManagementRequest {
 
   /**
    * Get query string map property.
+   *
+   * @return Map Query String component of TUNE Management API request.
    */
-  public final Map<String, String> getQueryData() {
+  public Map<String, String> getQueryData() {
     return this.mapQueryString;
   }
 
@@ -198,7 +212,7 @@ public class TuneManagementRequest {
    * Set query string map property.
    * @param mapQueryString  Map of TUNE Management API query string parameters.
    */
-  public final void setQueryData(final Map<String, String> mapQueryString) {
+  public void setQueryData(final Map<String, String> mapQueryString) {
     this.mapQueryString = mapQueryString;
   }
 
@@ -209,13 +223,13 @@ public class TuneManagementRequest {
    * @return String Query String component of TUNE Management API request.
    * @throws TuneSdkException If fails to post request.
    */
-  public final String getQueryString() throws TuneSdkException {
+  public String getQueryString() throws TuneSdkException {
     QueryStringBuilder qs = new QueryStringBuilder();
 
     if (!this.apiKey.isEmpty()) {
       try {
-        qs.add("sdk_name", this.SDK_NAME);
-        qs.add("sdk_version", this.SDK_VERSION);
+        qs.add("sdk", this.SDK_NAME);
+        qs.add("ver", this.SDK_VERSION);
         qs.add("api_key", this.apiKey);
 
         if (this.mapQueryString != null && !this.mapQueryString.isEmpty()) {
@@ -240,14 +254,14 @@ public class TuneManagementRequest {
    *
    * @return String Full TUNE Management API request without Query String.
    */
-  public final String getPath() {
+  public String getPath() {
     String requestPath = String.format(
         "%s/%s/%s/%s",
         this.apiUrlBase,
         this.apiUrlVersion,
         this.controller,
         this.action
-   );
+    );
 
     return requestPath;
   }
@@ -258,12 +272,12 @@ public class TuneManagementRequest {
    * @return String Full TUNE Management API request with Query String.
    * @throws TuneSdkException If fails to post request.
    */
-  public final String getUrl() throws TuneSdkException {
+  public String getUrl() throws TuneSdkException {
     String requestUrl = String.format(
         "%s?%s",
         this.getPath(),
         this.getQueryString()
-   );
+    );
 
     return requestUrl;
   }

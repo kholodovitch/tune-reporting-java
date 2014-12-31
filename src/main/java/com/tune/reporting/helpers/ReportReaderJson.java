@@ -40,13 +40,12 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-21 22:34:43 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
@@ -65,24 +64,26 @@ import java.util.Map;
 /**
  * Read remote JSON report with provided url.
  */
-public class ReportReaderJson extends ReportReaderBase {
+public final class ReportReaderJson extends ReportReaderBase {
   /**
-   * Constructor
+   * Constructor.
    *
    * @param reportUrl Report URL provide upon completion on Export queue.
    */
   public ReportReaderJson(
-      String reportUrl
- ) {
+      final String reportUrl
+  ) {
     super(
       reportUrl
-   );
+    );
   }
 
   /**
-   * Using provided report download URL, extract contents appropriate to the content's format.
+   * Using provided report download URL, extract contents appropriate
+   * to the content's format.
    *
    * @return Boolean  If successful in reading remote report returns true.
+   * @throws TuneSdkException If fails to read report.
    */
   public Boolean read()
     throws TuneSdkException {
@@ -118,7 +119,7 @@ public class ReportReaderJson extends ReportReaderBase {
         Map<String, String> jsonItemMap = new HashMap<String, String>();
 
         while (keys.hasNext()) {
-          String key = (String)keys.next();
+          String key = (String) keys.next();
           Object value = jsonItem.get(key);
           jsonItemMap.put(key, value.toString());
         }

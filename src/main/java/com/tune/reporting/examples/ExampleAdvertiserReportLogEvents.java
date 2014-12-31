@@ -40,7 +40,7 @@ package com.tune.reporting.examples;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -51,8 +51,7 @@ import com.tune.reporting.base.service.TuneManagementResponse;
 
 import com.tune.reporting.helpers.ReportReaderCsv;
 import com.tune.reporting.helpers.ReportReaderJson;
-
-import com.tune.reporting.helpers.TuneSdkException;
+import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneServiceException;
 
 import java.text.SimpleDateFormat;
@@ -69,7 +68,19 @@ import java.util.Set;
 /**
  * Example of tune.reporting.api.AdvertiserReportLogEvents.
  */
-public class ExampleAdvertiserReportLogEvents {
+public final class ExampleAdvertiserReportLogEvents {
+
+  /**
+   * The request has succeeded.
+   */
+  public static final int HTTP_STATUS_OK = 200;
+
+  /**
+   * Constructor.
+   */
+  private ExampleAdvertiserReportLogEvents() {
+    //not called
+  }
 
   /**
    * The main method.
@@ -77,8 +88,9 @@ public class ExampleAdvertiserReportLogEvents {
    * @param args the arguments
    * @throws Exception  If example should fail.
    */
-  public static void main(final String[] args) throws Exception {
-
+  public static void main(
+      final String[] args
+  ) throws Exception {
     String apiKey = null;
 
     if (args.length > 0) {
@@ -91,6 +103,9 @@ public class ExampleAdvertiserReportLogEvents {
     } else {
       throw new IllegalArgumentException("Missing [apiKey]");
     }
+
+    SdkConfig sdkConfig = SdkConfig.getInstance();
+    sdkConfig.setApiKey(apiKey);
 
     Date now = new Date();
 
@@ -107,19 +122,25 @@ public class ExampleAdvertiserReportLogEvents {
     String endDate = dateFormat.format(dateYesterday);
     endDate = String.format("%s 23:59:59", endDate);
 
-    System.out.println("\033[34m" + "============================================" + "\033[0m");
-    System.out.println("\033[34m" + " Begin TUNE Advertiser Report Log Events    " + "\033[0m");
-    System.out.println("\033[34m" + "============================================" + "\033[0m");
+    System.out.println(
+        "\033[34m" + "===============================================" + "\033[0m"
+    );
+    System.out.println(
+        "\033[34m" + " Begin TUNE Advertiser Report Log Events  " + "\033[0m"
+    );
+    System.out.println(
+        "\033[34m" + "===============================================" + "\033[0m"
+    );
 
-    AdvertiserReportLogEvents reportLogsEvents
-        = new AdvertiserReportLogEvents(apiKey, true);
+    AdvertiserReportLogEvents advertiserReport
+        = new AdvertiserReportLogEvents();
 
     System.out.println("====================================================");
-    System.out.println(" Fields Advertiser Report Log Events DEFAULT.       ");
+    System.out.println(" Fields Advertiser Report Log Events Default.       ");
     System.out.println("====================================================");
 
     Set<String> setFieldsDefault
-        = reportLogsEvents.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
+        = advertiserReport.getFieldsSet(EndpointBase.TUNE_FIELDS_DEFAULT);
     if ((null != setFieldsDefault) && !setFieldsDefault.isEmpty()) {
       for (String field : setFieldsDefault) {
         System.out.println(field);
@@ -129,13 +150,13 @@ public class ExampleAdvertiserReportLogEvents {
     }
 
     System.out.println("====================================================");
-    System.out.println(" Fields Advertiser Report Log Events RECOMMENDED.   ");
+    System.out.println(" Fields Advertiser Report Log Events Recommended.   ");
     System.out.println("====================================================");
 
-    Set<String> setFieldsRecommended
-        = reportLogsEvents.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
-    if ((null != setFieldsRecommended) && !setFieldsRecommended.isEmpty()) {
-      for (String field : setFieldsRecommended) {
+    Set<String> fieldsRecommended
+        = advertiserReport.getFieldsSet(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+    if ((null != fieldsRecommended) && !fieldsRecommended.isEmpty()) {
+      for (String field : fieldsRecommended) {
         System.out.println(field);
       }
     } else {
@@ -146,14 +167,14 @@ public class ExampleAdvertiserReportLogEvents {
     System.out.println(" Count Advertiser Report Log Events records.        ");
     System.out.println("====================================================");
 
-    TuneManagementResponse response = reportLogsEvents.count(
+    TuneManagementResponse response = advertiserReport.count(
         startDate,
         endDate,
         null,     // filter
         "America/Los_Angeles"
-   );
+    );
 
-    if ((response.getHttpCode() != 200)
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
         || (null != response.getErrors())) {
       throw new Exception(
         String.format(
@@ -189,9 +210,9 @@ public class ExampleAdvertiserReportLogEvents {
 
     // build fields
     String strFieldsRecommended
-        = reportLogsEvents.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+        = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-    response = reportLogsEvents.find(
+    response = advertiserReport.find(
         startDate,
         endDate,
         strFieldsRecommended,   // fields
@@ -200,15 +221,15 @@ public class ExampleAdvertiserReportLogEvents {
         0,                      // page
         sort,
         "America/Los_Angeles"   // responseTimezone
-   );
+    );
 
-    if ((response.getHttpCode() != 200)
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
         || (null != response.getErrors())) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
-       )
-     );
+        )
+      );
     }
 
     System.out.println(" TuneManagementResponse:");
@@ -218,16 +239,18 @@ public class ExampleAdvertiserReportLogEvents {
     System.out.println(" Export Advertiser Report Log Events CSV    ");
     System.out.println("====================================================");
 
-    response = reportLogsEvents.export(
+    response = advertiserReport.export(
         startDate,
         endDate,
         strFieldsRecommended,   // fields
         null,                   // filter
         "csv",                  // format
         "America/Los_Angeles"   // responseTimezone
-   );
+    );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
+        || (null != response.getErrors())
+    ) {
       throw new Exception(
         String.format(
           "Failed: %d: '%s'", response.getHttpCode(), response.toString()
@@ -238,20 +261,21 @@ public class ExampleAdvertiserReportLogEvents {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String csvJobId = AdvertiserReportLogEvents.parseResponseReportJobId(response);
+    String csvJobId
+        = AdvertiserReportLogEvents.parseResponseReportJobId(response);
     System.out.println(String.format(" CSV Job ID: '%s'", csvJobId));
 
     System.out.println("====================================================");
     System.out.println(" Fetching Advertiser Report Log Events CSV  ");
     System.out.println("====================================================");
 
-    response = reportLogsEvents.fetch(
-        csvJobId,       // Job ID
-        true,           // verbose
-        10              // sleep in seconds
+    response = advertiserReport.fetch(
+        csvJobId       // Job ID
     );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
+        || (null != response.getErrors())
+    ) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
@@ -262,7 +286,8 @@ public class ExampleAdvertiserReportLogEvents {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String csvReportUrl = AdvertiserReportLogEvents.parseResponseReportUrl(response);
+    String csvReportUrl
+        = AdvertiserReportLogEvents.parseResponseReportUrl(response);
     System.out.println(String.format(" CSV Report URL: '%s'", csvReportUrl));
 
     System.out.println("====================================================");
@@ -277,7 +302,7 @@ public class ExampleAdvertiserReportLogEvents {
     System.out.println(" Export Advertiser Report Log Events JSON   ");
     System.out.println("====================================================");
 
-    response = reportLogsEvents.export(
+    response = advertiserReport.export(
         startDate,
         endDate,
         strFieldsRecommended,  // fields
@@ -286,7 +311,9 @@ public class ExampleAdvertiserReportLogEvents {
         "America/Los_Angeles"     // responseTimezone
     );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
+        || (null != response.getErrors())
+    ) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
@@ -297,20 +324,21 @@ public class ExampleAdvertiserReportLogEvents {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String jsonJobId = AdvertiserReportLogEvents.parseResponseReportJobId(response);
+    String jsonJobId
+        = AdvertiserReportLogEvents.parseResponseReportJobId(response);
     System.out.println(String.format(" JSON Job ID: '%s'", jsonJobId));
 
     System.out.println("====================================================");
     System.out.println(" Fetching Advertiser Report Log Events JSON ");
     System.out.println("====================================================");
 
-    response = reportLogsEvents.fetch(
-        jsonJobId,      // Job ID
-        true,           // verbose
-        10              // sleep in seconds
+    response = advertiserReport.fetch(
+        jsonJobId      // Job ID
     );
 
-    if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+    if ((response.getHttpCode() != HTTP_STATUS_OK)
+        || (null != response.getErrors())
+    ) {
       throw new Exception(
         String.format(
           "Failed: %d: %s", response.getHttpCode(), response.toString()
@@ -321,7 +349,8 @@ public class ExampleAdvertiserReportLogEvents {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
-    String jsonReportUrl = AdvertiserReportLogEvents.parseResponseReportUrl(response);
+    String jsonReportUrl
+        = AdvertiserReportLogEvents.parseResponseReportUrl(response);
     System.out.println(String.format(" JSON Report URL: '%s'", jsonReportUrl));
 
     System.out.println("====================================================");

@@ -40,12 +40,13 @@ package com.tune.reporting.examples;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.service.TuneManagementClient;
+import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.Arrays;
@@ -55,16 +56,28 @@ import java.util.Map;
 /**
  * Example using TuneManagementClient to connect with 'account/users'.
  */
-public class ExampleTuneManagementClient {
+public final class ExampleTuneManagementClient {
+
+  /**
+   * The request has succeeded.
+   */
+  public static final int HTTP_STATUS_OK = 200;
+
+  /**
+   * Constructor.
+   */
+  private ExampleTuneManagementClient() {
+    //not called
+  }
 
   /**
    * The main method.
    *
    * @param args the arguments
-   * @throws Exception  If example should fail.
    */
-  public static void main(final String[] args) {
-
+  public static void main(
+      final String[] args
+  ) throws Exception {
     String apiKey = null;
 
     if (args.length > 0) {
@@ -78,9 +91,15 @@ public class ExampleTuneManagementClient {
       throw new IllegalArgumentException("Missing [apiKey]");
     }
 
-    System.out.println("\033[34m" + "============================================" + "\033[0m");
-    System.out.println("\033[34m" + " Begin TUNE Management Client               " + "\033[0m");
-    System.out.println("\033[34m" + "============================================" + "\033[0m");
+    System.out.println(
+        "\033[34m" + "================================" + "\033[0m"
+    );
+    System.out.println(
+        "\033[34m" + " Begin TUNE Management Client   " + "\033[0m"
+    );
+    System.out.println(
+        "\033[34m" + "================================" + "\033[0m"
+    );
 
     try {
       String controller = "account/users";

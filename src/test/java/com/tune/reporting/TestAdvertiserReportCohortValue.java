@@ -40,7 +40,7 @@ package com.tune.reporting;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -51,7 +51,7 @@ import com.tune.reporting.base.service.TuneManagementResponse;
 
 import com.tune.reporting.helpers.ReportReaderCsv;
 import com.tune.reporting.helpers.ReportReaderJson;
-
+import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneSdkException;
 import com.tune.reporting.helpers.TuneServiceException;
 
@@ -81,11 +81,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
   public static void main(final String[] args) {
   }
 
-  /** The apiKey. */
-  private String apiKey = null;
-
   /** Instance. */
-  private AdvertiserReportCohortValue reportCohort = null;
+  private AdvertiserReportCohortValue advertiserReport = null;
 
   /** Start Date. */
   private String startDate = null;
@@ -97,7 +94,18 @@ public class TestAdvertiserReportCohortValue extends TestCase {
    * @see junit.framework.TestCase#setUp()
    */
   protected void setUp() {
-    this.apiKey = System.getProperty("API_KEY");
+    String apiKey = System.getProperty("API_KEY");
+    TestCase.assertNotNull(apiKey);
+    TestCase.assertFalse(apiKey.isEmpty());
+
+    try {
+      SdkConfig sdkConfig = SdkConfig.getInstance();
+      sdkConfig.setApiKey(apiKey);
+    } catch (TuneSdkException ex) {
+      TestCase.fail("TuneSdkException: " + ex.getMessage());
+    } catch (Exception ex) {
+      TestCase.fail("Exception: " + ex.getMessage());
+    }
 
     Date now = new Date();
 
@@ -119,14 +127,19 @@ public class TestAdvertiserReportCohortValue extends TestCase {
     String endDate = dateFormat.format(dateYesterday);
     this.endDate = String.format("%s 23:59:59", endDate);
 
-    this.reportCohort = new AdvertiserReportCohortValue(this.apiKey, true);
-  }
-
-  /**
-   * Test provided apiKey is not null.
-   */
-  public void test_ApiKey() {
-    TestCase.assertNotNull(this.apiKey);
+    try {
+      this.advertiserReport = new AdvertiserReportCohortValue();
+    } catch (Exception ex) {
+      StringWriter errors = new StringWriter();
+      ex.printStackTrace(new PrintWriter(errors));
+      TestCase.fail(
+          String.format(
+            "Exception: Message: \"%s\", Stack Trace: %s",
+            ex.getMessage(),
+            errors.toString()
+          )
+      );
+    }
   }
 
   /**
@@ -136,7 +149,7 @@ public class TestAdvertiserReportCohortValue extends TestCase {
     TuneManagementResponse response = null;
 
     try {
-      response = this.reportCohort.count(
+      response = this.advertiserReport.count(
         startDate,
         endDate,
         "click",        // cohortType
@@ -144,7 +157,7 @@ public class TestAdvertiserReportCohortValue extends TestCase {
         "site_id,publisher_id", // group
         "(publisher_id > 0)",   // filter
         "America/Los_Angeles"
-     );
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -153,8 +166,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -163,8 +176,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -173,8 +186,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -188,7 +201,7 @@ public class TestAdvertiserReportCohortValue extends TestCase {
   public void test_Fields_All() {
     String strFieldsAll = null;
     try {
-      strFieldsAll = this.reportCohort.getFields(EndpointBase.TUNE_FIELDS_ALL);
+      strFieldsAll = this.advertiserReport.getFields(EndpointBase.TUNE_FIELDS_ALL);
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -197,8 +210,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -207,8 +220,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -217,8 +230,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(strFieldsAll);
@@ -231,7 +244,7 @@ public class TestAdvertiserReportCohortValue extends TestCase {
   public void test_Fields_Recommended() {
     String strFieldsRecommended = null;
     try {
-      strFieldsRecommended = this.reportCohort.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      strFieldsRecommended = this.advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -240,8 +253,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -250,8 +263,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -260,8 +273,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(strFieldsRecommended);
@@ -280,9 +293,9 @@ public class TestAdvertiserReportCohortValue extends TestCase {
       sort.put("created", "DESC");
 
       // build fields
-      String strFieldsRecommended = reportCohort.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      String strFieldsRecommended = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-      response = this.reportCohort.find(
+      response = this.advertiserReport.find(
         startDate,
         endDate,
         "click",        // cohortType
@@ -295,7 +308,7 @@ public class TestAdvertiserReportCohortValue extends TestCase {
         0,            // page
         null,           // sort
         "America/Los_Angeles"   // responseTimezone
-     );
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -304,8 +317,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -314,8 +327,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -324,8 +337,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -341,9 +354,9 @@ public class TestAdvertiserReportCohortValue extends TestCase {
 
     try {
       // build fields
-      String strFieldsRecommended = reportCohort.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      String strFieldsRecommended = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-      response = this.reportCohort.export(
+      response = this.advertiserReport.export(
         startDate,
         endDate,
         "click",        // cohortType
@@ -353,7 +366,7 @@ public class TestAdvertiserReportCohortValue extends TestCase {
         "site_id,publisher_id", // group
         "(publisher_id > 0)",   // filter
         "America/Los_Angeles"   // responseTimezone
-     );
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -362,8 +375,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -372,8 +385,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -382,8 +395,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -403,8 +416,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -413,8 +426,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -423,19 +436,17 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(csvJobId);
 
     String csvReportUrl  = null;
     try {
-      response = this.reportCohort.fetch(
-        csvJobId,          // Job ID
-        false,               // verbose
-        10                // sleep in seconds
-     );
+      response = this.advertiserReport.fetch(
+        csvJobId          // Job ID
+      );
 
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
@@ -445,8 +456,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -455,8 +466,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -465,8 +476,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -484,8 +495,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -494,8 +505,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -504,8 +515,8 @@ public class TestAdvertiserReportCohortValue extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(csvReportUrl);

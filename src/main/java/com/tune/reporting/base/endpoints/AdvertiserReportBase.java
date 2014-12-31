@@ -40,7 +40,7 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 12:27:54 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -48,41 +48,36 @@ package com.tune.reporting.base.endpoints;
 import com.tune.reporting.base.endpoints.EndpointBase;
 import com.tune.reporting.base.service.TuneManagementResponse;
 import com.tune.reporting.helpers.TuneSdkException;
-import com.tune.reporting.helpers.TuneServiceException;
 
 import java.util.Map;
 
 /**
- * Base class for TUNE Mangement API reports endpoints.
+ * Base class for TUNE Management API reports endpoints.
  */
 public class AdvertiserReportBase extends EndpointBase {
   /**
    * Remove debug mode information from results.
    */
-  protected Boolean filterDebugMode = false;
+  private Boolean filterDebugMode = false;
 
   /**
    * Remove test profile information from results.
    */
-  protected Boolean filterTestProfileId = false;
+  private Boolean filterTestProfileId = false;
 
   /**
    * Constructor.
    *
-   * @param controller        TUNE Management API endpoint name.
-   * @param apiKey           MobileAppTracking API Key.
+   * @param controller          TUNE Management API endpoint name.
    * @param filterDebugMode     Remove debug mode information from results.
-   * @param filterTestProfileId  Remove test profile information from results.
-   * @param validateFields       Validate fields used by actions' parameters.
+   * @param filterTestProfileId Remove test profile information from results.
    */
   public AdvertiserReportBase(
       final String controller,
-      final String apiKey,
       final Boolean filterDebugMode,
-      final Boolean filterTestProfileId,
-      final Boolean validateFields
- ) {
-    super(controller, apiKey, validateFields);
+      final Boolean filterTestProfileId
+  ) throws TuneSdkException {
+    super(controller);
 
     this.filterDebugMode = filterDebugMode;
     this.filterTestProfileId = filterTestProfileId;
@@ -97,19 +92,22 @@ public class AdvertiserReportBase extends EndpointBase {
    *
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
-   * @throws IllegalArgumentException If invalid value is provided to a parameter.
    */
-  protected TuneManagementResponse callRecords(
-      String action,
-      Map<String, String> mapQueryString
- ) throws IllegalArgumentException, TuneSdkException {
+  protected final TuneManagementResponse callRecords(
+      final String action,
+      final Map<String, String> mapQueryString
+  ) throws TuneSdkException {
     // action
     if ((null == action) || action.isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'action' is not defined.");
+      throw new IllegalArgumentException(
+        "Parameter 'action' is not defined."
+      );
     }
     // mapQueryString
     if ((null == mapQueryString) || mapQueryString.isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'mapQueryString' is not defined.");
+      throw new IllegalArgumentException(
+        "Parameter 'mapQueryString' is not defined."
+      );
     }
 
     String filterSdk = "";
@@ -133,7 +131,7 @@ public class AdvertiserReportBase extends EndpointBase {
           mapQueryString.put(
               "filter",
               "(" + mapQueryString.get("filter") + ") AND " + filterSdk
-         );
+          );
         } else {
           mapQueryString.put("filter", filterSdk);
         }
@@ -147,13 +145,13 @@ public class AdvertiserReportBase extends EndpointBase {
         mapQueryString.put(
             "filter",
             "(" + mapQueryString.get("filter") + ")"
-       );
+        );
       }
     }
 
     return super.call(
       action,
       mapQueryString
-   );
+    );
   }
 }

@@ -40,15 +40,15 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 /**
- * TuneServiceException is thrown when TUNE
+ * TuneServiceException is thrown when TUNE.
  */
-public class TuneServiceException extends Exception {
+public final class TuneServiceException extends Exception {
 
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = 3461168669128080352L;
@@ -68,7 +68,9 @@ public class TuneServiceException extends Exception {
    *
    * @param message the message
    */
-  public TuneServiceException(String message) {
+  public TuneServiceException(
+      final String message
+  ) {
     super(message);
     this.message = message;
   }
@@ -78,7 +80,7 @@ public class TuneServiceException extends Exception {
    *
    * @param cause the cause
    */
-  public TuneServiceException(Throwable cause) {
+  public TuneServiceException(final Throwable cause) {
     super(cause);
   }
 
@@ -88,7 +90,10 @@ public class TuneServiceException extends Exception {
    * @param message the message
    * @param cause the cause
    */
-  public TuneServiceException(String message, Throwable cause) {
+  public TuneServiceException(
+      final String message,
+      final Throwable cause
+  ) {
     super(message, cause);
     this.message = message;
   }

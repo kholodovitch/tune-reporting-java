@@ -9,7 +9,6 @@ Version 0.9.0
 Internal Beta release on November 21, 2014
 * TUNE Management API Client for Java 1.6
 
-
 Version 0.9.2
 --------------
 
@@ -28,8 +27,15 @@ Version 0.9.4
 Beta public release on December 24, 2014
 * Refactor Log and Cohort classes
 * TUNE Management API request contains SDK type and version.
+
 Version 0.9.5
 --------------
 
 Beta public release on December 30, 2014
 * TUNE Management API request contains 'sdk' and 'ver'.
+
+Version 0.9.6
+--------------
+
+Beta public release on December 31, 2014
+* Lint cleanup.

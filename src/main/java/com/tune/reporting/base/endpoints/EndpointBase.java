@@ -40,14 +40,14 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.service.TuneManagementClient;
 import com.tune.reporting.base.service.TuneManagementResponse;
-import com.tune.reporting.helpers.ReportExportWorker;
+import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneSdkException;
 import com.tune.reporting.helpers.TuneServiceException;
 
@@ -70,9 +70,14 @@ import java.util.Stack;
 
 
 /**
- * Base class for all TUNE Mangement API endpoints.
+ * Base class for all TUNE Management API endpoints.
  */
 public class EndpointBase {
+
+  /**
+   * The request has succeeded.
+   */
+  public static final int HTTP_STATUS_OK = 200;
 
   /** Gather all fields for this endpoint. */
   public static final int TUNE_FIELDS_ALL   = 0;
@@ -86,29 +91,34 @@ public class EndpointBase {
   public static final int TUNE_FIELDS_RECOMMENDED = 8;
 
   /**
+   * TUNE Reporting SDK Configuration.
+   */
+  private SdkConfig sdkConfig = null;
+
+  /**
    * TUNE Management API Endpoint.
    */
-  protected String controller = null;
+  private String controller = null;
 
   /**
    * MobileAppTracking API Key.
    */
-  protected String apiKey = null;
+  private String apiKey = null;
 
   /**
    * TUNE Management API Endpoint's fields.
    */
-  protected Map<String, Map<String, String>> endpointFields = null;
+  private Map<String, Map<String, String>> endpointFields = null;
 
   /**
    * Validate action's parameters against this endpoint' fields.
    */
-  protected Boolean validateFields = false;
+  private Boolean validateFields = false;
 
   /**
    * Endpoint's model name.
    */
-  protected String endpointModelName = null;
+  private String endpointModelName = null;
 
   /**
    * Parameter 'sort' directions.
@@ -117,7 +127,7 @@ public class EndpointBase {
       = new HashSet<String>(Arrays.asList(
           "DESC",
           "ASC"
-     ));
+      ));
 
   /**
    * Parameter 'filter' expression operations.
@@ -147,12 +157,32 @@ public class EndpointBase {
       = new HashSet<String>(Arrays.asList(
           "AND",
           "OR"
-     ));
+      ));
 
   /**
    * Recommended fields for report exports.
    */
-  protected Set<String> setFieldsRecommended = null;
+  private Set<String> fieldsRecommended = null;
+
+  /**
+   * Get recommended fields for an endpoint.
+   *
+   * @return Set
+   */
+  protected final Set<String> getFieldsRecommended() {
+    return this.fieldsRecommended;
+  }
+
+  /**
+   * Set recommended fields for an endpoint.
+   *
+   * @param fieldsRecommended   Set of recommended fields for this endpoint.
+   */
+  protected final void setFieldsRecommended(
+      final Set<String> fieldsRecommended
+  ) {
+    this.fieldsRecommended = fieldsRecommended;
+  }
 
   /**
    * Parameter 'format' for export report.
@@ -166,21 +196,27 @@ public class EndpointBase {
   /**
    * Constructor.
    *
-   * @param controller    TUNE Management API Endpoint
-   * @param apiKey       MobileAppTracking API Key
-   * @param validateFields   Validate fields used by actions' parameters.
+   * @param controller      TUNE Management API Endpoint
    */
   public EndpointBase(
-      final String controller,
-      final String apiKey,
-      final Boolean validateFields
- ) {
+      final String controller
+  ) throws TuneSdkException {
     // controller
     if ((null == controller) || controller.isEmpty()) {
       throw new IllegalArgumentException(
         "Parameter 'controller' is not defined."
-     );
+      );
     }
+
+    try {
+      this.sdkConfig = SdkConfig.getInstance();
+    } catch (TuneSdkException e) {
+      throw e;
+    }
+
+    String apiKey = this.sdkConfig.getApiKey();
+    Boolean validateFields = this.sdkConfig.getValidateFields();
+
     // apiKey
     if ((null == apiKey) || apiKey.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
@@ -217,13 +253,11 @@ public class EndpointBase {
    *
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
-  protected TuneManagementResponse call(
+  protected final TuneManagementResponse call(
       final String action,
       final Map<String, String> mapQueryString
- ) throws IllegalArgumentException, TuneSdkException {
+  ) throws TuneSdkException {
     // action
     if ((null == action) || action.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'action' is not defined.");
@@ -234,7 +268,7 @@ public class EndpointBase {
         action,
         this.apiKey,
         mapQueryString
-   );
+    );
 
     client.call();
 
@@ -247,12 +281,9 @@ public class EndpointBase {
    * @return TuneManagementResponse
    *
    * @throws TuneSdkException If fails to post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public final TuneManagementResponse getDefine()
-    throws  IllegalArgumentException,
-            TuneSdkException {
+    throws TuneSdkException {
     return this.call("define", null);
   }
 
@@ -265,7 +296,7 @@ public class EndpointBase {
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public String getFields()
+  public final String getFields()
     throws  TuneSdkException,
             TuneServiceException {
     return this.getFields(TUNE_FIELDS_ALL);
@@ -274,15 +305,17 @@ public class EndpointBase {
   /**
    * Gather reqested set of fields for this endpoint.
    *
+   * @param enumFieldsSelection Which set of fields for this endpoint.
+   *
    * @return String   Comma delimited set of all fields available for this
    *          endpoint.
    *
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public String getFields(
-      int enumFieldsSelection
- ) throws TuneSdkException, TuneServiceException {
+  public final String getFields(
+      final int enumFieldsSelection
+  ) throws TuneSdkException, TuneServiceException {
     // build fields
     StringBuilder sb = new StringBuilder();
     String loopDelim = "";
@@ -327,7 +360,7 @@ public class EndpointBase {
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public Set<String> getFieldsSet()
+  public final Set<String> getFieldsSet()
     throws  TuneSdkException,
             TuneServiceException {
     return this.getFieldsSet(TUNE_FIELDS_ALL);
@@ -342,13 +375,13 @@ public class EndpointBase {
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public Set<String> getFieldsSet(
-      int enumFieldsSelection
- ) throws TuneSdkException, TuneServiceException {
+  public final Set<String> getFieldsSet(
+      final int enumFieldsSelection
+  ) throws TuneSdkException, TuneServiceException {
     if ((this.validateFields
         || ((enumFieldsSelection & TUNE_FIELDS_RECOMMENDED) == 0))
         && (null == this.endpointFields)
-   ) {
+    ) {
       this.getEndpointFields();
 
       if ((null == this.endpointFields) || this.endpointFields.isEmpty()) {
@@ -366,12 +399,12 @@ public class EndpointBase {
     }
 
     if ((enumFieldsSelection & TUNE_FIELDS_RECOMMENDED) != 0) {
-      return this.setFieldsRecommended;
+      return this.fieldsRecommended;
     }
 
     if (((enumFieldsSelection & TUNE_FIELDS_DEFAULT) == 0)
         && ((enumFieldsSelection & TUNE_FIELDS_RELATED) != 0)
-   ) {
+    ) {
       return this.endpointFields.keySet();
     }
 
@@ -434,12 +467,9 @@ public class EndpointBase {
    *
    * @throws TuneServiceException If service fails to handle post request.
    * @throws TuneSdkException If fails to post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   protected final Map<String, Map<String, String>> getEndpointFields()
-    throws  IllegalArgumentException,
-            TuneServiceException,
+    throws  TuneServiceException,
             TuneSdkException {
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -451,7 +481,7 @@ public class EndpointBase {
         "get_controllers",
         this.apiKey,
         mapQueryString
-   );
+    );
 
     client.call();
 
@@ -459,11 +489,11 @@ public class EndpointBase {
     int httpCode = response.getHttpCode();
     JSONArray data = (JSONArray) response.getData();
 
-    if (httpCode != 200) {
+    if (httpCode != HTTP_STATUS_OK) {
       String requestUrl = response.getRequestUrl();
       throw new TuneServiceException(
         String.format("Connection failure '%s': '%s'", requestUrl, httpCode)
-     );
+      );
     }
 
     if ((null == data) || (data.length() == 0)) {
@@ -471,8 +501,8 @@ public class EndpointBase {
         String.format(
           "Failed to get fields for endpoint: '%s'.",
           this.controller
-       )
-     );
+        )
+      );
     }
 
     try {
@@ -551,28 +581,29 @@ public class EndpointBase {
               Map<String, String> relatedPropertyFieldInfo
                   = new HashMap<String, String>();
               relatedPropertyFieldInfo.put(
-                "default",
-                fieldFoundInfo.get("default")
-             );
+                  "default",
+                  fieldFoundInfo.get("default")
+              );
               relatedPropertyFieldInfo.put("related", "true");
               fieldsFoundMerged.put(
-                relatedPropertyFieldName,
-                relatedPropertyFieldInfo
-             );
+                  relatedPropertyFieldName,
+                  relatedPropertyFieldInfo
+              );
             }
           } else {
             Map<String, String> relatedPropertyFieldInfo
                 = new HashMap<String, String>();
             relatedPropertyFieldInfo.put(
-              "default", fieldFoundInfo.get("default")
-           );
+                "default",
+                fieldFoundInfo.get("default")
+            );
             relatedPropertyFieldInfo.put("related", "true");
             String relatedPropertyFieldName
                 = String.format("%s.%s", relatedProperty, "name");
             fieldsFoundMerged.put(
-              relatedPropertyFieldName,
-              relatedPropertyFieldInfo
-           );
+                relatedPropertyFieldName,
+                relatedPropertyFieldInfo
+            );
           }
         }
       }
@@ -589,19 +620,17 @@ public class EndpointBase {
   }
 
   /**
-   * Validate query string parameter 'fields' having valid endpoint's fields
+   * Validate query string parameter 'fields' having valid endpoint's fields.
    *
    * @param fields  Set of fields to validate.
    *
    * @return String Validated fields.
-   * @throws IllegalArgumentException If invalid value is provided to a parameter.
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String validateFields(
-      List<String> fields
-  ) throws  IllegalArgumentException,
-            TuneSdkException,
+      final List<String> fields
+  ) throws  TuneSdkException,
             TuneServiceException {
     if ((null == fields) || fields.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'fields' is not defined.");
@@ -622,14 +651,14 @@ public class EndpointBase {
           throw new TuneSdkException(
             String.format(
               "Parameter 'fields' contains an empty field.", field
-           )
+            )
          );
         }
         if (!endpointFields.contains(field)) {
           throw new TuneSdkException(
             String.format(
               "Parameter 'fields' contains an invalid field: '%s'.", field
-           )
+            )
          );
         }
       }
@@ -644,15 +673,13 @@ public class EndpointBase {
    * @param fields Provide comma delimited set of fields to validate.
    *
    * @return String Validated fields.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public String validateFields(String fields)
-    throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  public final String validateFields(
+      final String fields
+  ) throws  TuneSdkException,
+            TuneServiceException {
     if ((null == fields) || fields.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'fields' is not defined.");
     }
@@ -668,38 +695,34 @@ public class EndpointBase {
   }
 
   /**
-   * Validate query string parameter 'group' having valid endpoint's fields
+   * Validate query string parameter 'group' having valid endpoint's fields.
    *
    * @param group Set of fields.
    *
    * @return String         Validated group parameter.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public String validateGroup(List<String> group)
-    throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  public final String validateGroup(
+      final List<String> group
+  ) throws  TuneSdkException,
+            TuneServiceException {
     return this.validateFields(group);
   }
 
   /**
-   * Validate query string parameter 'group' having valid endpoint's fields
+   * Validate query string parameter 'group' having valid endpoint's fields.
    *
    * @param group Comma delimited string of fields.
    *
    * @return String         Validated group parameter.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public String validateGroup(String group)
-    throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  public final String validateGroup(
+      final String group
+  ) throws  TuneSdkException,
+            TuneServiceException {
     return this.validateFields(group);
   }
 
@@ -707,19 +730,18 @@ public class EndpointBase {
    * Validate query string parameter 'sort' having valid endpoint's
    * fields and direction.
    *
-   * @param sort  Provide a set of sort pairs of field and direction to validate.
+   * @param fields Fields to validate sort parameters.
+   * @param sort Provide a set of sort pairs of field and direction to validate.
    *
    * @return String     Validated sort parameter.
-   * @throws IllegalArgumentException If invalid value is provided to a parameter.
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public String validateSort(
+  public final String validateSort(
       Set<String> fields,
-      Map<String, String> sort
+      final Map<String, String> sort
   ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+            TuneServiceException {
     if ((null == sort) || sort.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'sort' is not defined.");
     }
@@ -738,16 +760,16 @@ public class EndpointBase {
             String.format(
               "Parameter 'sort' contains an empty field.",
               sortField
-           )
-         );
+            )
+          );
         }
         if (!endpointFields.contains(sortField)) {
           throw new IllegalArgumentException(
             String.format(
               "Parameter 'sort' contains an invalid field: '%s'.",
               sortField
-           )
-         );
+            )
+          );
         }
         String sortDirection = sort.get(sortField);
 
@@ -758,8 +780,8 @@ public class EndpointBase {
             String.format(
               "Parameter 'sort' contains an invalid direction: '%s'.",
               sortDirection
-           )
-         );
+            )
+          );
         }
       }
     }
@@ -794,14 +816,12 @@ public class EndpointBase {
    * @param filter  Provide SQL filter parameter to validate.
    *
    * @return String       Validated filter request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public String validateFilter(String filter)
-    throws  IllegalArgumentException,
-            TuneSdkException,
+  public final String validateFilter(
+      final String filter
+  ) throws  TuneSdkException,
             TuneServiceException {
     if ((null == filter) || filter.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'filter' is not defined.");
@@ -813,7 +833,7 @@ public class EndpointBase {
           "Invalid parameter 'filter' is not parentheses balanced: '%s'.",
           filter
         )
-     );
+      );
     }
     String filterPruned = filter;
     filterPruned = filterPruned.replaceAll("\\(", " ");
@@ -870,8 +890,8 @@ public class EndpointBase {
           "Parameter 'filter' is invalid: '%s': '%s'.",
           filter,
           filterPart
-       )
-     );
+        )
+      );
     }
 
     return String.format("(%s)", filter);
@@ -881,18 +901,15 @@ public class EndpointBase {
    * Validates that provided date time is either "yyyy-MM-dd"
    * or "yyyy-MM-dd HH:mm:ss".
    *
-   * @param paramName  Which date time parameter, typically
-   * 'start_date' or 'end_date'.
+   * @param paramName   Which date time parameter, typically
+   *                    'start_date' or 'end_date'.
    * @param dateTime   Date time
-   * @return String Validated date time
-   *
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
+   * @return String Validated date time.
    */
   public static String validateDateTime(
-      String paramName,
-      String dateTime
- ) throws IllegalArgumentException {
+      final String paramName,
+      final String dateTime
+  ) {
     if ((null == paramName) || paramName.isEmpty()) {
       throw new IllegalArgumentException(
         "Parameter 'paramName' is not defined."
@@ -928,7 +945,7 @@ public class EndpointBase {
         String.format(
           "Parameter '%s' is invalid date-time: '%s'.", paramName, dateTime
         ),
-         ex
+        ex
       );
     }
   }
@@ -940,28 +957,20 @@ public class EndpointBase {
    * Requesting for report url is not the same for all report endpoints.
    * </p>
    *
-   * @param exportController    Controller for report export status.
+   * @param exportController  Controller for report export status.
    * @param exportAction      Action for report export status.
-   * @param jobId           Job Identifier of report on queue.
-   * @param verbose          For debugging purposes only.
-   * @param sleep            How long worker should sleep
-   *                        before next status request.
+   * @param jobId             Job Identifier of report on queue.
    *
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   protected final TuneManagementResponse fetchRecords(
       final String exportController,
       final String exportAction,
-      final String jobId,
-      final Boolean verbose,
-      final int sleep
- ) throws  IllegalArgumentException,
-            TuneServiceException,
-            TuneSdkException {
+      final String jobId
+  ) throws TuneServiceException,
+          TuneSdkException {
     if ((null == exportController) || exportController.isEmpty()) {
       throw new IllegalArgumentException(
         "Parameter 'exportController' is not defined."
@@ -970,7 +979,7 @@ public class EndpointBase {
     if ((null == exportAction) || exportAction.isEmpty()) {
       throw new IllegalArgumentException(
         "Parameter 'exportAction' is not defined."
-     );
+      );
     }
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException(
@@ -981,14 +990,25 @@ public class EndpointBase {
       throw new TuneSdkException("Parameter 'apiKey' is not defined.");
     }
 
+    try {
+      this.sdkConfig = SdkConfig.getInstance();
+    } catch (TuneSdkException e) {
+      throw e;
+    }
+
+    Integer sleep = this.sdkConfig.getFetchSleep();
+    Integer timeout = this.sdkConfig.getFetchTimeout();
+    Boolean verbose = this.sdkConfig.getFetchVerbose();
+
     ReportExportWorker exportWorker = new ReportExportWorker(
         exportController,
         exportAction,
         this.apiKey,
         jobId,
         verbose,
-        sleep
-   );
+        sleep,
+        timeout
+    );
 
     if (verbose) {
       System.out.println("Starting worker...");
@@ -1003,14 +1023,14 @@ public class EndpointBase {
     if (null == response) {
       throw new TuneServiceException(
         "Report export request no response."
-     );
+      );
     }
 
     int httpCode = response.getHttpCode();
-    if (httpCode != 200) {
+    if (httpCode != HTTP_STATUS_OK) {
       throw new TuneServiceException(
         String.format("Report export request error: '%d'", httpCode)
-     );
+      );
     }
 
     JSONObject jdata = (JSONObject) response.getData();
@@ -1025,8 +1045,8 @@ public class EndpointBase {
         String.format(
           "Export data does not contain report 'status', response: %s",
           response.toString()
-       )
-     );
+        )
+      );
     }
 
     String status = null;
@@ -1044,8 +1064,8 @@ public class EndpointBase {
           "Report export status '%s':, response: %s",
           status,
           response.toString()
-       )
-     );
+        )
+      );
     }
 
     return response;
@@ -1056,12 +1076,12 @@ public class EndpointBase {
    *
    * @return String Stringified contents of this object.
    */
-  public String toString() {
+  public final String toString() {
     return String.format(
       "Endpoint '%s', API Key: '%s",
       this.controller,
       this.apiKey
-   );
+    );
   }
 
   /**
@@ -1074,26 +1094,26 @@ public class EndpointBase {
    * @throws TuneSdkException If fails to post request.
    */
   public static String parseResponseReportJobId(
-      TuneManagementResponse response
- ) throws  TuneServiceException,
+      final TuneManagementResponse response
+  ) throws  TuneServiceException,
             TuneSdkException {
     String jobId = null;
     if (null == response) {
       throw new IllegalArgumentException(
         "Parameter 'response' is not defined."
-     );
+      );
     }
     Object jdata = response.getData();
     if (null == jdata) {
       throw new TuneServiceException(
         "Report request failed to get export data."
-     );
+      );
     }
     jobId = jdata.toString();
     if ((null == jobId) || jobId.isEmpty()) {
       throw new TuneSdkException(
         "Parameter 'jobId' is not defined."
-     );
+      );
     }
     return jobId;
   }
@@ -1108,29 +1128,29 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public static String parseResponseReportUrl(
-      TuneManagementResponse response
- ) throws TuneSdkException, TuneServiceException {
+      final TuneManagementResponse response
+  ) throws TuneSdkException, TuneServiceException {
 
     if (null == response) {
       throw new IllegalArgumentException(
         "Parameter 'response' is not defined."
-     );
+      );
     }
 
     JSONObject jdata = (JSONObject) response.getData();
     if (null == jdata) {
       throw new TuneServiceException(
-      "Report export response failed to get data."
-     );
+        "Report export response failed to get data."
+      );
     }
 
     if (!jdata.has("data")) {
       throw new TuneSdkException(
-      String.format(
-        "Export data does not contain report 'data', response: %s",
-        response.toString()
-     )
-     );
+        String.format(
+          "Export data does not contain report 'data', response: %s",
+          response.toString()
+        )
+      );
     }
 
     JSONObject jdataInternal = null;
@@ -1144,11 +1164,11 @@ public class EndpointBase {
 
     if (null == jdataInternal) {
       throw new TuneServiceException(
-      String.format(
-        "Export data response does not contain 'data', response: %s",
-        response.toString()
-     )
-     );
+        String.format(
+          "Export data response does not contain 'data', response: %s",
+          response.toString()
+        )
+      );
     }
 
     if (!jdataInternal.has("url")) {
@@ -1174,8 +1194,8 @@ public class EndpointBase {
         String.format(
           "Export response 'url' is not defined, response: %s",
           response.toString()
-       )
-     );
+        )
+      );
     }
 
     return jdataInternalUrl;
@@ -1188,7 +1208,7 @@ public class EndpointBase {
    */
   public static boolean isParenthesesBalanced(
       final String str
- ) {
+  ) {
     if (str.isEmpty()) {
       return true;
     }
@@ -1227,7 +1247,7 @@ public class EndpointBase {
    */
   public static boolean hasDuplicate(
       final Iterable<String> all
- ) {
+  ) {
     Set<String> set = new HashSet<String>();
     // Set#add returns false if the set does not change, which
     // indicates that a duplicate element has been added.
@@ -1249,7 +1269,7 @@ public class EndpointBase {
   public static String implode(
       final Iterable<String> all,
       final String glue
- ) {
+  ) {
     StringBuilder sb = new StringBuilder();
     for (String item : all) {
       item = item.trim();
@@ -1271,7 +1291,7 @@ public class EndpointBase {
   public static Set<String> explode(
       final String all,
       final String glue
- ) {
+  ) {
     String[] items = all.split(glue);
 
     Set<String> set = new HashSet<String>();

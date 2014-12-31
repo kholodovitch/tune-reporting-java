@@ -1,4 +1,4 @@
-package com.tune.reporting.helpers;
+package com.tune.reporting.base.endpoints;
 
 /**
  * ReportExportWorker.java
@@ -40,13 +40,15 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.service.TuneManagementClient;
 import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.helpers.TuneSdkException;
+import com.tune.reporting.helpers.TuneServiceException;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -61,30 +63,45 @@ import java.util.Map;
 public class ReportExportWorker {
 
   /**
+   * The request has succeeded.
+   */
+  public static final int HTTP_STATUS_OK = 200;
+
+  /**
    * Export controller for handling Report export status.
    * @var String
    */
   private String exportController = null;
+
   /**
    * Export action for handling Report export status.
    * @var String
    */
   private String exportAction = null;
+
   /**
    * User's TUNE MobileAppTracking API Key.
    * @var String
    */
   private String apiKey = null;
+
   /**
    * Report Job Identifier on Export queue.
    * @var String
    */
   private String jobId = null;
+
   /**
    * Sleep duration between requesting Export status.
    * @var int
    */
   private int sleep = 10;
+
+  /**
+   * When to stop polling requests of Export status.
+   * @var int
+   */
+  private int timeout = 0;
 
   /**
    * Within console, provide verbose feedback of export status.
@@ -101,15 +118,16 @@ public class ReportExportWorker {
   /**
    * Constructor.
    *
-   * @param exportController    Controller for report export status.
+   * @param exportController  Controller for report export status.
    * @param exportAction      Action for report export status.
    * @param apiKey            MobileAppTracking API Key
    * @param jobId             Provided Job Identifier to reference
-   * requested report on export queue.
+   *                          requested report on export queue.
    * @param verbose           Debug purposes only to view
-   * progress of job on export queue.
+   *                          progress of job on export queue.
    * @param sleep             Polling delay between querying
-   * job status on export queue.
+   *                          job status on export queue.
+   * @param timeout           When to stop polling.
    */
   public ReportExportWorker(
       final String exportController,
@@ -117,8 +135,9 @@ public class ReportExportWorker {
       final String apiKey,
       final String jobId,
       final Boolean verbose,
-      final int sleep
- ) {
+      final int sleep,
+      final int timeout
+  ) {
     if ((null == exportController) || exportController.isEmpty()) {
       throw new IllegalArgumentException(
         "Parameter 'exportController' is not defined."
@@ -142,6 +161,7 @@ public class ReportExportWorker {
     this.apiKey = apiKey;
     this.jobId = jobId;
     this.sleep = sleep;
+    this.timeout = timeout;
 
     this.verbose = verbose;
     this.response = null;
@@ -161,6 +181,7 @@ public class ReportExportWorker {
     String status = null;
     TuneManagementResponse response = null;
     int attempt = 0;
+    int timeout = 0;
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("job_id", jobId);
@@ -182,6 +203,17 @@ public class ReportExportWorker {
     }
 
     while (true) {
+      if (this.timeout > 0) {
+        if (timeout >= this.timeout) {
+          throw new TuneSdkException(
+              String.format(
+                "Fetch request has timed out."
+              )
+          );
+        }
+
+        timeout += sleep;
+      }
       try {
         client.call();
       } catch (Exception e1) {
@@ -200,7 +232,9 @@ public class ReportExportWorker {
       int responseHttpCode = response.getHttpCode();
 
       // Failed to get successful service response.
-      if ((response.getHttpCode() != 200) || (null != response.getErrors())) {
+      if ((response.getHttpCode() != HTTP_STATUS_OK)
+          || (null != response.getErrors())
+      ) {
         throw new TuneServiceException(
           String.format(
             "Service failed request: %d: %s",

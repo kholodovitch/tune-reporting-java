@@ -40,7 +40,7 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -49,7 +49,7 @@ package com.tune.reporting.helpers;
  * TuneSdkException is thrown when the TUNE SDK has
  * detected an error within its code, regardless of any given Request.
  */
-public class TuneSdkException extends Exception {
+public final class TuneSdkException extends Exception {
 
   /** The Constant serialVersionUID. */
   private static final long serialVersionUID = -7471889902427169391L;
@@ -69,7 +69,9 @@ public class TuneSdkException extends Exception {
    *
    * @param message the message
    */
-  public TuneSdkException(String message) {
+  public TuneSdkException(
+      final String message
+  ) {
     super(message);
     this.message = message;
   }
@@ -79,7 +81,7 @@ public class TuneSdkException extends Exception {
    *
    * @param cause the cause
    */
-  public TuneSdkException(Throwable cause) {
+  public TuneSdkException(final Throwable cause) {
     super(cause);
   }
 
@@ -89,7 +91,10 @@ public class TuneSdkException extends Exception {
    * @param message the message
    * @param cause the cause
    */
-  public TuneSdkException(String message, Throwable cause) {
+  public TuneSdkException(
+      final String message,
+      final Throwable cause
+  ) {
     super(message, cause);
     this.message = message;
   }

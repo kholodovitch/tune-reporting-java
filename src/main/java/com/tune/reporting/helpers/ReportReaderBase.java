@@ -40,13 +40,12 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-21 22:34:43 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -55,14 +54,25 @@ import java.util.Map;
  */
 public abstract class ReportReaderBase {
 
-  protected String reportUrl = null;
+  /**
+   * Report URL provided by TUNE Management API export queue.
+   */
+  private String reportUrl = null;
 
+  /**
+   * Buffer to hold mapped report.
+   */
   protected List<Map<String, String>> reportMapList
       = new ArrayList<Map<String, String>>();
 
+  /**
+   * Constructor.
+   *
+   * @param reportUrl Report URL provided by TUNE Management API export queue.
+   */
   public ReportReaderBase(
       final String reportUrl
- ) {
+  ) {
     this.reportUrl = reportUrl;
   }
 
@@ -70,7 +80,9 @@ public abstract class ReportReaderBase {
    * Using provided report download URL, extract contents appropriate
    * to the content's format.
    *
-   * @return Boolean  If successful in reading remote report returns true.
+   * @return Boolean            If successful in reading remote report
+   *                            returns true.
+   * @throws TuneSdkException   If error occurs when reading exported report.
    */
   public abstract Boolean read() throws TuneSdkException;
 
@@ -98,8 +110,8 @@ public abstract class ReportReaderBase {
           String.format("%d: %s",
             i + 1,
             this.reportMapList.get(i)
-         )
-     );
+          )
+      );
     }
   }
 

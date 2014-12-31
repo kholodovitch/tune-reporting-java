@@ -40,7 +40,7 @@ package com.tune.reporting;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -51,7 +51,7 @@ import com.tune.reporting.base.service.TuneManagementResponse;
 
 import com.tune.reporting.helpers.ReportReaderCsv;
 import com.tune.reporting.helpers.ReportReaderJson;
-
+import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneSdkException;
 import com.tune.reporting.helpers.TuneServiceException;
 
@@ -81,11 +81,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
   public static void main(final String[] args) {
   }
 
-  /** The apiKey. */
-  private String apiKey = null;
-
   /** Instance. */
-  private AdvertiserReportLogEvents reportLogsEvents = null;
+  private AdvertiserReportLogEvents advertiserReport = null;
 
   /** Start Date. */
   private String startDate = null;
@@ -97,7 +94,18 @@ public class TestAdvertiserReportLogEvents extends TestCase {
    * @see junit.framework.TestCase#setUp()
    */
   protected void setUp() {
-    this.apiKey = System.getProperty("API_KEY");
+    String apiKey = System.getProperty("API_KEY");
+    TestCase.assertNotNull(apiKey);
+    TestCase.assertFalse(apiKey.isEmpty());
+
+    try {
+      SdkConfig sdkConfig = SdkConfig.getInstance();
+      sdkConfig.setApiKey(apiKey);
+    } catch (TuneSdkException ex) {
+      TestCase.fail("TuneSdkException: " + ex.getMessage());
+    } catch (Exception ex) {
+      TestCase.fail("Exception: " + ex.getMessage());
+    }
 
     Date now = new Date();
     GregorianCalendar calendarYesterday = new GregorianCalendar();
@@ -113,14 +121,20 @@ public class TestAdvertiserReportLogEvents extends TestCase {
     String endDate = dateFormat.format(dateYesterday);
     this.endDate = String.format("%s 23:59:59", endDate);
 
-    this.reportLogsEvents = new AdvertiserReportLogEvents(this.apiKey, true);
-  }
-
-  /**
-   * Test provided apiKey is not null.
-   */
-  public void test_ApiKey() {
-    TestCase.assertNotNull(this.apiKey);
+    try {
+      this.advertiserReport
+          = new AdvertiserReportLogEvents();
+    } catch (Exception ex) {
+      StringWriter errors = new StringWriter();
+      ex.printStackTrace(new PrintWriter(errors));
+      TestCase.fail(
+          String.format(
+            "Exception: Message: \"%s\", Stack Trace: %s",
+            ex.getMessage(),
+            errors.toString()
+          )
+      );
+    }
   }
 
   /**
@@ -130,12 +144,12 @@ public class TestAdvertiserReportLogEvents extends TestCase {
     TuneManagementResponse response = null;
 
     try {
-      response = this.reportLogsEvents.count(
+      response = this.advertiserReport.count(
         this.startDate,
         this.endDate,
         null,  // filter
         "America/Los_Angeles"
-     );
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -144,8 +158,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -154,8 +168,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -164,8 +178,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -179,7 +193,7 @@ public class TestAdvertiserReportLogEvents extends TestCase {
   public void test_Fields_Default() {
     String strFieldsDefault = null;
     try {
-      strFieldsDefault = this.reportLogsEvents.getFields(EndpointBase.TUNE_FIELDS_DEFAULT);
+      strFieldsDefault = this.advertiserReport.getFields(EndpointBase.TUNE_FIELDS_DEFAULT);
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -188,8 +202,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -198,8 +212,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -208,8 +222,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(strFieldsDefault);
@@ -222,7 +236,7 @@ public class TestAdvertiserReportLogEvents extends TestCase {
   public void test_Fields_Recommended() {
     String strFieldsRecommended = null;
     try {
-      strFieldsRecommended = this.reportLogsEvents.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      strFieldsRecommended = this.advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -231,8 +245,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -241,8 +255,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -251,8 +265,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(strFieldsRecommended);
@@ -272,9 +286,9 @@ public class TestAdvertiserReportLogEvents extends TestCase {
 
       // build fields
       String strFieldsRecommended
-          = reportLogsEvents.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+          = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-      response = this.reportLogsEvents.find(
+      response = this.advertiserReport.find(
         this.startDate,
         this.endDate,
         strFieldsRecommended,  // fields
@@ -283,7 +297,7 @@ public class TestAdvertiserReportLogEvents extends TestCase {
         0,           // page
         sort,
         "America/Los_Angeles"     // responseTimezone
-     );
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -292,8 +306,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -302,8 +316,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -312,8 +326,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -330,16 +344,16 @@ public class TestAdvertiserReportLogEvents extends TestCase {
     try {
       // build fields
       String strFieldsRecommended
-          = reportLogsEvents.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+          = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-      response = this.reportLogsEvents.export(
+      response = this.advertiserReport.export(
         this.startDate,
         this.endDate,
         strFieldsRecommended,    // fields
         null,        // filter
         "csv",                 // format
         "America/Los_Angeles"       // responseTimezone
-     );
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -348,8 +362,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -358,8 +372,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -368,8 +382,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -389,8 +403,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -399,8 +413,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -409,19 +423,17 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(csvJobId);
 
     String csvReportUrl  = null;
     try {
-      response = this.reportLogsEvents.fetch(
-        csvJobId,          // Job ID
-        false,               // verbose
-        10                // sleep in seconds
-     );
+      response = this.advertiserReport.fetch(
+        csvJobId          // Job ID
+      );
 
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
@@ -431,8 +443,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -441,8 +453,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -451,8 +463,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(response);
@@ -470,8 +482,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneSdkException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (TuneServiceException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -480,8 +492,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "TuneServiceException: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     } catch (Exception ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -490,8 +502,8 @@ public class TestAdvertiserReportLogEvents extends TestCase {
             "Exception: Message: \"%s\", Stack Trace: %s",
             ex.getMessage(),
             errors.toString()
-         )
-     );
+          )
+      );
     }
 
     TestCase.assertNotNull(csvReportUrl);

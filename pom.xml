@@ -37,7 +37,7 @@
   <groupId>com.tune.reporting</groupId>
   <artifactId>tune-reporting</artifactId>
   <packaging>jar</packaging>
-  <version>0.9.5</version>
+  <version>0.9.6</version>
   <name>TUNE Reporting SDK for Java</name>
   <description>Java helper library for TUNE Reporting API services.</description>
   <url>http://maven.apache.org</url>
@@ -250,9 +250,9 @@
       </plugin>-->
     </plugins>
   </build>
-<!--  <reporting>
+  <reporting>
     <plugins>
-      <plugin>
+<!--      <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-checkstyle-plugin</artifactId>
         <version>2.13</version>
@@ -263,9 +263,9 @@
             </reports>
           </reportSet>
         </reportSets>
-      </plugin>
+      </plugin>-->
     </plugins>
-  </reporting>-->
+  </reporting>
   <!-- Sonatype repo submission stuff -->
   <parent>
     <groupId>org.sonatype.oss</groupId>

@@ -40,7 +40,7 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -65,32 +65,25 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
   /**
    * Constructor.
    *
-   * @param apiKey       TUNE MobileAppTracking API Key.
-   * @param validateFields   Validate fields used by actions' parameters.
    */
-  public AdvertiserReportCohortValue(
-      final String apiKey,
-      final Boolean validateFields
- ) {
+  public AdvertiserReportCohortValue() throws TuneSdkException {
     super(
-        "advertiser/stats/ltv",
-        apiKey,
-        false,
-        true,
-        validateFields
-   );
+      "advertiser/stats/ltv",
+      false,
+      true
+    );
 
     /*
      * Fields recommended in suggested order.
      */
-    this.setFieldsRecommended = new HashSet<String>(Arrays.asList(
-      "site_id",
-      "site.name",
-      "publisher_id",
-      "publisher.name",
-      "rpi",
-      "epi"
-   ));
+    this.setFieldsRecommended(new HashSet<String>(Arrays.asList(
+        "site_id",
+        "site.name",
+        "publisher_id",
+        "publisher.name",
+        "rpi",
+        "epi"
+    )));
   }
 
   /**
@@ -118,8 +111,6 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value is provided
-   * to a parameter
    */
   public final TuneManagementResponse find(
       final String startDate,
@@ -127,28 +118,33 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
       final String cohortType,
       final String cohortInterval,
       final String aggregationType,
-      String fields,
-      String group,
-      String filter,
+      final String fields,
+      final String group,
+      final String filter,
       final int limit,
       final int page,
       final Map<String, String> sort,
       final String responseTimezone
- ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  ) throws  TuneSdkException,
+            TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
     AdvertiserReportCohortBase.validateCohortType(cohortType);
     AdvertiserReportCohortBase.validateCohortInterval(cohortInterval);
-    AdvertiserReportCohortBase.validateAggregationTypes(aggregationType);
+
+    String fieldsV = null;
+    String groupV = null;
+    String filterV = null;
 
     if ((null != group) && !group.isEmpty()) {
-      group = super.validateGroup(group);
+      groupV = super.validateGroup(group);
     }
     if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
+      filterV = super.validateFilter(filter);
+    }
+    if ((null != fields) && !fields.isEmpty()) {
+      fieldsV = super.validateFields(fields);
     }
 
     String strSort = null;
@@ -160,12 +156,8 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
       strSort = super.validateSort(setFields, sort);
 
       if ((null != setFields) && !setFields.isEmpty()) {
-        fields = EndpointBase.implode(setFields, ",");
+        fieldsV = EndpointBase.implode(setFields, ",");
       }
-    }
-
-    if ((null != fields) && !fields.isEmpty()) {
-      fields = super.validateFields(fields);
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -175,8 +167,8 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
     mapQueryString.put("interval", cohortInterval);
     mapQueryString.put("aggregation_type", aggregationType);
     mapQueryString.put("fields", fields);
-    mapQueryString.put("group", group);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("group", groupV);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("limit", Integer.toString(limit));
     mapQueryString.put("page", Integer.toString(page));
     mapQueryString.put("sort", strSort);
@@ -185,7 +177,7 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
     return super.callRecords(
       "find",
       mapQueryString
-   );
+    );
   }
 
   /**
@@ -210,8 +202,6 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value
-   * is provided to a parameter
    */
   public final TuneManagementResponse export(
       final String startDate,
@@ -219,13 +209,12 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
       final String cohortType,
       final String cohortInterval,
       final String aggregationType,
-      String fields,
-      String group,
-      String filter,
+      final String fields,
+      final String group,
+      final String filter,
       final String responseTimezone
- ) throws  TuneSdkException,
-            TuneServiceException,
-            IllegalArgumentException {
+  ) throws  TuneSdkException,
+            TuneServiceException {
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
@@ -233,14 +222,18 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
     AdvertiserReportCohortBase.validateCohortInterval(cohortInterval);
     AdvertiserReportCohortBase.validateAggregationTypes(aggregationType);
 
+    String fieldsV = null;
+    String groupV = null;
+    String filterV = null;
+
     if ((null != group) && !group.isEmpty()) {
-      group = super.validateGroup(group);
+      groupV = super.validateGroup(group);
     }
     if ((null != filter) && !filter.isEmpty()) {
-      filter = super.validateFilter(filter);
+      filterV = super.validateFilter(filter);
     }
     if ((null != fields) && !fields.isEmpty()) {
-      fields = super.validateFields(fields);
+      fieldsV = super.validateFields(fields);
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -249,43 +242,33 @@ public class AdvertiserReportCohortValue extends AdvertiserReportCohortBase {
     mapQueryString.put("cohort_type", cohortType);
     mapQueryString.put("interval", cohortInterval);
     mapQueryString.put("aggregation_type", aggregationType);
-    mapQueryString.put("fields", fields);
-    mapQueryString.put("group", group);
-    mapQueryString.put("filter", filter);
-    mapQueryString.put("filter", filter);
+    mapQueryString.put("fields", fieldsV);
+    mapQueryString.put("group", groupV);
+    mapQueryString.put("filter", filterV);
     mapQueryString.put("response_timezone", responseTimezone);
 
     return super.callRecords(
       "export",
       mapQueryString
-   );
+    );
   }
 
   /**
    * Helper function for fetching report document given provided job identifier.
    *
    * @param jobId       Job Identifier of report on queue.
-   * @param verbose     For debugging purposes only.
-   * @param sleep       How long worker should sleep before
-   *                    next status request.
    *
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
-   * @throws IllegalArgumentException If invalid value
-   * is provided to a parameter.
    */
   public final TuneManagementResponse fetch(
-      final String jobId,
-      final Boolean verbose,
-      final int sleep
- ) throws IllegalArgumentException, TuneServiceException, TuneSdkException {
+      final String jobId
+  ) throws TuneServiceException, TuneSdkException {
     return super.fetchRecords(
-      this.controller,
+      this.getController(),
       "status",
-      jobId,
-      verbose,
-      sleep
-   );
+      jobId
+    );
   }
 }

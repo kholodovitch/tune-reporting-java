@@ -7,10 +7,12 @@
 # Ignore JUnit files
 junit/*
 
-# Where maven compiles by default
+# maven and ant build files
 target/
 classes/
 build/
+files/
+overview-frame.html
 
 # Java Files that should be ignored
 *.class
