@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -53,9 +53,9 @@ import java.net.URLEncoder;
 
 /**
  * Helper utility for building query string intended for
- * TUNE Mangement API request.
+ * TUNE Management API request.
  */
-public class QueryStringBuilder {
+public final class QueryStringBuilder {
 
   /** Buffer for holding constructed query string. */
   private String strQueryString = "";
@@ -86,16 +86,12 @@ public class QueryStringBuilder {
    * @param name  Query string parameter's name.
    * @param value Query string parameter's value.
    *
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    * @throws TuneSdkException If fails to post request.
    */
-  public final void add(
+  public void add(
       String name,
       String value
-  ) throws  IllegalArgumentException,
-            TuneSdkException {
-
+  ) throws TuneSdkException {
     if (null == name) {
       throw new IllegalArgumentException(
         String.format("Parameter 'name' must be defined.")
@@ -190,7 +186,7 @@ public class QueryStringBuilder {
    *
    * @return String
    */
-  public final String getQuery() {
+  public String getQuery() {
     return this.strQueryString;
   }
 
@@ -199,7 +195,7 @@ public class QueryStringBuilder {
    *
    * @return String
    */
-  public final String toString() {
+  public String toString() {
     return this.getQuery();
   }
 }

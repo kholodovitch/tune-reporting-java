@@ -40,12 +40,13 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 12:27:54 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.AdvertiserReportLogBase;
+import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,46 +59,39 @@ public class AdvertiserReportLogInstalls extends AdvertiserReportLogBase {
   /**
    * Constructor.
    *
-   * @param apiKey          TUNE MobileAppTracking API Key.
-   * @param validateFields  Validate fields used by actions' parameters.
    */
-  public AdvertiserReportLogInstalls(
-      final String apiKey,
-      final Boolean validateFields
- ) {
+  public AdvertiserReportLogInstalls() throws TuneSdkException {
     super(
       "advertiser/stats/installs",
-      apiKey,
       true,
-      true,
-      validateFields
-   );
+      true
+    );
 
     /*
      * Fields recommended in suggested order.
      */
-    this.setFieldsRecommended = new HashSet<String>(Arrays.asList(
-      "id",
-      "created",
-      "status",
-      "site_id",
-      "site.name",
-      "publisher_id",
-      "publisher.name",
-      "advertiser_ref_id",
-      "advertiser_sub_campaign_id",
-      "advertiser_sub_campaign.ref",
-      "publisher_sub_campaign_id",
-      "publisher_sub_campaign.ref",
-      "user_id",
-      "device_id",
-      "os_id",
-      "google_aid",
-      "ios_ifa",
-      "ios_ifv",
-      "windows_aid",
-      "referral_url",
-      "is_view_through"
-   ));
+    this.setFieldsRecommended(new HashSet<String>(Arrays.asList(
+        "id",
+        "created",
+        "status",
+        "site_id",
+        "site.name",
+        "publisher_id",
+        "publisher.name",
+        "advertiser_ref_id",
+        "advertiser_sub_campaign_id",
+        "advertiser_sub_campaign.ref",
+        "publisher_sub_campaign_id",
+        "publisher_sub_campaign.ref",
+        "user_id",
+        "device_id",
+        "os_id",
+        "google_aid",
+        "ios_ifa",
+        "ios_ifv",
+        "windows_aid",
+        "referral_url",
+        "is_view_through"
+    )));
   }
 }

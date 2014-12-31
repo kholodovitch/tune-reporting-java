@@ -40,7 +40,7 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 12:27:54 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -61,16 +61,11 @@ public class Export extends EndpointBase {
   /**
    * Constructor.
    *
-   * @param apiKey MobileAppTracking API Key
    */
-  public Export(
-      final String apiKey
- ) {
+  public Export() throws TuneSdkException {
     super(
-      "export",
-      apiKey,
-      false
-   );
+      "export"
+    );
   }
 
  /**
@@ -81,22 +76,20 @@ public class Export extends EndpointBase {
    *
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
-   * @throws IllegalArgumentException If invalid value
-   * is provided to a parameter.
    */
   public final TuneManagementResponse download(
       final String jobId
- ) throws IllegalArgumentException, TuneSdkException {
+  ) throws TuneSdkException {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
     }
 
-    Map<String, String> mapQueryString = new HashMap<String, String> ();
+    Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("job_id", jobId);
 
     return super.call(
       "download",
       mapQueryString
-   );
+    );
   }
 }

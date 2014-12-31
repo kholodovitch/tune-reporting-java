@@ -40,13 +40,14 @@ package com.tune.reporting;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-21 22:34:43 $
+ * @version   $Date: 2014-12-31 13:59:48 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.service.TuneManagementClient;
 import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneSdkException;
 
 import junit.framework.TestCase;
@@ -70,7 +71,11 @@ public class TestTuneManagementClient extends TestCase {
    * @see junit.framework.TestCase#setUp()
    */
   protected void setUp() {
-    this.apiKey = System.getProperty("API_KEY");
+    String apiKey = System.getProperty("API_KEY");
+    TestCase.assertNotNull(apiKey);
+    TestCase.assertFalse(apiKey.isEmpty());
+
+    this.apiKey = apiKey;
   }
 
   /**
@@ -101,7 +106,7 @@ public class TestTuneManagementClient extends TestCase {
           action,
           this.apiKey,
           mapQueryString
-     );
+      );
 
       isSuccess = client.call();
       response = client.getResponse();

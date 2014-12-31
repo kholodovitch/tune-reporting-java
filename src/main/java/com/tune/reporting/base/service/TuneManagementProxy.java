@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -63,9 +63,16 @@ import javax.net.ssl.HttpsURLConnection;
 /**
  * The Class Proxy.
  */
-public class TuneManagementProxy {
+public final class TuneManagementProxy {
 
+  /**
+   * Tune Management API request.
+   */
   private TuneManagementRequest request = null;
+
+  /**
+   * Tune Management API response.
+   */
   private TuneManagementResponse response = null;
 
   /**
@@ -94,7 +101,9 @@ public class TuneManagementProxy {
    *
    * @param request @see TuneManagementRequest
    */
-  public TuneManagementProxy(TuneManagementRequest request) {
+  public TuneManagementProxy(
+      final TuneManagementRequest request
+  ) {
     this.request = request;
   }
 
@@ -184,12 +193,12 @@ public class TuneManagementProxy {
 
 
       this.response = new TuneManagementResponse(
-      responseRaw,
-      responseJson,
-      responseHttpCode,
-      responseHeaders,
-      requestUrl.toString()
-     );
+        responseRaw,
+        responseJson,
+        responseHttpCode,
+        responseHeaders,
+        requestUrl.toString()
+      );
     } catch (Exception e) {
       throw new TuneSdkException(
         String.format(

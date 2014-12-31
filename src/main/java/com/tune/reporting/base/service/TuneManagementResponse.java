@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -57,7 +57,7 @@ import java.util.Map;
 /**
  * TUNE Management API Response.
  */
-public class TuneManagementResponse {
+public final class TuneManagementResponse {
 
   /**
    * TUNE Management API request URL.
@@ -102,7 +102,7 @@ public class TuneManagementResponse {
       final int                       responseHttpCode,
       final Map<String, List<String>> responseHeaders,
       final String                    requestUrl
- ) {
+  ) {
     this.responseRaw        = responseRaw;
     this.responseJson       = responseJson;
     this.responseHttpCode   = responseHttpCode;
@@ -113,7 +113,7 @@ public class TuneManagementResponse {
   /**
    * Get request URL.
    */
-  public final String getRequestUrl() {
+  public String getRequestUrl() {
     return this.requestUrl;
   }
 
@@ -121,22 +121,22 @@ public class TuneManagementResponse {
    * Set request URL.
    * @param requestUrl       TUNE Management API request URL
    */
-  public final void setRequestUrl(final String requestUrl) {
+  public void setRequestUrl(final String requestUrl) {
     this.requestUrl = requestUrl;
   }
 
   /**
-   * Get Raw response from TUNE Mangement API service.
+   * Get Raw response from TUNE Management API service.
    */
-  public final String getRaw() {
+  public String getRaw() {
     return this.responseRaw;
   }
 
   /**
-   * Set Raw response from TUNE Mangement API service.
+   * Set Raw response from TUNE Management API service.
    * @param responseRaw  TUNE Management API Service full response.
    */
-  public final void setRaw(final String responseRaw) {
+  public void setRaw(final String responseRaw) {
     this.responseRaw = responseRaw;
 
     try {
@@ -147,26 +147,28 @@ public class TuneManagementResponse {
   }
 
   /**
-   * Get Full JSON response from TUNE Mangement API service.
+   * Get Full JSON response from TUNE Management API service.
+   *
+   * @return JSONObject TUNE Management API JSON response.
    */
-  public final JSONObject getJson() {
+  public JSONObject getJson() {
     return this.responseJson;
   }
 
   /**
-   * Set Full JSON response from TUNE Mangement API service.
+   * Set Full JSON response from TUNE Management API service.
    * @param responseJson TUNE Management API Service response JSON.
    */
-  public final void setJson(final JSONObject responseJson) {
+  public void setJson(final JSONObject responseJson) {
     this.responseJson = responseJson;
   }
 
   /**
    * Get HTTP code returned within TUNE Management API reponse.
    *
-   * @return int
+   * @return int HTTP Code
    */
-  public final int getHttpCode() {
+  public int getHttpCode() {
     return this.responseHttpCode;
   }
 
@@ -174,7 +176,7 @@ public class TuneManagementResponse {
    * Set HTTP code returned within TUNE Management API reponse.
    * @param responseHttpCode TUNE Management API Service response HTTP code.
    */
-  public final void setHttpCode(final int responseHttpCode) {
+  public void setHttpCode(final int responseHttpCode) {
     this.responseHttpCode = responseHttpCode;
   }
 
@@ -183,7 +185,7 @@ public class TuneManagementResponse {
    *
    * @return Map
    */
-  public final Map<String, List<String>> getHeaders() {
+  public Map<String, List<String>> getHeaders() {
     return this.responseHeaders;
   }
 
@@ -191,8 +193,8 @@ public class TuneManagementResponse {
    * Set HTTP headers returned within TUNE Management API reponse.
    * @param responseHeaders  TUNE Management API Service response HTTP headers.
    */
-  public final void setHeaders(
-    final Map<String, List<String>> responseHeaders
+  public void setHeaders(
+      final Map<String, List<String>> responseHeaders
   ) {
     this.responseHeaders = responseHeaders;
   }
@@ -202,7 +204,7 @@ public class TuneManagementResponse {
    *
    * @return String
    */
-  public final String toStringRaw() {
+  public String toStringRaw() {
     String responseRawPrint = "";
     try {
       //tokenize the ugly JSON string
@@ -224,7 +226,7 @@ public class TuneManagementResponse {
    *
    * @return String
    */
-  public final String toString() {
+  public String toString() {
     int statusCode = this.getStatusCode();
     int responseSize = this.getResponseSize();
     Object data = this.getData();
@@ -300,7 +302,7 @@ public class TuneManagementResponse {
    *
    * @return int
    */
-  public final int getResponseSize() {
+  public int getResponseSize() {
     if (this.responseJson.has("response_size")) {
       try {
         return this.responseJson.getInt("response_size");
@@ -317,7 +319,7 @@ public class TuneManagementResponse {
    *
    * @return int
    */
-  public final int getStatusCode() {
+  public int getStatusCode() {
     if (this.responseJson.has("status_code")) {
       try {
         return this.responseJson.getInt("status_code");
@@ -334,7 +336,7 @@ public class TuneManagementResponse {
    *
    * @return String
    */
-  public final String getErrors() {
+  public String getErrors() {
     if (this.responseJson.has("errors")) {
       try {
         if (this.responseJson.has("errors")) {
@@ -369,7 +371,7 @@ public class TuneManagementResponse {
    *
    * @return String
    */
-  public final String getDebugs() {
+  public String getDebugs() {
     if (this.responseJson.has("debugs")) {
       try {
         return this.responseJson.getString("debugs");

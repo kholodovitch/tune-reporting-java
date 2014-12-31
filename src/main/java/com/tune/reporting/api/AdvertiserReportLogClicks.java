@@ -40,12 +40,13 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 12:27:54 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.AdvertiserReportLogBase;
+import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -57,36 +58,29 @@ public class AdvertiserReportLogClicks extends AdvertiserReportLogBase {
   /**
    * Constructor.
    *
-   * @param apiKey       TUNE MobileAppTracking API Key.
-   * @param validateFields   Validate fields used by actions' parameters.
    */
-  public AdvertiserReportLogClicks(
-      final String apiKey,
-      final Boolean validateFields
- ) {
+  public AdvertiserReportLogClicks() throws TuneSdkException {
     super(
       "advertiser/stats/clicks",
-      apiKey,
       true,
-      true,
-      validateFields
-   );
+      true
+    );
 
     /*
      * Fields recommended in suggested order.
      */
-    this.setFieldsRecommended = new HashSet<String>(Arrays.asList(
-      "id",
-      "created",
-      "site_id",
-      "site.name",
-      "publisher_id",
-      "publisher.name",
-      "is_unique",
-      "advertiser_sub_campaign_id",
-      "advertiser_sub_campaign.ref",
-      "publisher_sub_campaign_id",
-      "publisher_sub_campaign.ref"
-   ));
+    this.setFieldsRecommended(new HashSet<String>(Arrays.asList(
+        "id",
+        "created",
+        "site_id",
+        "site.name",
+        "publisher_id",
+        "publisher.name",
+        "is_unique",
+        "advertiser_sub_campaign_id",
+        "advertiser_sub_campaign.ref",
+        "publisher_sub_campaign_id",
+        "publisher_sub_campaign.ref"
+    )));
   }
 }

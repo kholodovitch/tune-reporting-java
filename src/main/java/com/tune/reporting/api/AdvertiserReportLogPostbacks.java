@@ -40,12 +40,13 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 12:27:54 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.AdvertiserReportLogBase;
+import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -58,42 +59,35 @@ public class AdvertiserReportLogPostbacks extends AdvertiserReportLogBase {
   /**
    * Constructor.
    *
-   * @param apiKey       TUNE MobileAppTracking API Key.
-   * @param validateFields   Validate fields used by actions' parameters.
    */
-  public AdvertiserReportLogPostbacks(
-      final String apiKey,
-      final Boolean validateFields
- ) {
+  public AdvertiserReportLogPostbacks() throws TuneSdkException {
     super(
       "advertiser/stats/postbacks",
-      apiKey,
       false,
-      true,
-      validateFields
-   );
+      true
+    );
 
     /*
      * Fields recommended in suggested order.
      */
-    this.setFieldsRecommended = new HashSet<String>(Arrays.asList(
-      "id",
-      "stat_install_id",
-      "stat_event_id",
-      "stat_open_id",
-      "created",
-      "status",
-      "site_id",
-      "site.name",
-      "site_event_id",
-      "site_event.name",
-      "site_event.type",
-      "publisher_id",
-      "publisher.name",
-      "attributed_publisher_id",
-      "attributed_publisher.name",
-      "url",
-      "http_result"
-   ));
+    this.setFieldsRecommended(new HashSet<String>(Arrays.asList(
+        "id",
+        "stat_install_id",
+        "stat_event_id",
+        "stat_open_id",
+        "created",
+        "status",
+        "site_id",
+        "site.name",
+        "site_event_id",
+        "site_event.name",
+        "site_event.type",
+        "publisher_id",
+        "publisher.name",
+        "attributed_publisher_id",
+        "attributed_publisher.name",
+        "url",
+        "http_result"
+    )));
   }
 }

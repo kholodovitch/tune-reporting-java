@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2014 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-24 13:23:15 $
+ * @version   $Date: 2014-12-31 09:56:30 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -57,11 +57,18 @@ public final class TuneManagementClient {
   /** TUNE Management API Service. */
   public static final String TUNE_MANAGEMENT_API_BASE_URL
       = "https://api.mobileapptracking.com";
-  /** TUNE Mangement API Controller Version. */
+  /** TUNE Management API Controller Version. */
   public static final String TUNE_MANAGEMENT_API_VERSION
       = "v2";
 
+  /**
+   * Tune Management API request.
+   */
   private TuneManagementRequest request = null;
+
+  /**
+   * Tune Management API response.
+   */
   private TuneManagementResponse response = null;
 
 /**
@@ -89,16 +96,13 @@ public final class TuneManagementClient {
    * @param action        TUNE Management API endpoint's action name
    * @param apiKey         TUNE MobileAppTracking API Key
    * @param mapQueryString   Action's query string parameters
-   *
-   * @throws IllegalArgumentException If invalid value is
-   * provided to a parameter.
    */
   public TuneManagementClient(
       final String controller,
       final String action,
       final String apiKey,
       final Map<String, String> mapQueryString
- ) throws IllegalArgumentException {
+  ) {
     // controller
     if ((null == controller) || controller.isEmpty()) {
       throw new IllegalArgumentException(
@@ -122,7 +126,7 @@ public final class TuneManagementClient {
       mapQueryString,
       TUNE_MANAGEMENT_API_BASE_URL,
       TUNE_MANAGEMENT_API_VERSION
-   );
+    );
   }
 
   /**
