@@ -1,8 +1,8 @@
 <h2>tune-reporting-java</h2>
 <h2>TUNE Reporting SDK for Java 1.6</h2>
 <h3>Incorporate TUNE Reporting services.</h3>
-<h4>Update:  $Date: 2014-12-31 09:56:30 $</h4>
-<h4>Version: 0.9.6</h4>
+<h4>Update:  $Date: 2015-01-05 09:40:09 $</h4>
+<h4>Version: 0.9.7</h4>
 ===
 
 <a id="TOP"></a>
@@ -193,7 +193,7 @@ Use the following dependency in your project:
     <dependency>
        <groupId>com.tune.reporting</groupId>
        <artifactId>tune-reporting</artifactId>
-       <version>0.9.6</version>
+       <version>0.9.7</version>
        <scope>compile</scope>
     </dependency>
 ```

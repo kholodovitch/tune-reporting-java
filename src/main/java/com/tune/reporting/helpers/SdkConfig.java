@@ -4,7 +4,7 @@ package com.tune.reporting.helpers;
  * SdkConfig.java
  *
  * <p>
- * Copyright (c) 2014 TUNE, Inc.
+ * Copyright (c) 2015 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,9 +38,9 @@ package com.tune.reporting.helpers;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 TUNE, Inc. (http://www.tune.com)
+ * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-31 13:59:48 $
+ * @version   $Date: 2015-01-05 09:40:09 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -87,7 +87,7 @@ public final class SdkConfig {
     this.sdkConfig = new Properties();
     String srcDirectory = new File("").getAbsolutePath();
     String strSdkConfigFilePath
-        = srcDirectory + "/" + SDK_CONFIG_FILENAME;
+        = srcDirectory + "/config/" + SDK_CONFIG_FILENAME;
     File fileSdkConfig = new File(strSdkConfigFilePath);
     if(!fileSdkConfig.exists() || fileSdkConfig.isDirectory()) {
       throw new TuneSdkException(

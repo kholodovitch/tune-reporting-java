@@ -41,12 +41,12 @@ ant-clean:
 	sudo rm -fR ./junit/*
 	sudo rm -fR ./files/*
 	sudo rm -fR ./build/*
-	sudo rm overview-frame.html
+	if [ -f overview-frame.html ]; then sudo rm overview-frame.html; fi
 	ant clean
-	
+
 ant-lint:
 	ant checkstyle
-	
+
 ant-build:
 	ant build
 
