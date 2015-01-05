@@ -2,8 +2,8 @@
 tune-reporting-java
 TUNE Reporting API SDK for Java 1.6
 Incorporate TUNE Reporting API services.
-Update:  $Date: 2014-12-31 09:56:30 $
-Version: 0.9.6
+Update:  $Date: 2015-01-05 09:40:09 $
+Version: 0.9.7
 ****************************************
 
 =============
@@ -64,7 +64,7 @@ Use the following dependency in your project:
       <dependency>
          <groupId>com.tune.reporting</groupId>
          <artifactId>tune-reporting</artifactId>
-         <version>0.9.6</version>
+         <version>0.9.7</version>
          <scope>compile</scope>
       </dependency>
 ```

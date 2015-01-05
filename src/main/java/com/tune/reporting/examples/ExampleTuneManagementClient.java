@@ -4,7 +4,7 @@ package com.tune.reporting.examples;
  * ExampleTuneManagementClient.java
  *
  * <p>
- * Copyright (c) 2014 TUNE, Inc.
+ * Copyright (c) 2015 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,14 +38,15 @@ package com.tune.reporting.examples;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 TUNE, Inc. (http://www.tune.com)
+ * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-31 13:59:48 $
+ * @version   $Date: 2015-01-05 09:40:09 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.service.TuneManagementClient;
+import com.tune.reporting.base.service.TuneManagementResponse;
 import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneSdkException;
 
@@ -119,7 +120,13 @@ public final class ExampleTuneManagementClient {
 
       client.call();
 
-      System.out.println(client.getResponse().toString());
+      TuneManagementResponse response = client.getResponse();
+
+      System.out.println(" TuneManagementResponse:");
+      System.out.println(response.toString());
+
+      System.out.println(" JSON:");
+      System.out.println(response.toJson());
 
     } catch (TuneSdkException e) {
       System.out.println("TuneSdkException: '" + e.getMessage() + "'");

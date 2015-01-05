@@ -39,3 +39,11 @@ Version 0.9.6
 
 Beta public release on December 31, 2014
 * Lint cleanup.
+
+
+Version 0.9.7
+--------------
+
+Beta public release on January 05, 2015
+* Provide toJson() within response.
+* Created 'config' directory to hold TUNE Reporting SDK configuration.

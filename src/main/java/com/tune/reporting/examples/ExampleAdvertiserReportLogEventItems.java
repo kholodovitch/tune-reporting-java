@@ -4,7 +4,7 @@ package com.tune.reporting.examples;
  * ExampleAdvertiserReportLogEventItems.java
  *
  * <p>
- * Copyright (c) 2014 TUNE, Inc.
+ * Copyright (c) 2015 TUNE, Inc.
  * All rights reserved.
  * </p>
  *
@@ -38,9 +38,9 @@ package com.tune.reporting.examples;
  * @category  tune-reporting
  * @package   com.tune.reporting
  * @author    Jeff Tanner jefft@tune.com
- * @copyright 2014 TUNE, Inc. (http://www.tune.com)
+ * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2014-12-31 13:59:48 $
+ * @version   $Date: 2015-01-05 09:40:09 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -295,6 +295,9 @@ public final class ExampleAdvertiserReportLogEventItems {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
+    System.out.println(" JSON:");
+    System.out.println(response.toJson());
+
     String csvReportUrl
         = AdvertiserReportLogEventItems.parseResponseReportUrl(response);
     System.out.println(String.format(" CSV Report URL: '%s'", csvReportUrl));
@@ -333,6 +336,9 @@ public final class ExampleAdvertiserReportLogEventItems {
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
 
+    System.out.println(" JSON:");
+    System.out.println(response.toJson());
+
     String jsonJobId
         = AdvertiserReportLogEventItems.parseResponseReportJobId(response);
     System.out.println(String.format(" JSON Job ID: '%s'", jsonJobId));
@@ -357,6 +363,9 @@ public final class ExampleAdvertiserReportLogEventItems {
 
     System.out.println(" TuneManagementResponse:");
     System.out.println(response.toString());
+
+    System.out.println(" JSON:");
+    System.out.println(response.toJson());
 
     String jsonReportUrl
         = AdvertiserReportLogEventItems.parseResponseReportUrl(response);
