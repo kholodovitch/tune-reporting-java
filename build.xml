@@ -26,8 +26,8 @@ THE SOFTWARE.
 tune-reporting
 TUNE Reporting API SDK for Java 1.6
 Incorporate TUNE Reporting API services.
-Update:  $Date: 2015-01-05 09:40:09 $
-Version: 0.9.7
+Update:  $Date: 2015-01-05 22:52:04 $
+Version: 0.9.8
 -->
 <project basedir="."
 	default="build"
@@ -54,7 +54,7 @@ Version: 0.9.7
 	<property name="build.name" value="tune-reporting" />
 	<property name="build.major.number" value="0" />
 	<property name="build.minor.number" value="9" />
-	<property name="build.revision.number" value="7" />
+	<property name="build.revision.number" value="8" />
 
         <property name="javadoc.name" value="TUNE Reporting API SDK for Java" />
 

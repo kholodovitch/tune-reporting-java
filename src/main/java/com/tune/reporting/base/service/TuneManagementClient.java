@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -92,15 +92,17 @@ public final class TuneManagementClient {
   /**
    * Constructor.
    *
-   * @param controller      TUNE Management API endpoint name
-   * @param action        TUNE Management API endpoint's action name
-   * @param apiKey         TUNE MobileAppTracking API Key
-   * @param mapQueryString   Action's query string parameters
+   * @param controller      TUNE Management API endpoint name.
+   * @param action          TUNE Management API endpoint's action name.
+   * @param authKey         TUNE Reporting Authentication Key.
+   * @param authType        TUNE Reporting Authentication Type.
+   * @param mapQueryString  Action's query string parameters.
    */
   public TuneManagementClient(
       final String controller,
       final String action,
-      final String apiKey,
+      final String authKey,
+      final String authType,
       final Map<String, String> mapQueryString
   ) {
     // controller
@@ -113,16 +115,13 @@ public final class TuneManagementClient {
     if ((null == action) || action.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'action' is not defined.");
     }
-    // apiKey
-    if ((null == apiKey) || apiKey.isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
-    }
 
     // set up the request
     this.request = new TuneManagementRequest(
       controller,
       action,
-      apiKey,
+      authKey,
+      authType,
       mapQueryString,
       TUNE_MANAGEMENT_API_BASE_URL,
       TUNE_MANAGEMENT_API_VERSION

@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -62,7 +62,7 @@ public final class TuneManagementRequest {
   /**
    * TUNE Reporting SDK version.
    */
-  private final String SDK_VERSION = "0.9.7";
+  private final String SDK_VERSION = "0.9.8";
 
   /**
    * TUNE Management API endpoint requested.
@@ -76,10 +76,16 @@ public final class TuneManagementRequest {
   private String action = null;
 
   /**
-   * TUNE Management API key.
-   * @var String
+   * TUNE Reporting Authentication Key:
+   * MobileAppTracking API_KEY or Session token.
    */
-  private String apiKey = null;
+  private String authKey = null;
+
+  /**
+   * TUNE Reporting Authentication Type:
+   * api_key OR session_token.
+   */
+  private String authType = null;
 
   /**
    * Query String dictionary.
@@ -102,20 +108,21 @@ public final class TuneManagementRequest {
   /**
    * Instantiates a new base request.
    *
-   * @param controller    TUNE Management API controller
-   * @param action        TUNE Management API controller's action
-   * @param apiKey        User's API Key provide by their
-   *                      MobileAppTracking platform account.
-   * @param mapQueryString  Query string elements appropriate to
-   *                        the requested controller's action.
-   * @param apiUrlBase      TUNE Management API base url.
-   * @param apiUrlVersion   TUNE Management API version.
+   * @param controller        TUNE Management API controller.
+   * @param action            TUNE Management API controller's action.
+   * @param authKey           TUNE Reporting Authentication Key.
+   * @param authType          TUNE Reporting Authentication Type.
+   * @param mapQueryString    Query string elements appropriate to
+   *                          the requested controller's action.
+   * @param apiUrlBase        TUNE Management API base url.
+   * @param apiUrlVersion     TUNE Management API version.
    *
    */
   public TuneManagementRequest(
       final String        controller,
       final String        action,
-      final String        apiKey,
+      final String        authKey,
+      final String        authType,
       final Map<String, String> mapQueryString,
       final String        apiUrlBase,
       final String        apiUrlVersion
@@ -133,17 +140,14 @@ public final class TuneManagementRequest {
     if ((null == action) || action.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'action' is not defined.");
     }
-    // apiKey
-    if ((null == apiKey) || apiKey.isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
-    }
 
-    this.controller     = controller;
-    this.action       = action;
-    this.apiKey       = apiKey;
+    this.controller       = controller;
+    this.action           = action;
+    this.authKey          = authKey;
+    this.authType         = authType;
     this.mapQueryString   = mapQueryString;
-    this.apiUrlBase     = apiUrlBase;
-    this.apiUrlVersion  = apiUrlVersion;
+    this.apiUrlBase       = apiUrlBase;
+    this.apiUrlVersion    = apiUrlVersion;
   }
 
   /**
@@ -176,27 +180,28 @@ public final class TuneManagementRequest {
   /**
    * Set controller action for this request.
    *
-   * @param action Endpoint controller's action name
+   * @param action Endpoint controller's action name.
    */
   public void setAction(final String action) {
     this.action = action;
   }
 
   /**
-   * Get apiKey property.
+   * Get TUNE Reporting Authentication Key.
    *
-   * @return String TUNE MobileAppTracking Key
+   * @return String TUNE MobileAppTracking Key.
    */
-  public String getApiKey() {
-    return this.apiKey;
+  public String getAuthKey() {
+    return this.authKey;
   }
 
   /**
-   * Set apiKey property.
-   * @param apiKey  TUNE MobileAppTracking Key
+   * Get TUNE Reporting Authentication Type.
+   *
+   * @return String TUNE Reporting Authentication Type.
    */
-  public void setApiKey(final String apiKey) {
-    this.apiKey = apiKey;
+  public String getAuthType() {
+    return this.authType;
   }
 
   /**
@@ -226,11 +231,19 @@ public final class TuneManagementRequest {
   public String getQueryString() throws TuneSdkException {
     QueryStringBuilder qs = new QueryStringBuilder();
 
-    if (!this.apiKey.isEmpty()) {
+    if (!this.authKey.isEmpty()) {
       try {
         qs.add("sdk", this.SDK_NAME);
         qs.add("ver", this.SDK_VERSION);
-        qs.add("api_key", this.apiKey);
+
+        // Set authentication
+        if ((this.authType != null)
+            && (this.authKey != null)
+            && !this.authType.isEmpty()
+            && !this.authKey.isEmpty()
+        ) {
+          qs.add(this.authType, this.authKey);
+        }
 
         if (this.mapQueryString != null && !this.mapQueryString.isEmpty()) {
           for (Map.Entry<String, String> entry : this.mapQueryString.entrySet()) {

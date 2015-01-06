@@ -40,7 +40,7 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -182,37 +182,67 @@ public final class SdkConfig {
   }
 
   /**
-   * Get API_KEY from TUNE Reporting SDK configuration.
+   * Get TUNE Reporting authentication key.
    *
-   * @return String   TUNE MobileAppTracking API Key.
+   * @return String   TUNE Reporting authentication key.
    */
-  public String getApiKey()
+  public String getAuthKey()
   {
-    String apiKey = this.getConfigValue("tune_reporting_api_key_string");
-
-    if (!apiKey.matches("[a-zA-Z0-9]+")) {
-      throw new IllegalArgumentException(
-        String.format("Invalid 'tune_reporting_api_key_string': '%s'", apiKey)
-      );
-    }
-
-    if (apiKey.equals("API_KEY")) {
-      throw new IllegalArgumentException(
-        String.format("Invalid 'tune_reporting_api_key_string': '%s'", apiKey)
-      );
-    }
-
-    return apiKey;
+    return this.getConfigValue("tune_reporting_auth_key_string");
   }
 
   /**
-   * Set API_KEY from TUNE Reporting SDK configuration.
+   * Set TUNE Reporting authentication key.
+   *
+   * @param authKey  TUNE Reporting authentication key.
+   */
+  public void setAuthKey(String authKey)
+  {
+    this.setConfigValue("tune_reporting_auth_key_string", authKey);
+  }
+
+  /**
+   * Get TUNE Reporting authentication type.
+   *
+   * @return String   TUNE Reporting authentication type.
+   */
+  public String getAuthType()
+  {
+    return this.getConfigValue("tune_reporting_auth_type_string");
+  }
+
+  /**
+   * Set TUNE Reporting authentication type.
+   *
+   * @param authType  TUNE Reporting authentication type.
+   */
+  public void setAuthType(String authType)
+  {
+    this.setConfigValue("tune_reporting_auth_type_string", authType);
+  }
+
+  /**
+   * Set TUNE MobileAppTracking API Key to
+   * TUNE Reporting SDK configuration.
    *
    * @param apiKey   TUNE MobileAppTracking API Key.
    */
   public void setApiKey(String apiKey)
   {
-    this.setConfigValue("tune_reporting_api_key_string", apiKey);
+    this.setAuthKey(apiKey);
+    this.setAuthType("api_key");
+  }
+
+  /**
+   * Set TUNE MobileAppTracking Session Token to
+   * TUNE Reporting SDK configuration.
+   *
+   * @param sessionToken   TUNE MobileAppTracking Session Token.
+   */
+  public void setSessionToken(String sessionToken)
+  {
+    this.setAuthKey(sessionToken);
+    this.setAuthType("session_token");
   }
 
   /**

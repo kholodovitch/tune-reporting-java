@@ -40,7 +40,7 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -80,10 +80,16 @@ public class ReportExportWorker {
   private String exportAction = null;
 
   /**
-   * User's TUNE MobileAppTracking API Key.
-   * @var String
+   * TUNE Reporting Authentication Key:
+   * MobileAppTracking API_KEY or Session token.
    */
-  private String apiKey = null;
+  private String authKey = null;
+
+  /**
+   * TUNE Reporting Authentication Type:
+   * api_key OR session_token.
+   */
+  private String authType = null;
 
   /**
    * Report Job Identifier on Export queue.
@@ -120,7 +126,8 @@ public class ReportExportWorker {
    *
    * @param exportController  Controller for report export status.
    * @param exportAction      Action for report export status.
-   * @param apiKey            MobileAppTracking API Key
+   * @param authKey           TUNE Reporting Authentication Key.
+   * @param authType          TUNE Reporting Authentication Type.
    * @param jobId             Provided Job Identifier to reference
    *                          requested report on export queue.
    * @param verbose           Debug purposes only to view
@@ -132,7 +139,8 @@ public class ReportExportWorker {
   public ReportExportWorker(
       final String exportController,
       final String exportAction,
-      final String apiKey,
+      final String authKey,
+      final String authType,
       final String jobId,
       final Boolean verbose,
       final int sleep,
@@ -148,8 +156,11 @@ public class ReportExportWorker {
         "Parameter 'exportAction' is not defined."
       );
     }
-    if ((null == apiKey) || apiKey.isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
+    if ((null == authKey) || authKey.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'authKey' is not defined.");
+    }
+    if ((null == authType) || authType.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'authType' is not defined.");
     }
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
@@ -158,7 +169,8 @@ public class ReportExportWorker {
     this.exportController = exportController;
     this.exportAction = exportAction;
 
-    this.apiKey = apiKey;
+    this.authKey = authKey;
+    this.authType = authType;
     this.jobId = jobId;
     this.sleep = sleep;
     this.timeout = timeout;
@@ -191,7 +203,8 @@ public class ReportExportWorker {
       client = new TuneManagementClient(
           this.exportController,
           this.exportAction,
-          this.apiKey,
+          this.authKey,
+          this.authType,
           mapQueryString
      );
     } catch (IllegalArgumentException e1) {
