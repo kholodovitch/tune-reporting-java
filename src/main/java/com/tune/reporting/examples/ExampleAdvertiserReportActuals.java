@@ -40,13 +40,14 @@ package com.tune.reporting.examples;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 
 import com.tune.reporting.api.AdvertiserReportActuals;
+import com.tune.reporting.api.SessionAuthenticate;
 import com.tune.reporting.base.endpoints.EndpointBase;
 import com.tune.reporting.base.service.TuneManagementResponse;
 
@@ -93,19 +94,28 @@ public final class ExampleAdvertiserReportActuals {
   ) throws Exception {
     String apiKey = null;
 
+    SdkConfig sdkConfig = SdkConfig.getInstance();
+
     if (args.length > 0) {
       apiKey = args[0];
-      if (!apiKey.matches("[a-zA-Z0-9]+")) {
-        throw new IllegalArgumentException(
-          String.format("Invalid [apiKey]: '%s'", apiKey)
-        );
-      }
-    } else {
-      throw new IllegalArgumentException("Missing [apiKey]");
+      sdkConfig.setApiKey(apiKey);
     }
 
-    SdkConfig sdkConfig = SdkConfig.getInstance();
+    apiKey = sdkConfig.getAuthKey();
+
+    SessionAuthenticate sessionAuthenticate = new SessionAuthenticate();
+    TuneManagementResponse response = sessionAuthenticate.apiKey(apiKey);
+    String sessonToken = response.getData().toString();
+    System.out.println(sessonToken);
+
     sdkConfig.setApiKey(apiKey);
+    run();
+
+    sdkConfig.setSessionToken(sessonToken);
+    run();
+  }
+
+  public static void run() throws Exception {
 
     Date now = new Date();
     GregorianCalendar calendarWeekAgo = new GregorianCalendar();

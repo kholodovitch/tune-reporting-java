@@ -1,7 +1,7 @@
 package com.tune.reporting.api;
 
 /**
- * Export.java
+ * SessionAuthenticate.java
  *
  * <p>
  * Copyright (c) 2015 TUNE, Inc.
@@ -56,40 +56,39 @@ import java.util.Map;
  * TUNE Management API endpoint '/export/'.
  *
  */
-public class Export extends EndpointBase {
+public class SessionAuthenticate extends EndpointBase {
 
   /**
    * Constructor.
    *
    */
-  public Export() throws TuneSdkException {
+  public SessionAuthenticate() throws TuneSdkException {
     super(
-      "export",
+      "session/authenticate",
       true
     );
   }
 
  /**
-   * Action 'download' for polling export queue for status information
-   * on request report to be exported.
+   * Generate session token is returned to provide access to service.
    *
-   * @param jobId Job identifier assigned for report export.
+   * @param apiKeys Generate 'session token' for this api_keys.
    *
    * @return TuneManagementResponse
    * @throws TuneSdkException If fails to post request.
    */
-  public final TuneManagementResponse download(
-      final String jobId
+  public final TuneManagementResponse apiKey(
+      final String apiKeys
   ) throws TuneSdkException {
-    if ((null == jobId) || jobId.isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
+    if ((null == apiKeys) || apiKeys.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'apiKeys' is not defined.");
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
-    mapQueryString.put("job_id", jobId);
+    mapQueryString.put("api_keys", apiKeys);
 
     return super.call(
-      "download",
+      "api_key",
       mapQueryString
     );
   }

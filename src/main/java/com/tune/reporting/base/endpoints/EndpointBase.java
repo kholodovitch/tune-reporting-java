@@ -40,7 +40,7 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -101,9 +101,16 @@ public class EndpointBase {
   private String controller = null;
 
   /**
-   * MobileAppTracking API Key.
+   * TUNE Reporting Authentication Key:
+   * MobileAppTracking API_KEY or Session token.
    */
-  private String apiKey = null;
+  private String authKey = null;
+
+  /**
+   * TUNE Reporting Authentication Type:
+   * api_key OR session_token.
+   */
+  private String authType = null;
 
   /**
    * TUNE Management API Endpoint's fields.
@@ -196,10 +203,12 @@ public class EndpointBase {
   /**
    * Constructor.
    *
-   * @param controller      TUNE Management API Endpoint
+   * @param controller  TUNE Management API Endpoint.
+   * @param useConfig   Use TUNE Reporting SDK config.
    */
   public EndpointBase(
-      final String controller
+      final String controller,
+      final Boolean useConfig
   ) throws TuneSdkException {
     // controller
     if ((null == controller) || controller.isEmpty()) {
@@ -208,23 +217,32 @@ public class EndpointBase {
       );
     }
 
-    try {
-      this.sdkConfig = SdkConfig.getInstance();
-    } catch (TuneSdkException e) {
-      throw e;
-    }
+    if (useConfig) {
+      try {
+        this.sdkConfig = SdkConfig.getInstance();
+      } catch (TuneSdkException e) {
+        throw e;
+      }
 
-    String apiKey = this.sdkConfig.getApiKey();
-    Boolean validateFields = this.sdkConfig.getValidateFields();
+      String authKey = this.sdkConfig.getAuthKey();
+      String authType = this.sdkConfig.getAuthType();
+      Boolean validateFields = this.sdkConfig.getValidateFields();
 
-    // apiKey
-    if ((null == apiKey) || apiKey.isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
+      // authKey
+      if ((null == authKey) || authKey.isEmpty()) {
+        throw new IllegalArgumentException("Parameter 'authKey' is not defined.");
+      }
+      // authType
+      if ((null == authKey) || authKey.isEmpty()) {
+        throw new IllegalArgumentException("Parameter 'authType' is not defined.");
+      }
+
+      this.authKey = authKey;
+      this.authType = authType;
+      this.validateFields = validateFields;
     }
 
     this.controller = controller;
-    this.apiKey = apiKey;
-    this.validateFields = validateFields;
   }
 
   /**
@@ -237,12 +255,21 @@ public class EndpointBase {
   }
 
   /**
-   * Get API Key property for this request.
+   * TUNE Reporting Authentication Key.
    *
    * @return String
    */
-  public final String getApiKey() {
-    return this.apiKey;
+  public final String getAuthKey() {
+    return this.authKey;
+  }
+
+  /**
+   * TUNE Reporting Authentication Type.
+   *
+   * @return String
+   */
+  public final String getAuthType() {
+    return this.authType;
   }
 
   /**
@@ -266,7 +293,8 @@ public class EndpointBase {
     TuneManagementClient client = new TuneManagementClient(
         this.controller,
         action,
-        this.apiKey,
+        this.authKey,
+        this.authType,
         mapQueryString
     );
 
@@ -479,7 +507,8 @@ public class EndpointBase {
     TuneManagementClient client = new TuneManagementClient(
         "apidoc",
         "get_controllers",
-        this.apiKey,
+        this.authKey,
+        this.authType,
         mapQueryString
     );
 
@@ -492,15 +521,20 @@ public class EndpointBase {
     if (httpCode != HTTP_STATUS_OK) {
       String requestUrl = response.getRequestUrl();
       throw new TuneServiceException(
-        String.format("Connection failure '%s': '%s'", requestUrl, httpCode)
+        String.format("Connection failure '%s': Request: '%s'",
+          httpCode,
+          requestUrl
+        )
       );
     }
 
     if ((null == data) || (data.length() == 0)) {
+      String requestUrl = response.getRequestUrl();
       throw new TuneServiceException(
         String.format(
-          "Failed to get fields for endpoint: '%s'.",
-          this.controller
+          "Failed to get fields for endpoint: '%s', Request: '%s'",
+          this.controller,
+          requestUrl
         )
       );
     }
@@ -986,8 +1020,8 @@ public class EndpointBase {
         "Parameter 'jobId' is not defined."
       );
     }
-    if ((null == this.apiKey) || this.apiKey.isEmpty()) {
-      throw new TuneSdkException("Parameter 'apiKey' is not defined.");
+    if ((null == this.authKey) || this.authKey.isEmpty()) {
+      throw new TuneSdkException("Parameter 'authKey' is not defined.");
     }
 
     try {
@@ -1003,7 +1037,8 @@ public class EndpointBase {
     ReportExportWorker exportWorker = new ReportExportWorker(
         exportController,
         exportAction,
-        this.apiKey,
+        this.authKey,
+        this.authType,
         jobId,
         verbose,
         sleep,
@@ -1080,7 +1115,7 @@ public class EndpointBase {
     return String.format(
       "Endpoint '%s', API Key: '%s",
       this.controller,
-      this.apiKey
+      this.authKey
     );
   }
 

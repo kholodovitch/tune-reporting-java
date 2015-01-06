@@ -40,7 +40,7 @@ package com.tune.reporting;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -64,25 +64,28 @@ public class TestTuneManagementClient extends TestCase {
   public static void main(final String[] args) {
   }
 
-  /** The apiKey. */
-  private String apiKey = null;
+  /** The authKey. */
+  private String authKey = null;
+  /** The authType. */
+  private String authType = null;
 
   /* (non-Javadoc)
    * @see junit.framework.TestCase#setUp()
    */
   protected void setUp() {
-    String apiKey = System.getProperty("API_KEY");
-    TestCase.assertNotNull(apiKey);
-    TestCase.assertFalse(apiKey.isEmpty());
+    String authKey = System.getProperty("API_KEY");
+    TestCase.assertNotNull(authKey);
+    TestCase.assertFalse(authKey.isEmpty());
 
-    this.apiKey = apiKey;
+    this.authKey = authKey;
+    this.authType = "api_key";
   }
 
   /**
-   * Test provided apiKey is not null.
+   * Test provided authKey is not null.
    */
   public void test_ApiKey() {
-    TestCase.assertNotNull(this.apiKey);
+    TestCase.assertNotNull(this.authKey);
   }
 
   /**
@@ -104,7 +107,8 @@ public class TestTuneManagementClient extends TestCase {
       TuneManagementClient client = new TuneManagementClient(
           controller,
           action,
-          this.apiKey,
+          this.authKey,
+          this.authType,
           mapQueryString
       );
 

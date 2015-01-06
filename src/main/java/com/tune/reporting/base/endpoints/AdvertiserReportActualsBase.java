@@ -40,7 +40,7 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -336,8 +336,11 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
     }
-    if ((null == this.getApiKey()) || this.getApiKey().isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
+    if ((null == this.getAuthKey()) || this.getAuthKey().isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'authKey' is not defined.");
+    }
+    if ((null == this.getAuthType()) || this.getAuthType().isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'authType' is not defined.");
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -346,7 +349,8 @@ public class AdvertiserReportActualsBase extends AdvertiserReportBase {
     TuneManagementClient client = new TuneManagementClient(
         "export",
         "download",
-        this.getApiKey(),
+        this.getAuthKey(),
+        this.getAuthType(),
         mapQueryString
     );
 

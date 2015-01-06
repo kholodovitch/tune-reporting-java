@@ -40,7 +40,7 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-01-05 22:52:04 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -77,7 +77,7 @@ public class AdvertiserReportBase extends EndpointBase {
       final Boolean filterDebugMode,
       final Boolean filterTestProfileId
   ) throws TuneSdkException {
-    super(controller);
+    super(controller, true);
 
     this.filterDebugMode = filterDebugMode;
     this.filterTestProfileId = filterTestProfileId;

@@ -1,8 +1,8 @@
 <h2>tune-reporting-java</h2>
 <h2>TUNE Reporting SDK for Java 1.6</h2>
 <h3>Incorporate TUNE Reporting services.</h3>
-<h4>Update:  $Date: 2015-01-05 09:40:09 $</h4>
-<h4>Version: 0.9.7</h4>
+<h4>Update:  $Date: 2015-01-05 22:52:04 $</h4>
+<h4>Version: 0.9.8</h4>
 ===
 
 <a id="TOP"></a>
@@ -33,6 +33,7 @@
                 </ul>
             </li>
             <li><a href="#sdk_install_library">Library</a></li>
+            <li><a href="#sdk_install_config">Configuration</a></li>
         </ul>
     </li>
 
@@ -193,7 +194,7 @@ Use the following dependency in your project:
     <dependency>
        <groupId>com.tune.reporting</groupId>
        <artifactId>tune-reporting</artifactId>
-       <version>0.9.7</version>
+       <version>0.9.8</version>
        <scope>compile</scope>
     </dependency>
 ```
@@ -212,6 +213,64 @@ Requires maven, download from http://maven.apache.org/download.html
 ```
 
 You may need to run the above commands with `sudo`.
+
+<a id="sdk_install_config" name="sdk_install_config"></a>
+#### TUNE Reporting SDK Configuration
+
+##### SDK Configuration file
+
+In the root folder, the TUNE Reporting SDK configuration is set within file ```./config/tune_reporting_sdk_config.properties```.
+
+With generated API_KEY from TUNE MobileAppTracking Platform account, replace `API_KEY`.
+
+```
+[TUNE_REPORTING]
+# TUNE MobileAppTracking Platform generated API Key. Replace UNDEFINED.
+tune_reporting_auth_key_string=UNDEFINED
+# TUNE Reporting Authentication Type: api_key OR session_token.
+tune_reporting_auth_type_string=api_key
+# Validate use TUNE Management API fields used within action parameters.
+tune_reporting_validate_fields_boolean=false
+# TUNE reporting export status sleep (seconds).
+tune_reporting_export_status_sleep_seconds=10
+# TUNE reporting export fetch timeout (seconds).
+tune_reporting_export_status_timeout_seconds=240
+# Verbose output for debugging purposes when fetching report download url.
+tune_reporting_export_status_verbose_boolean=false
+```
+
+##### SDK Configuration class
+
+The TUNE Reporting SDK reads configuration through class ```SdkConfig``` with the
+provided path to SDK configuration file.
+
+```java
+    SdkConfig sdkConfig = SdkConfig.getInstance();
+```
+
+By default, configuration is assumed using ```api_key``` authentication type.
+
+To override 'api_key' authentication type, then use ```SdkConfig::setApiKey()```:
+
+```java
+    sdkConfig.setApiKey(apiKey);
+```
+
+To override authentication type using ```session_token```, then use ```SdkConfig::setSessionToken()```:
+
+```java
+    sdkConfig.setSessionToken(apiKey);
+```
+
+If you wish to generate your own session_token, class ```SessionAuthentication``` is provided:
+
+```java
+    SessionAuthenticate sessionAuthenticate = new SessionAuthenticate();
+    TuneManagementResponse response = sessionAuthenticate.apiKey(apiKey);
+    String sessonToken = response.getData().toString();
+```
+
+and you're good to go!
 
 <p>
 <a href="#TOP">
@@ -361,6 +420,8 @@ File **Makefile** provides shortcuts for executing examples and tests.
 ├── AUTHORS.md
 ├── build.xml
 ├── CHANGES.md
+├── config
+│   └── tune_reporting_sdk_config.properties
 ├── docs
 ├── LICENSE.md
 ├── Makefile
@@ -388,32 +449,44 @@ src/main/java/
         └── reporting
             ├── api
             │   ├── AdvertiserReportActuals.java
-            │   ├── AdvertiserReportLogClicks.java
+            │   ├── AdvertiserReportCohortRetention.java
             │   ├── AdvertiserReportCohortValue.java
+            │   ├── AdvertiserReportLogClicks.java
             │   ├── AdvertiserReportLogEventItems.java
             │   ├── AdvertiserReportLogEvents.java
             │   ├── AdvertiserReportLogInstalls.java
             │   ├── AdvertiserReportLogPostbacks.java
-            │   ├── AdvertiserReportCohortRetention.java
-            │   └── Export.java
+            │   ├── Export.java
+            │   └── SessionAuthenticate.java
             ├── base
             │   ├── endpoints
             │   │   ├── AdvertiserReportActualsBase.java
             │   │   ├── AdvertiserReportBase.java
             │   │   ├── AdvertiserReportCohortBase.java
             │   │   ├── AdvertiserReportLogBase.java
-            │   │   └── EndpointBase.java
+            │   │   ├── EndpointBase.java
+            │   │   └── ReportExportWorker.java
             │   └── service
             │       ├── QueryStringBuilder.java
             │       ├── TuneManagementClient.java
             │       ├── TuneManagementProxy.java
             │       ├── TuneManagementRequest.java
             │       └── TuneManagementResponse.java
+            ├── examples
+            │   ├── ExampleAdvertiserReportActuals.java
+            │   ├── ExampleAdvertiserReportCohortRetention.java
+            │   ├── ExampleAdvertiserReportCohortValue.java
+            │   ├── ExampleAdvertiserReportLogClicks.java
+            │   ├── ExampleAdvertiserReportLogEventItems.java
+            │   ├── ExampleAdvertiserReportLogEvents.java
+            │   ├── ExampleAdvertiserReportLogInstalls.java
+            │   ├── ExampleAdvertiserReportLogPostbacks.java
+            │   └── ExampleTuneManagementClient.java
             └── helpers
-                ├── ReportExportWorker.java
                 ├── ReportReaderBase.java
                 ├── ReportReaderCsv.java
                 ├── ReportReaderJson.java
+                ├── SdkConfig.java
                 ├── TuneSdkException.java
                 └── TuneServiceException.java
 ```
@@ -667,9 +740,7 @@ Provides the same signature as function find(), accept parameters <code>limit</c
 <a id="sdk_method_status" name="sdk_method_status"></a>
 ##### Method <code>status()</code>
 
-
 As discussed in <a href="#exporting-reports">Exporting Advertise Reports</a>, for gathering report export status records' classes <strong>Cohort (AdvertiserReportCohorts)</strong> and <strong>AdvertiserReportCohortRetention</strong> uses it own method <code>status()</code>. Its purpose is the same as method <code>Export::download()</code>.
-
 
 <a id="sdk_method_fetch" name="sdk_method_fetch"></a>
 ##### Method <code>fetch()</code>
