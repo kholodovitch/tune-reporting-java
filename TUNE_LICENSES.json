@@ -11,7 +11,7 @@
        },
        "doxygen": {
            "oss_licenses": [
-               "GNU General Public License (GPL-2.0)"
+               "GPL-2.0"
            ],
            "url": "http://www.stack.nl/~dimitri/doxygen/manual/index.html#license",
            "versions": [
@@ -20,7 +20,7 @@
        },
        "java": {
            "oss_licenses": [
-               "Oracle Corporation Binary Code License"
+               "Oracle BCL"
            ],
            "url": "http://www.oracle.com/technetwork/java/javase/downloads/jre-6u21-license-159054.txt",
            "versions": [
@@ -38,7 +38,7 @@
        },
        "junit": {
            "oss_licenses": [
-               "Eclipse Public License 1.0"
+               "EPL-1.0"
            ],
            "url": "http://junit.org/license.html",
            "versions": [
@@ -56,7 +56,7 @@
        },
        "org.json": {
            "oss_licenses": [
-               "org.json License"
+               "json.org License"
            ],
            "url": "http://json.org/license.html",
            "versions": [
