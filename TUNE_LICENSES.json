@@ -1,0 +1,67 @@
+{
+   "tune_reporting_php_sdk": {
+       "checkstyle": {
+           "oss_licenses": [
+               "Apache 2.0"
+           ],
+           "url": "https://github.com/checkstyle/checkstyle/blob/master/LICENSE.apache20",
+           "versions": [
+               "6.4.1"
+           ]
+       },
+       "doxygen": {
+           "oss_licenses": [
+               "GNU General Public License (GPL-2.0)"
+           ],
+           "url": "http://www.stack.nl/~dimitri/doxygen/manual/index.html#license",
+           "versions": [
+               "1.6.1"
+           ]
+       },
+       "java": {
+           "oss_licenses": [
+               "Oracle Corporation Binary Code License"
+           ],
+           "url": "http://www.oracle.com/technetwork/java/javase/downloads/jre-6u21-license-159054.txt",
+           "versions": [
+               "1.7.0_75"
+           ]
+       },
+       "javadoc": {
+           "oss_licenses": [
+               "Apache 2.0"
+           ],
+           "url": "http://maven.apache.org/plugins/maven-javadoc-plugin/license.html",
+           "versions": [
+               "2.10.1"
+           ]
+       },
+       "junit": {
+           "oss_licenses": [
+               "Eclipse Public License 1.0"
+           ],
+           "url": "http://junit.org/license.html",
+           "versions": [
+               "4.12"
+           ]
+       },
+       "lint4j": {
+           "oss_licenses": [
+               "jutils.com License"
+           ],
+           "url": "http://www.jutils.com/license.html",
+           "versions": [
+               "0.9.1"
+           ]
+       },
+       "org.json": {
+           "oss_licenses": [
+               "org.json License"
+           ],
+           "url": "http://json.org/license.html",
+           "versions": [
+               "20131018"
+           ]
+       }
+   }
+}
