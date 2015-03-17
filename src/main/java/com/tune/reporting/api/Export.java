@@ -40,20 +40,20 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 22:52:04 $
+ * @version   $Date: 2015-03-05 23:27:46 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.EndpointBase;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceResponse;
 import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TUNE Management API endpoint '/export/'.
+ * TUNE Service API endpoint '/export/'.
  *
  */
 public class Export extends EndpointBase {
@@ -62,10 +62,10 @@ public class Export extends EndpointBase {
    * Constructor.
    *
    */
-  public Export() throws TuneSdkException {
+  public Export(
+  ) throws TuneSdkException {
     super(
-      "export",
-      true
+      "export"
     );
   }
 
@@ -75,11 +75,13 @@ public class Export extends EndpointBase {
    *
    * @param jobId Job identifier assigned for report export.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    */
-  public final TuneManagementResponse download(
-      final String jobId
+  public final TuneServiceResponse download(
+    final String strAuthKey,
+    final String strAuthType,
+    final String jobId
   ) throws TuneSdkException {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
@@ -90,6 +92,8 @@ public class Export extends EndpointBase {
 
     return super.call(
       "download",
+      strAuthKey,
+      strAuthType,
       mapQueryString
     );
   }

@@ -40,21 +40,22 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 22:52:04 $
+ * @version   $Date: 2015-03-05 23:27:46 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.EndpointBase;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceResponse;
 import com.tune.reporting.helpers.TuneSdkException;
+import com.tune.reporting.helpers.TuneServiceException;
 
 import java.util.Map;
 
 /**
- * Base class for TUNE Management API reports endpoints.
+ * Base class for TUNE Service API reports endpoints.
  */
-public class AdvertiserReportBase extends EndpointBase {
+public abstract class AdvertiserReportBase extends EndpointBase {
   /**
    * Remove debug mode information from results.
    */
@@ -68,16 +69,16 @@ public class AdvertiserReportBase extends EndpointBase {
   /**
    * Constructor.
    *
-   * @param controller          TUNE Management API endpoint name.
+   * @param controller          TUNE Service API endpoint name.
    * @param filterDebugMode     Remove debug mode information from results.
    * @param filterTestProfileId Remove test profile information from results.
    */
   public AdvertiserReportBase(
-      final String controller,
-      final Boolean filterDebugMode,
-      final Boolean filterTestProfileId
+    final String controller,
+    final Boolean filterDebugMode,
+    final Boolean filterTestProfileId
   ) throws TuneSdkException {
-    super(controller, true);
+    super(controller);
 
     this.filterDebugMode = filterDebugMode;
     this.filterTestProfileId = filterTestProfileId;
@@ -85,23 +86,32 @@ public class AdvertiserReportBase extends EndpointBase {
 
   /**
    * Prepare action with provided query string parameters, then call
-   * Management API service.
+   * TUNE Service API service.
    *
    * @param action          Endpoint action to be called.
    * @param mapQueryString  Query string parameters for this action.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    */
-  protected final TuneManagementResponse callRecords(
-      final String action,
-      final Map<String, String> mapQueryString
-  ) throws TuneSdkException {
+  protected final TuneServiceResponse callService(
+    final String action,
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, String> mapQueryString
+  ) throws TuneSdkException
+  {
     // action
     if ((null == action) || action.isEmpty()) {
       throw new IllegalArgumentException(
         "Parameter 'action' is not defined."
       );
+    }
+    if ((null == strAuthKey) || strAuthKey.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthKey' is not defined.");
+    }
+    if ((null == strAuthType) || strAuthType.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthType' is not defined.");
     }
     // mapQueryString
     if ((null == mapQueryString) || mapQueryString.isEmpty()) {
@@ -151,7 +161,42 @@ public class AdvertiserReportBase extends EndpointBase {
 
     return super.call(
       action,
+      strAuthKey,
+      strAuthType,
       mapQueryString
     );
   }
+
+  public abstract TuneServiceResponse count(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
+  ) throws  TuneSdkException,
+            TuneServiceException;
+
+  public abstract TuneServiceResponse find(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
+  ) throws  TuneSdkException,
+            TuneServiceException;
+
+  public abstract TuneServiceResponse export(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
+  ) throws  TuneSdkException,
+            TuneServiceException;
+
+  public abstract TuneServiceResponse status(
+    final String strAuthKey,
+    final String strAuthType,
+    final String jobId
+  ) throws TuneSdkException;
+
+  public abstract TuneServiceResponse fetch(
+    final String strAuthKey,
+    final String strAuthType,
+    final String jobId
+  ) throws TuneServiceException, TuneSdkException;
 }

@@ -40,13 +40,13 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 22:52:04 $
+ * @version   $Date: 2015-03-06 12:26:07 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
-import com.tune.reporting.base.service.TuneManagementClient;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceClient;
+import com.tune.reporting.base.service.TuneServiceResponse;
 import com.tune.reporting.helpers.SdkConfig;
 import com.tune.reporting.helpers.TuneSdkException;
 import com.tune.reporting.helpers.TuneServiceException;
@@ -67,10 +67,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.Stack;
-
+import java.lang.System;
 
 /**
- * Base class for all TUNE Management API endpoints.
+ * Base class for all TUNE Service API endpoints.
  */
 public class EndpointBase {
 
@@ -96,24 +96,12 @@ public class EndpointBase {
   private SdkConfig sdkConfig = null;
 
   /**
-   * TUNE Management API Endpoint.
+   * TUNE Service API Endpoint.
    */
   private String controller = null;
 
   /**
-   * TUNE Reporting Authentication Key:
-   * MobileAppTracking API_KEY or Session token.
-   */
-  private String authKey = null;
-
-  /**
-   * TUNE Reporting Authentication Type:
-   * api_key OR session_token.
-   */
-  private String authType = null;
-
-  /**
-   * TUNE Management API Endpoint's fields.
+   * TUNE Service API Endpoint's fields.
    */
   private Map<String, Map<String, String>> endpointFields = null;
 
@@ -128,6 +116,15 @@ public class EndpointBase {
   private String endpointModelName = null;
 
   /**
+   * Parameter access modes.
+   */
+  public static final Set<String> AUTH_TYPE
+      = new HashSet<String>(Arrays.asList(
+          "api_key",
+          "session_token"
+      ));
+
+  /**
    * Parameter 'sort' directions.
    */
   public static final Set<String> SORT_DIRECTIONS
@@ -140,31 +137,31 @@ public class EndpointBase {
    * Parameter 'filter' expression operations.
   */
   protected static final Set<String> FILTER_OPERATIONS
-      = new HashSet<String>(Arrays.asList(
-          "=",
-          "!=",
-          "<",
-          "<=",
-          ">",
-          ">=",
-          "IS",
-          "NOT",
-          "NULL",
-          "IN",
-          "LIKE",
-          "RLIKE",
-          "REGEXP",
-          "BETWEEN"
-     ));
+    = new HashSet<String>(Arrays.asList(
+      "=",
+      "!=",
+      "<",
+      "<=",
+      ">",
+      ">=",
+      "IS",
+      "NOT",
+      "NULL",
+      "IN",
+      "LIKE",
+      "RLIKE",
+      "REGEXP",
+      "BETWEEN"
+    ));
 
   /**
    * Parameter 'filter' expression conjunctions.
   */
   protected static final Set<String> FILTER_CONJUNCTIONS
-      = new HashSet<String>(Arrays.asList(
-          "AND",
-          "OR"
-      ));
+    = new HashSet<String>(Arrays.asList(
+      "AND",
+      "OR"
+    ));
 
   /**
    * Recommended fields for report exports.
@@ -203,12 +200,10 @@ public class EndpointBase {
   /**
    * Constructor.
    *
-   * @param controller  TUNE Management API Endpoint.
-   * @param useConfig   Use TUNE Reporting SDK config.
+   * @param controller  TUNE Service API Endpoint.
    */
   public EndpointBase(
-      final String controller,
-      final Boolean useConfig
+    final String controller
   ) throws TuneSdkException {
     // controller
     if ((null == controller) || controller.isEmpty()) {
@@ -217,32 +212,9 @@ public class EndpointBase {
       );
     }
 
-    if (useConfig) {
-      try {
-        this.sdkConfig = SdkConfig.getInstance();
-      } catch (TuneSdkException e) {
-        throw e;
-      }
-
-      String authKey = this.sdkConfig.getAuthKey();
-      String authType = this.sdkConfig.getAuthType();
-      Boolean validateFields = this.sdkConfig.getValidateFields();
-
-      // authKey
-      if ((null == authKey) || authKey.isEmpty()) {
-        throw new IllegalArgumentException("Parameter 'authKey' is not defined.");
-      }
-      // authType
-      if ((null == authKey) || authKey.isEmpty()) {
-        throw new IllegalArgumentException("Parameter 'authType' is not defined.");
-      }
-
-      this.authKey = authKey;
-      this.authType = authType;
-      this.validateFields = validateFields;
-    }
-
     this.controller = controller;
+
+    this.sdkConfig = SdkConfig.getInstance();
   }
 
   /**
@@ -255,47 +227,71 @@ public class EndpointBase {
   }
 
   /**
-   * TUNE Reporting Authentication Key.
+   * Call TUNE Service API service for this controller.
    *
-   * @return String
-   */
-  public final String getAuthKey() {
-    return this.authKey;
-  }
-
-  /**
-   * TUNE Reporting Authentication Type.
+   * @param action          TUNE Service API endpoint's action name.
+   * @param strAuthKey      API Key or Session Token.
+   * @param strAuthType     "api_key" or "session_token".
+   * @param mapQueryString  Action's query string parameters.
    *
-   * @return String
-   */
-  public final String getAuthType() {
-    return this.authType;
-  }
-
-  /**
-   * Call TUNE Management API service for this controller.
-   *
-   * @param action          TUNE Management API endpoint's action name
-   * @param mapQueryString  Action's query string parameters
-   *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    */
-  protected final TuneManagementResponse call(
-      final String action,
-      final Map<String, String> mapQueryString
+  protected final TuneServiceResponse call(
+    final String action,
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, String> mapQueryString
+  ) throws TuneSdkException {
+    // action
+    if ((null == action) || action.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'action' is not defined.");
+    }
+    // strAuthKey
+    if ((null == strAuthKey) || strAuthKey.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthKey' is not defined.");
+    }
+    // strAuthType
+    if ((null == strAuthType) || strAuthType.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthType' is not defined.");
+    }
+
+    TuneServiceClient client = new TuneServiceClient(
+      this.controller,
+      action,
+      mapQueryString
+    );
+
+    client.call(
+      strAuthKey,
+      strAuthType
+    );
+
+    return client.getResponse();
+  }
+
+  /**
+   * Call TUNE Service API service for this controller.
+   *
+   * @param action          TUNE Service API endpoint's action name
+   * @param mapQueryString  Action's query string parameters
+   *
+   * @return TuneServiceResponse
+   * @throws TuneSdkException If fails to post request.
+   */
+  protected final TuneServiceResponse call(
+    final String action,
+    final Map<String, String> mapQueryString
   ) throws TuneSdkException {
     // action
     if ((null == action) || action.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'action' is not defined.");
     }
 
-    TuneManagementClient client = new TuneManagementClient(
-        this.controller,
-        action,
-        this.authKey,
-        this.authType,
-        mapQueryString
+    TuneServiceClient client = new TuneServiceClient(
+      this.controller,
+      action,
+      mapQueryString
     );
 
     client.call();
@@ -306,13 +302,16 @@ public class EndpointBase {
   /**
    * Provide complete definition for this endpoint.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    *
    * @throws TuneSdkException If fails to post request.
    */
-  public final TuneManagementResponse getDefine()
+  public final TuneServiceResponse getDefine(
+    final String strAuthKey,
+    final String strAuthType
+  )
     throws TuneSdkException {
-    return this.call("define", null);
+    return this.call("define", strAuthKey, strAuthType, null);
   }
 
   /**
@@ -324,10 +323,14 @@ public class EndpointBase {
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final String getFields()
+  public final String getFields(
+    final String strAuthKey,
+    final String strAuthType
+  )
     throws  TuneSdkException,
-            TuneServiceException {
-    return this.getFields(TUNE_FIELDS_ALL);
+            TuneServiceException
+  {
+    return this.getFields(strAuthKey, strAuthType, TUNE_FIELDS_ALL);
   }
 
   /**
@@ -342,12 +345,20 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String getFields(
-      final int enumFieldsSelection
-  ) throws TuneSdkException, TuneServiceException {
+    final String strAuthKey,
+    final String strAuthType,
+    final int enumFieldsSelection
+  ) throws TuneSdkException, TuneServiceException
+  {
     // build fields
     StringBuilder sb = new StringBuilder();
     String loopDelim = "";
-    Set<String> fields = this.getFieldsSet(enumFieldsSelection);
+    Set<String> fields
+      = this.getFieldsSet(
+        strAuthKey,
+        strAuthType,
+        enumFieldsSelection
+      );
 
     if ((null == fields) || fields.isEmpty()) {
       return null;
@@ -370,11 +381,15 @@ public class EndpointBase {
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final String getModelName()
+  public final String getModelName(
+    final String strAuthKey,
+    final String strAuthType
+  )
     throws  TuneSdkException,
-            TuneServiceException {
+            TuneServiceException
+  {
     if (null == this.endpointFields) {
-      this.getFieldsSet(TUNE_FIELDS_ALL);
+      this.getFieldsSet(strAuthKey, strAuthType, TUNE_FIELDS_ALL);
     }
 
     return this.endpointModelName;
@@ -388,10 +403,14 @@ public class EndpointBase {
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final Set<String> getFieldsSet()
+  public final Set<String> getFieldsSet(
+    final String strAuthKey,
+    final String strAuthType
+  )
     throws  TuneSdkException,
-            TuneServiceException {
-    return this.getFieldsSet(TUNE_FIELDS_ALL);
+            TuneServiceException
+  {
+    return this.getFieldsSet(strAuthKey, strAuthType, TUNE_FIELDS_ALL);
   }
 
   /**
@@ -404,13 +423,15 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final Set<String> getFieldsSet(
-      final int enumFieldsSelection
+    final String strAuthKey,
+    final String strAuthType,
+    final int enumFieldsSelection
   ) throws TuneSdkException, TuneServiceException {
     if ((this.validateFields
         || ((enumFieldsSelection & TUNE_FIELDS_RECOMMENDED) == 0))
         && (null == this.endpointFields)
     ) {
-      this.getEndpointFields();
+      this.getEndpointFields(strAuthKey, strAuthType);
 
       if ((null == this.endpointFields) || this.endpointFields.isEmpty()) {
         throw new TuneSdkException(
@@ -496,25 +517,36 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    * @throws TuneSdkException If fails to post request.
    */
-  protected final Map<String, Map<String, String>> getEndpointFields()
+  protected final Map<String, Map<String, String>> getEndpointFields(
+    final String strAuthKey,
+    final String strAuthType
+  )
     throws  TuneServiceException,
-            TuneSdkException {
+            TuneSdkException
+  {
+    if ((null == strAuthKey) || strAuthKey.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthKey' is not defined.");
+    }
+    if ((null == strAuthType) || strAuthType.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthType' is not defined.");
+    }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("controllers", this.controller);
     mapQueryString.put("details", "modelName,fields");
 
-    TuneManagementClient client = new TuneManagementClient(
-        "apidoc",
-        "get_controllers",
-        this.authKey,
-        this.authType,
-        mapQueryString
+    TuneServiceClient client = new TuneServiceClient(
+      "apidoc",
+      "get_controllers",
+      mapQueryString
     );
 
-    client.call();
+    client.call(
+      strAuthKey,
+      strAuthType
+    );
 
-    TuneManagementResponse response = client.getResponse();
+    TuneServiceResponse response = client.getResponse();
     int httpCode = response.getHttpCode();
     JSONArray data = (JSONArray) response.getData();
 
@@ -663,7 +695,9 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String validateFields(
-      final List<String> fields
+    final String strAuthKey,
+    final String strAuthType,
+    final List<String> fields
   ) throws  TuneSdkException,
             TuneServiceException {
     if ((null == fields) || fields.isEmpty()) {
@@ -676,7 +710,7 @@ public class EndpointBase {
 
     if (this.validateFields) {
       if (null == this.endpointFields || this.endpointFields.isEmpty()) {
-        this.getFieldsSet();
+        this.getFieldsSet(strAuthKey, strAuthType);
       }
       Set<String> endpointFields = this.endpointFields.keySet();
       for (String field : fields) {
@@ -711,7 +745,9 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String validateFields(
-      final String fields
+    final String strAuthKey,
+    final String strAuthType,
+    final String fields
   ) throws  TuneSdkException,
             TuneServiceException {
     if ((null == fields) || fields.isEmpty()) {
@@ -725,7 +761,11 @@ public class EndpointBase {
 
     List<String> setFields = Arrays.asList(fieldsArray);
 
-    return this.validateFields(setFields);
+    return this.validateFields(
+      strAuthKey,
+      strAuthType,
+      setFields
+    );
   }
 
   /**
@@ -738,10 +778,12 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String validateGroup(
-      final List<String> group
+    final String strAuthKey,
+    final String strAuthType,
+    final List<String> group
   ) throws  TuneSdkException,
             TuneServiceException {
-    return this.validateFields(group);
+    return this.validateFields(strAuthKey, strAuthType, group);
   }
 
   /**
@@ -754,10 +796,12 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String validateGroup(
-      final String group
+    final String strAuthKey,
+    final String strAuthType,
+    final String group
   ) throws  TuneSdkException,
             TuneServiceException {
-    return this.validateFields(group);
+    return this.validateFields(strAuthKey, strAuthType, group);
   }
 
   /**
@@ -772,8 +816,10 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String validateSort(
-      Set<String> fields,
-      final Map<String, String> sort
+    final String strAuthKey,
+    final String strAuthType,
+    Set<String> fields,
+    final Map<String, String> sort
   ) throws  TuneSdkException,
             TuneServiceException {
     if ((null == sort) || sort.isEmpty()) {
@@ -784,7 +830,7 @@ public class EndpointBase {
 
     if (this.validateFields) {
       if (null == this.endpointFields || this.endpointFields.isEmpty()) {
-        this.getFieldsSet();
+        this.getFieldsSet(strAuthKey, strAuthType);
       }
       Set<String> endpointFields = this.endpointFields.keySet();
       for (String sortField : sortFields) {
@@ -854,7 +900,9 @@ public class EndpointBase {
    * @throws TuneServiceException If service fails to handle post request.
    */
   public final String validateFilter(
-      final String filter
+    final String strAuthKey,
+    final String strAuthType,
+    final String filter
   ) throws  TuneSdkException,
             TuneServiceException {
     if ((null == filter) || filter.isEmpty()) {
@@ -878,7 +926,7 @@ public class EndpointBase {
     Set<String> endpointFields = null;
     if (this.validateFields) {
       if (null == this.endpointFields || this.endpointFields.isEmpty()) {
-        this.getFieldsSet();
+        this.getFieldsSet(strAuthKey, strAuthType);
       }
 
       endpointFields = this.endpointFields.keySet();
@@ -941,8 +989,8 @@ public class EndpointBase {
    * @return String Validated date time.
    */
   public static String validateDateTime(
-      final String paramName,
-      final String dateTime
+    final String paramName,
+    final String dateTime
   ) {
     if ((null == paramName) || paramName.isEmpty()) {
       throw new IllegalArgumentException(
@@ -995,16 +1043,25 @@ public class EndpointBase {
    * @param exportAction      Action for report export status.
    * @param jobId             Job Identifier of report on queue.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  protected final TuneManagementResponse fetchRecords(
-      final String exportController,
-      final String exportAction,
-      final String jobId
+  protected final TuneServiceResponse fetchRecords(
+    final String strAuthKey,
+    final String strAuthType,
+    final String exportController,
+    final String exportAction,
+    final String jobId
   ) throws TuneServiceException,
-          TuneSdkException {
+          TuneSdkException
+  {
+    if ((null == strAuthKey) || strAuthKey.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthKey' is not defined.");
+    }
+    if ((null == strAuthType) || strAuthType.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthType' is not defined.");
+    }
     if ((null == exportController) || exportController.isEmpty()) {
       throw new IllegalArgumentException(
         "Parameter 'exportController' is not defined."
@@ -1020,29 +1077,20 @@ public class EndpointBase {
         "Parameter 'jobId' is not defined."
       );
     }
-    if ((null == this.authKey) || this.authKey.isEmpty()) {
-      throw new TuneSdkException("Parameter 'authKey' is not defined.");
-    }
 
-    try {
-      this.sdkConfig = SdkConfig.getInstance();
-    } catch (TuneSdkException e) {
-      throw e;
-    }
-
-    Integer sleep = this.sdkConfig.getFetchSleep();
+    Integer sleep   = this.sdkConfig.getFetchSleep();
     Integer timeout = this.sdkConfig.getFetchTimeout();
     Boolean verbose = this.sdkConfig.getFetchVerbose();
 
     ReportExportWorker exportWorker = new ReportExportWorker(
-        exportController,
-        exportAction,
-        this.authKey,
-        this.authType,
-        jobId,
-        verbose,
-        sleep,
-        timeout
+      exportController,
+      exportAction,
+      strAuthKey,
+      strAuthType,
+      jobId,
+      verbose,
+      sleep,
+      timeout
     );
 
     if (verbose) {
@@ -1054,7 +1102,7 @@ public class EndpointBase {
       }
     }
 
-    TuneManagementResponse response = exportWorker.getResponse();
+    TuneServiceResponse response = exportWorker.getResponse();
     if (null == response) {
       throw new TuneServiceException(
         "Report export request no response."
@@ -1113,23 +1161,21 @@ public class EndpointBase {
    */
   public final String toString() {
     return String.format(
-      "Endpoint '%s', API Key: '%s",
-      this.controller,
-      this.authKey
+      "Endpoint '%s'"
     );
   }
 
   /**
    * Parse response and gather job identifier.
    *
-   * @param response @see TuneManagementResponse
+   * @param response @see TuneServiceResponse
    *
    * @return String  Report Job ID upon Export queue.
    * @throws TuneServiceException If service fails to handle post request.
    * @throws TuneSdkException If fails to post request.
    */
   public static String parseResponseReportJobId(
-      final TuneManagementResponse response
+      final TuneServiceResponse response
   ) throws  TuneServiceException,
             TuneSdkException {
     String jobId = null;
@@ -1156,14 +1202,14 @@ public class EndpointBase {
   /**
    * Parse response and gather report url.
    *
-   * @param response @see TuneManagementResponse
+   * @param response @see TuneServiceResponse
    *
    * @return String   Report URL download from Export queue.
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
   public static String parseResponseReportUrl(
-      final TuneManagementResponse response
+      final TuneServiceResponse response
   ) throws TuneSdkException, TuneServiceException {
 
     if (null == response) {

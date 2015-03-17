@@ -40,7 +40,7 @@ package com.tune.reporting.base.service;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-03-05 23:27:46 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -53,7 +53,7 @@ import java.net.URLEncoder;
 
 /**
  * Helper utility for building query string intended for
- * TUNE Management API request.
+ * TUNE Service API request.
  */
 public final class QueryStringBuilder {
 

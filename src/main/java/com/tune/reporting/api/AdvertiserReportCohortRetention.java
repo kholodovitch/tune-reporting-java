@@ -40,14 +40,14 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-03-06 12:26:07 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.AdvertiserReportCohortBase;
 import com.tune.reporting.base.endpoints.EndpointBase;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceResponse;
 import com.tune.reporting.helpers.TuneSdkException;
 import com.tune.reporting.helpers.TuneServiceException;
 
@@ -58,7 +58,7 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * TUNE Management API endpoint 'advertiser/stats/retention'.
+ * TUNE Service API endpoint 'advertiser/stats/retention'.
  */
 public class AdvertiserReportCohortRetention
     extends AdvertiserReportCohortBase {
@@ -67,7 +67,8 @@ public class AdvertiserReportCohortRetention
    * Constructor.
    *
    */
-  public AdvertiserReportCohortRetention() throws TuneSdkException {
+  public AdvertiserReportCohortRetention(
+  ) throws TuneSdkException {
     super(
       "advertiser/stats/retention",
       false,
@@ -78,12 +79,12 @@ public class AdvertiserReportCohortRetention
      * Fields recommended in suggested order.
      */
     this.setFieldsRecommended(new HashSet<String>(Arrays.asList(
-        "site_id",
-        "site.name",
-        "install_publisher_id",
-        "install_publisher.name",
-        "installs",
-        "opens"
+      "site_id",
+      "site.name",
+      "install_publisher_id",
+      "install_publisher.name",
+      "installs",
+      "opens"
     )));
   }
 
@@ -91,71 +92,123 @@ public class AdvertiserReportCohortRetention
    * Finds all existing records that match filter criteria
    * and returns an array of found model data.
    *
-   * @param startDate    YYYY-MM-DD HH:MM:SS
-   * @param endDate      YYYY-MM-DD HH:MM:SS
-   * @param cohortType        Cohort types: click, install
-   * @param cohortInterval    Cohort intervals:
-   *                    year_day, year_week, year_month, year
-   * @param fields      Present results using these endpoint's fields.
-   * @param group       Group results using this endpoint's fields.
-   * @param filter      Apply constraints based upon values associated with
-   *                    this endpoint's fields.
-   * @param limit       Limit number of results, default 10, 0 shows all
-   * @param page        Pagination, default 1.
-   * @param sort        Sort results using this endpoint's fields.
-   *                    Directions: DESC, ASC
-   * @param responseTimezone  Setting expected timezone for results,
-   *                          default is set in account.
+   * @param strAuthKey   API Key or Session Token
+   * @param strAuthType  "api_key" or "session_token"
+   * @param mapParams    Mapping of: <p><dl>
+   * <dt>start_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>end_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>cohort_type</dt><dd>Cohort types: click, install</dd>
+   * <dt>cohort_interval</dt><dd>Cohort intervals:
+   *                    year_day, year_week, year_month, year</dd>
+   * <dt>fields</dt><dd>Present results using these endpoint's fields.</dd>
+   * <dt>group</dt><dd>Group results using this endpoint's fields.
+   * <dt>filter</dt><dd>Apply constraints based upon values associated with
+   *                    this endpoint's fields.</dd>
+   * <dt>limit</dt><dd>Limit number of results, default 10, 0 shows all</dd>
+   * <dt>page</dt><dd>Pagination, default 1.</dd>
+   * <dt>sort</dt><dd>Sort results using this endpoint's fields.
+   *                    Directions: DESC, ASC</dd>
+   * <dt>response_timezone</dt><dd>Setting expected timezone for results,
+   *                          default is set in account.</dd>
+   * </dl><p>
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final TuneManagementResponse find(
-      final String startDate,
-      final String endDate,
-      final String cohortType,
-      final String cohortInterval,
-      final String fields,
-      final String group,
-      final String filter,
-      final int limit,
-      final int page,
-      final Map<String, String> sort,
-      final String responseTimezone
+  @SuppressWarnings("unchecked")
+  public final TuneServiceResponse find(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
   ) throws  TuneSdkException,
             TuneServiceException {
+
+    if (!mapParams.containsKey("start_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'start_date' is not defined."
+      );
+    }
+    final String startDate = (String) mapParams.get("start_date");
+
+    if (!mapParams.containsKey("end_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'end_date' is not defined."
+      );
+    }
+    final String endDate = (String) mapParams.get("end_date");
+
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
-    AdvertiserReportCohortBase.validateCohortType(cohortType);
-    AdvertiserReportCohortBase.validateCohortInterval(cohortInterval);
+    String filterV = null;
+    if (mapParams.containsKey("filter")) {
+      String filter = (String) mapParams.get("filter");
+      if ((null != filter) && !filter.isEmpty()) {
+        filterV = super.validateFilter(strAuthKey, strAuthType, filter);
+      }
+    }
+
+    String groupV = null;
+    if (mapParams.containsKey("group")) {
+      String group = (String) mapParams.get("group");
+      if ((null != group) && !group.isEmpty()) {
+        groupV = super.validateGroup(strAuthKey, strAuthType, group);
+      }
+    }
 
     String fieldsV = null;
-    String groupV = null;
-    String filterV = null;
-
-    if ((null != group) && !group.isEmpty()) {
-      groupV = super.validateGroup(group);
-    }
-    if ((null != filter) && !filter.isEmpty()) {
-      filterV = super.validateFilter(filter);
-    }
-    if ((null != fields) && !fields.isEmpty()) {
-      fieldsV = super.validateFields(fields);
+    String fields = null;
+    if (mapParams.containsKey("fields")) {
+      fields = (String) mapParams.get("fields");
+      if ((null != fields) && !fields.isEmpty()) {
+        fieldsV = super.validateFields(strAuthKey, strAuthType, fields);
+      }
     }
 
     String strSort = null;
-    if ((null != sort) && !sort.isEmpty()) {
-      Set<String> setFields = null;
-      if ((null != fields) && !fields.isEmpty()) {
-        setFields = EndpointBase.explode(fields, "\\,");
-      }
-      strSort = super.validateSort(setFields, sort);
+    if (mapParams.containsKey("sort")) {
+      Map<String, String> sort = (HashMap<String, String>) mapParams.get("sort");
+      if ((null != sort) && !sort.isEmpty()) {
+        Set<String> setFields = null;
+        if ((null != fields) && !fields.isEmpty()) {
+          setFields = EndpointBase.explode(fields, "\\,");
+        }
+        strSort = super.validateSort(strAuthKey, strAuthType, setFields, sort);
 
-      if ((null != setFields) && !setFields.isEmpty()) {
-        fieldsV = EndpointBase.implode(setFields, ",");
+        if ((null != setFields) && !setFields.isEmpty()) {
+          fieldsV = EndpointBase.implode(setFields, ",");
+        }
       }
+    }
+
+    String responseTimezone = null;
+    if (mapParams.containsKey("response_timezone")) {
+      responseTimezone = (String) mapParams.get("response_timezone");
+    }
+
+    if (!mapParams.containsKey("cohort_type")) {
+      throw new IllegalArgumentException(
+        "Parameter 'cohort_type' is not defined."
+      );
+    }
+    final String cohortType = (String) mapParams.get("cohort_type");
+
+    if (!mapParams.containsKey("cohort_interval")) {
+      throw new IllegalArgumentException(
+        "Parameter 'cohort_interval' is not defined."
+      );
+    }
+    final String cohortInterval = (String) mapParams.get("cohort_interval");
+
+    Integer limit = 0;
+    if (mapParams.containsKey("limit")) {
+      limit = (Integer) mapParams.get("limit");
+    }
+
+    Integer page = 0;
+    if (mapParams.containsKey("page")) {
+      page = (Integer) mapParams.get("page");
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -171,8 +224,10 @@ public class AdvertiserReportCohortRetention
     mapQueryString.put("sort", strSort);
     mapQueryString.put("response_timezone", responseTimezone);
 
-    return super.callRecords(
+    return super.callService(
       "find",
+      strAuthKey,
+      strAuthType,
       mapQueryString
     );
   }
@@ -183,51 +238,110 @@ public class AdvertiserReportCohortRetention
    * identifier to be provided to action /export/download.json to download
    * completed report.
    *
-   * @param startDate    YYYY-MM-DD HH:MM:SS
-   * @param endDate      YYYY-MM-DD HH:MM:SS
-   * @param cohortType     Cohort types: click, install
-   * @param cohortInterval   Cohort intervals:
-   *                    year_day, year_week, year_month, year.
-   * @param fields      Present results using these endpoint's fields.
-   * @param group       Group results using this endpoint's fields.
-   * @param filter      Apply constraints based upon values associated with
-   *                  this endpoint's fields.
-   * @param responseTimezone Setting expected timezone for results,
-   *                  default is set in account.
+   * @param strAuthKey   API Key or Session Token
+   * @param strAuthType  "api_key" or "session_token"
+   * @param mapParams    Mapping of: <p><dl>
+   * <dt>start_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>end_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>cohort_type</dt><dd>Cohort types: click, install</dd>
+   * <dt>cohort_interval</dt><dd>Cohort intervals:
+   *                    year_day, year_week, year_month, year</dd>
+   * <dt>fields</dt><dd>Present results using these endpoint's fields.</dd>
+   * <dt>group</dt><dd>Group results using this endpoint's fields.
+   * <dt>filter</dt><dd>Apply constraints based upon values associated with
+   *                    this endpoint's fields.</dd>
+   * <dt>response_timezone</dt><dd>Setting expected timezone for results,
+   *                          default is set in account.</dd>
+   * </dl><p>
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final TuneManagementResponse export(
-      final String startDate,
-      final String endDate,
-      final String cohortType,
-      final String cohortInterval,
-      final String fields,
-      final String group,
-      final String filter,
-      final String responseTimezone
+  public final TuneServiceResponse export(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
   ) throws  TuneSdkException,
             TuneServiceException {
+
+    if (!mapParams.containsKey("start_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'start_date' is not defined."
+      );
+    }
+    final String startDate = (String) mapParams.get("start_date");
+
+    if (!mapParams.containsKey("end_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'end_date' is not defined."
+      );
+    }
+    final String endDate = (String) mapParams.get("end_date");
+
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
-    AdvertiserReportCohortBase.validateCohortType(cohortType);
-    AdvertiserReportCohortBase.validateCohortInterval(cohortInterval);
+    String filterV = null;
+    if (mapParams.containsKey("filter")) {
+      String filter = (String) mapParams.get("filter");
+      if ((null != filter) && !filter.isEmpty()) {
+        filterV = super.validateFilter(strAuthKey, strAuthType, filter);
+      }
+    }
+
+    String groupV = null;
+    if (mapParams.containsKey("group")) {
+      String group = (String) mapParams.get("group");
+      if ((null != group) && !group.isEmpty()) {
+        groupV = super.validateGroup(strAuthKey, strAuthType, group);
+      }
+    }
 
     String fieldsV = null;
-    String groupV = null;
-    String filterV = null;
+    String fields = null;
+    if (mapParams.containsKey("fields")) {
+      fields = (String) mapParams.get("fields");
+      if ((null != fields) && !fields.isEmpty()) {
+        fieldsV = super.validateFields(strAuthKey, strAuthType, fields);
+      }
+    }
 
-    if ((null != fields) && !fields.isEmpty()) {
-      fieldsV = super.validateFields(fields);
+    String responseTimezone = null;
+    if (mapParams.containsKey("response_timezone")) {
+      responseTimezone = (String) mapParams.get("response_timezone");
     }
-    if ((null != group) && !group.isEmpty()) {
-      groupV = super.validateGroup(group);
+
+    if (!mapParams.containsKey("cohort_type")) {
+      throw new IllegalArgumentException(
+        "Parameter 'cohort_type' is not defined."
+      );
     }
-    if ((null != filter) && !filter.isEmpty()) {
-      filterV = super.validateFilter(filter);
+    final String cohortType = (String) mapParams.get("cohort_type");
+
+    if (!mapParams.containsKey("cohort_interval")) {
+      throw new IllegalArgumentException(
+        "Parameter 'cohort_interval' is not defined."
+      );
+    }
+    final String cohortInterval = (String) mapParams.get("cohort_interval");
+
+    String format = "csv";
+    if (mapParams.containsKey("format")) {
+      if (!EndpointBase.REPORT_EXPORT_FORMATS.contains(format)) {
+        throw new IllegalArgumentException(
+        String.format("Parameter 'format' is invalid: '%s'.", format)
+       );
+      }
+      format = (String) mapParams.get("format");
+    }
+    if (format.equals("csv") && ((null == fields) || fields.isEmpty())) {
+      throw new IllegalArgumentException(
+        String.format(
+          "Parameter 'fields' needs to be defined if report format is: '%s'.",
+          format
+        )
+      );
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -238,10 +352,13 @@ public class AdvertiserReportCohortRetention
     mapQueryString.put("fields", fieldsV);
     mapQueryString.put("group", groupV);
     mapQueryString.put("filter", filterV);
+    mapQueryString.put("format", format);
     mapQueryString.put("response_timezone", responseTimezone);
 
-    return super.callRecords(
+    return super.callService(
       "export",
+      strAuthKey,
+      strAuthType,
       mapQueryString
     );
   }
@@ -251,14 +368,18 @@ public class AdvertiserReportCohortRetention
    *
    * @param jobId      Job Identifier of report on queue.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final TuneManagementResponse fetch(
-      final String jobId
+  public final TuneServiceResponse fetch(
+    final String strAuthKey,
+    final String strAuthType,
+    final String jobId
   ) throws TuneServiceException, TuneSdkException {
     return super.fetchRecords(
+      strAuthKey,
+      strAuthType,
       this.getController(),
       "status",
       jobId

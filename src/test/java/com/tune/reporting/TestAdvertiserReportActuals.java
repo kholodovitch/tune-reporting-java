@@ -40,14 +40,16 @@ package com.tune.reporting;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-03-05 16:09:11 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.api.AdvertiserReportActuals;
+import com.tune.reporting.api.SessionAuthenticate;
+import com.tune.reporting.base.endpoints.AdvertiserReportBase;
 import com.tune.reporting.base.endpoints.EndpointBase;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceResponse;
 
 import com.tune.reporting.helpers.ReportReaderCsv;
 import com.tune.reporting.helpers.ReportReaderJson;
@@ -81,31 +83,43 @@ public class TestAdvertiserReportActuals extends TestCase {
   public static void main(final String[] args) {
   }
 
+  /**
+   * The request has succeeded.
+   */
+  public static final int HTTP_STATUS_OK = 200;
+
   /** Instance. */
-  private AdvertiserReportActuals advertiserReport = null;
+  protected AdvertiserReportBase advertiserReport = null;
 
   /** Start Date. */
-  private String startDate = null;
+  protected String startDate = null;
 
   /** End Date. */
-  private String endDate = null;
+  protected String endDate = null;
+
+  /** Service API Key */
+  protected String strApiKey = null;
 
   /* (non-Javadoc)
    * @see junit.framework.TestCase#setUp()
    */
-  protected void setUp() {
-    String apiKey = System.getProperty("API_KEY");
-    TestCase.assertNotNull(apiKey);
-    TestCase.assertFalse(apiKey.isEmpty());
+  protected void setUp()
+    throws Exception
+  {
+    this.advertiserReport = new AdvertiserReportActuals();
 
-    try {
+    this.strApiKey = System.getProperty("API_KEY");
+    TestCase.assertNotNull(this.strApiKey);
+    TestCase.assertFalse(this.strApiKey.isEmpty());
+
+    if ((strApiKey != null) && !strApiKey.isEmpty()) {
       SdkConfig sdkConfig = SdkConfig.getInstance();
-      sdkConfig.setApiKey(apiKey);
-    } catch (TuneSdkException ex) {
-      TestCase.fail("TuneSdkException: " + ex.getMessage());
-    } catch (Exception ex) {
-      TestCase.fail("Exception: " + ex.getMessage());
+      sdkConfig.setApiKey(strApiKey);
     }
+
+    this.strApiKey = System.getProperty("API_KEY");
+    TestCase.assertNotNull(this.strApiKey);
+    TestCase.assertFalse(this.strApiKey.isEmpty());
 
     Date now = new Date();
 
@@ -126,21 +140,26 @@ public class TestAdvertiserReportActuals extends TestCase {
 
     String endDate = dateFormat.format(dateYesterday);
     this.endDate = String.format("%s 23:59:59", endDate);
+  }
 
-    try {
-      this.advertiserReport
-          = new AdvertiserReportActuals();
-    } catch (Exception ex) {
-      StringWriter errors = new StringWriter();
-      ex.printStackTrace(new PrintWriter(errors));
-      TestCase.fail(
-          String.format(
-            "Exception: Message: \"%s\", Stack Trace: %s",
-            ex.getMessage(),
-            errors.toString()
-          )
-      );
-    }
+  protected String getSessionToken()
+    throws Exception
+  {
+    SdkConfig sdkConfig = SdkConfig.getInstance();
+
+    String strApiKey = sdkConfig.getApiKey();
+    SessionAuthenticate sessionAuthenticate = new SessionAuthenticate();
+    TuneServiceResponse response = sessionAuthenticate.apiKey(strApiKey);
+    String strSessonToken = response.getData().toString();
+
+    return strSessonToken;
+  }
+
+  /**
+   * Test provided authKey is not null.
+   */
+  public void test_ApiKey() {
+    TestCase.assertNotNull(this.strApiKey);
   }
 
   /**
@@ -148,8 +167,17 @@ public class TestAdvertiserReportActuals extends TestCase {
    */
   public void test_Fields_Default() {
     String strFieldsDefault = null;
+
+    String strSessionToken = null;
+
     try {
-      strFieldsDefault = this.advertiserReport.getFields(EndpointBase.TUNE_FIELDS_DEFAULT);
+      strSessionToken = this.getSessionToken();
+
+      strFieldsDefault = this.advertiserReport.getFields(
+        strSessionToken,
+        "session_token",
+        EndpointBase.TUNE_FIELDS_DEFAULT
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -191,8 +219,15 @@ public class TestAdvertiserReportActuals extends TestCase {
    */
   public void test_Fields_Recommended() {
     String strFieldsRecommended = null;
+
+    String strSessionToken = null;
     try {
-      strFieldsRecommended = this.advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      strSessionToken = this.getSessionToken();
+      strFieldsRecommended = this.advertiserReport.getFields(
+        strSessionToken,
+        "session_token",
+        EndpointBase.TUNE_FIELDS_RECOMMENDED
+      );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -233,15 +268,25 @@ public class TestAdvertiserReportActuals extends TestCase {
    * Test action "count".
    */
   public void test_Count() {
-    TuneManagementResponse response = null;
+    TuneServiceResponse response = null;
+
+    String strSessionToken = null;
+
+    Map<String, Object> mapParamsCount = new HashMap<String, Object>();
+    mapParamsCount.put("start_date", startDate);
+    mapParamsCount.put("end_date", endDate);
+    mapParamsCount.put("group", "site_id,publisher_id");
+    mapParamsCount.put("filter", "(publisher_id > 0)");
+    mapParamsCount.put("timestamp", "datehour");
+    mapParamsCount.put("response_timezone", "America/Los_Angeles");
 
     try {
+      strSessionToken = this.getSessionToken();
+
       response = this.advertiserReport.count(
-        startDate,
-        endDate,
-        "site_id,publisher_id",   // group
-        "(publisher_id > 0)",     // filter
-        "America/Los_Angeles"     // responseTimezone
+        strSessionToken,
+        "session_token",
+        mapParamsCount
       );
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
@@ -284,28 +329,44 @@ public class TestAdvertiserReportActuals extends TestCase {
    * Test action "find".
    */
   public void test_Find() {
-    TuneManagementResponse response = null;
+    TuneServiceResponse response = null;
+
+    String strSessionToken = null;
 
     try {
+      strSessionToken = this.getSessionToken();
+
       // build sort
       Map<String, String> sort = new HashMap<String, String>();
       sort.put("installs", "DESC");
 
       // build fields
-      String strFieldsRecommended = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      String strFieldsRecommended = advertiserReport.getFields(
+        strSessionToken,
+        "session_token",
+        EndpointBase.TUNE_FIELDS_RECOMMENDED
+      );
+
+      Map<String, Object> mapParamsFind = new HashMap<String, Object>();
+      mapParamsFind.put("start_date", startDate);
+      mapParamsFind.put("end_date", endDate);
+      mapParamsFind.put("fields", strFieldsRecommended);
+      mapParamsFind.put("group", "site_id,publisher_id");
+      mapParamsFind.put("filter", "(publisher_id > 0)");
+      mapParamsFind.put("limit", 5);
+      mapParamsFind.put("page", 0);
+      mapParamsFind.put("sort", sort);
+      mapParamsFind.put("timestamp", "datehour");
+      mapParamsFind.put("response_timezone", "America/Los_Angeles");
+
+      strSessionToken = this.getSessionToken();
 
       response = this.advertiserReport.find(
-        startDate,
-        endDate,
-        strFieldsRecommended,    // fields
-        "site_id,publisher_id",     // group
-        "(publisher_id > 0)",       // filter
-        5,                // limit
-        0,                // page
-        sort,
-        "datehour",           // timestamp
-        "America/Los_Angeles"       // responseTimezone
+        strSessionToken,
+        "session_token",
+        mapParamsFind
       );
+
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -347,22 +408,38 @@ public class TestAdvertiserReportActuals extends TestCase {
    * Test this endpoint's action "export".
    */
   public void test_Export() {
-    TuneManagementResponse response = null;
+    TuneServiceResponse response = null;
+
+    String strSessionToken = null;
 
     try {
+      strSessionToken = this.getSessionToken();
+
       // build fields
-      String strFieldsRecommended = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      String strFieldsRecommended = advertiserReport.getFields(
+        strSessionToken,
+        "session_token",
+        EndpointBase.TUNE_FIELDS_RECOMMENDED
+      );
+
+      Map<String, Object> mapParamsExportCSV = new HashMap<String, Object>();
+      mapParamsExportCSV.put("start_date", startDate);
+      mapParamsExportCSV.put("end_date", endDate);
+      mapParamsExportCSV.put("fields", strFieldsRecommended);
+      mapParamsExportCSV.put("group", "site_id,publisher_id");
+      mapParamsExportCSV.put("filter", "(publisher_id > 0)");
+      mapParamsExportCSV.put("timestamp", "datehour");
+      mapParamsExportCSV.put("format", "csv");
+      mapParamsExportCSV.put("response_timezone", "America/Los_Angeles");
+
+      strSessionToken = this.getSessionToken();
 
       response = this.advertiserReport.export(
-          this.startDate,
-          this.endDate,
-          strFieldsRecommended,       // fields
-          "site_id,publisher_id",     // group
-          "(publisher_id > 0)",       // filter
-          "datehour",                 // timestamp
-          "csv",                      // report format
-          "America/Los_Angeles"       // responseTimezone
+        strSessionToken,
+        "session_token",
+        mapParamsExportCSV
       );
+
     } catch (TuneSdkException ex) {
       StringWriter errors = new StringWriter();
       ex.printStackTrace(new PrintWriter(errors));
@@ -440,11 +517,12 @@ public class TestAdvertiserReportActuals extends TestCase {
 
     String csvReportUrl  = null;
     try {
-      // build fields
-      String strFieldsRecommended = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
+      strSessionToken = this.getSessionToken();
 
       response = this.advertiserReport.fetch(
-          csvJobId             // Job ID
+        strSessionToken,
+        "session_token",
+        csvJobId             // Job ID
       );
 
     } catch (TuneSdkException ex) {
@@ -520,4 +598,5 @@ public class TestAdvertiserReportActuals extends TestCase {
 
     TestCase.assertNotNull(csvReportUrl);
   }
+
 }

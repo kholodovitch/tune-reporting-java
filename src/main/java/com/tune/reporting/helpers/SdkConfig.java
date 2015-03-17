@@ -40,7 +40,7 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 22:52:04 $
+ * @version   $Date: 2015-03-06 12:26:07 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -89,36 +89,29 @@ public final class SdkConfig {
     String strSdkConfigFilePath
         = srcDirectory + "/config/" + SDK_CONFIG_FILENAME;
     File fileSdkConfig = new File(strSdkConfigFilePath);
-    if(!fileSdkConfig.exists() || fileSdkConfig.isDirectory()) {
-      throw new TuneSdkException(
-        String.format(
-          "Tune Reporting SDK configuration file does not exist: '%s'.",
-          strSdkConfigFilePath
-        )
-      );
-    }
-
-    try {
-      InputStream in = new FileInputStream(fileSdkConfig);
-      this.sdkConfig.load(in);
-    } catch (IOException e) {
-      throw new TuneSdkException(
-        String.format(
-          "IOException: Problems getting SDK configuration: '%s', error: '%s'",
-          strSdkConfigFilePath,
-          e.getMessage()
-        ),
-        e
-      );
-    } catch (Exception e) {
-      throw new TuneSdkException(
-        String.format(
-          "Unexpected: Problems getting SDK configuration: '%s', error: '%s'",
-          strSdkConfigFilePath,
-          e.getMessage()
-        ),
-        e
-      );
+    if(fileSdkConfig.exists() && !fileSdkConfig.isDirectory()) {
+      try {
+        InputStream in = new FileInputStream(fileSdkConfig);
+        this.sdkConfig.load(in);
+      } catch (IOException ex) {
+        throw new TuneSdkException(
+          String.format(
+            "IOException: Problems getting SDK configuration: '%s', error: '%s'",
+            strSdkConfigFilePath,
+            ex.getMessage()
+          ),
+          ex
+        );
+      } catch (Exception ex) {
+        throw new TuneSdkException(
+          String.format(
+            "Unexpected: Problems getting SDK configuration: '%s', error: '%s'",
+            strSdkConfigFilePath,
+            ex.getMessage()
+          ),
+          ex
+        );
+      }
     }
   }
 
@@ -186,63 +179,19 @@ public final class SdkConfig {
    *
    * @return String   TUNE Reporting authentication key.
    */
-  public String getAuthKey()
+  public String getApiKey()
   {
-    return this.getConfigValue("tune_reporting_auth_key_string");
+    return this.getConfigValue("tune_reporting_api_key_string");
   }
 
   /**
    * Set TUNE Reporting authentication key.
    *
-   * @param authKey  TUNE Reporting authentication key.
+   * @param strApiKey  TUNE Reporting authentication key.
    */
-  public void setAuthKey(String authKey)
+  public void setApiKey(String strApiKey)
   {
-    this.setConfigValue("tune_reporting_auth_key_string", authKey);
-  }
-
-  /**
-   * Get TUNE Reporting authentication type.
-   *
-   * @return String   TUNE Reporting authentication type.
-   */
-  public String getAuthType()
-  {
-    return this.getConfigValue("tune_reporting_auth_type_string");
-  }
-
-  /**
-   * Set TUNE Reporting authentication type.
-   *
-   * @param authType  TUNE Reporting authentication type.
-   */
-  public void setAuthType(String authType)
-  {
-    this.setConfigValue("tune_reporting_auth_type_string", authType);
-  }
-
-  /**
-   * Set TUNE MobileAppTracking API Key to
-   * TUNE Reporting SDK configuration.
-   *
-   * @param apiKey   TUNE MobileAppTracking API Key.
-   */
-  public void setApiKey(String apiKey)
-  {
-    this.setAuthKey(apiKey);
-    this.setAuthType("api_key");
-  }
-
-  /**
-   * Set TUNE MobileAppTracking Session Token to
-   * TUNE Reporting SDK configuration.
-   *
-   * @param sessionToken   TUNE MobileAppTracking Session Token.
-   */
-  public void setSessionToken(String sessionToken)
-  {
-    this.setAuthKey(sessionToken);
-    this.setAuthType("session_token");
+    this.setConfigValue("tune_reporting_api_key_string", strApiKey);
   }
 
   /**

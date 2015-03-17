@@ -26,7 +26,7 @@
   author    Jeff Tanner jefft@tune.com
   copyright 2015 TUNE, Inc. (http://www.tune.com)
   license   http://opensource.org/licenses/MIT The MIT License (MIT)
-  version   $Date: 2015-01-05 22:52:04 $
+  version   $Date: 2015-03-02 19:16:15 $
   link      https://developers.mobileapptracking.com
 -->
 <project xmlns="http://maven.apache.org/POM/4.0.0"
@@ -37,7 +37,7 @@
   <groupId>com.tune.reporting</groupId>
   <artifactId>tune-reporting</artifactId>
   <packaging>jar</packaging>
-  <version>0.9.8</version>
+  <version>0.9.9</version>
   <name>TUNE Reporting SDK for Java</name>
   <description>Java helper library for TUNE Reporting API services.</description>
   <url>http://maven.apache.org</url>
