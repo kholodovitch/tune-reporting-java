@@ -40,13 +40,13 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 22:52:04 $
+ * @version   $Date: 2015-03-06 12:26:07 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
-import com.tune.reporting.base.service.TuneManagementClient;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceClient;
+import com.tune.reporting.base.service.TuneServiceResponse;
 
 import com.tune.reporting.helpers.TuneSdkException;
 import com.tune.reporting.helpers.TuneServiceException;
@@ -56,56 +56,82 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Base class for TUNE Management API reports logs endpoints.
+ * Base class for TUNE Service API reports logs endpoints.
  */
 public class AdvertiserReportLogBase extends AdvertiserReportBase {
   /**
    * Constructor.
    *
-   * @param controller          TUNE Management API endpoint name.
+   * @param controller          TUNE Service API endpoint name.
    * @param filterDebugMode     Remove debug mode information from results.
    * @param filterTestProfileId Remove test profile information from results.
    */
   public AdvertiserReportLogBase(
-      final String controller,
-      final Boolean filterDebugMode,
-      final Boolean filterTestProfileId
+    final String controller,
+    final Boolean filterDebugMode,
+    final Boolean filterTestProfileId
   ) throws TuneSdkException {
     super(
       controller,
       filterDebugMode,
       filterTestProfileId
-   );
+    );
   }
 
   /**
    * Counts all existing records that match filter criteria
    * and returns an array of found model data.
    *
-   * @param startDate    YYYY-MM-DD HH:MM:SS
-   * @param endDate      YYYY-MM-DD HH:MM:SS
-   * @param filter      Filter the results and apply conditions
-   *                  that must be met for records to be included in data.
-   * @param responseTimezone Setting expected time for data
+   * @param strAuthKey   API Key or Session Token
+   * @param strAuthType  "api_key" or "session_token"
+   * @param mapParams    Mapping of: <p><dl>
+   * <dt>start_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>end_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>filter</dt><dd>Apply constraints based upon values associated with
+   *                    this endpoint's fields.</dd>
+   * <dt>response_timezone</dt><dd>Setting expected timezone for results,
+   *                          default is set in account.</dd>
+   * </dl><p>
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final TuneManagementResponse count(
-      final String startDate,
-      final String endDate,
-      final String filter,
-      final String responseTimezone
+  public final TuneServiceResponse count(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
   ) throws  TuneSdkException,
-            TuneServiceException {
+            TuneServiceException
+  {
+    if (!mapParams.containsKey("start_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'start_date' is not defined."
+      );
+    }
+    final String startDate = (String) mapParams.get("start_date");
+
+    if (!mapParams.containsKey("end_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'end_date' is not defined."
+      );
+    }
+    final String endDate = (String) mapParams.get("end_date");
+
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
     String filterV = null;
+    if (mapParams.containsKey("filter")) {
+      String filter = (String) mapParams.get("filter");
+      if ((null != filter) && !filter.isEmpty()) {
+        filterV = super.validateFilter(strAuthKey, strAuthType, filter);
+      }
+    }
 
-    if ((null != filter) && !filter.isEmpty()) {
-      filterV = super.validateFilter(filter);
+    String responseTimezone = null;
+    if (mapParams.containsKey("response_timezone")) {
+      responseTimezone = (String) mapParams.get("response_timezone");
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -114,72 +140,109 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
     mapQueryString.put("filter", filterV);
     mapQueryString.put("response_timezone", responseTimezone);
 
-    return super.callRecords(
+    return super.callService(
       "count",
+      strAuthKey,
+      strAuthType,
       mapQueryString
-   );
+    );
   }
 
   /**
    * Finds all existing records that match filter criteria
    * and returns an array of found model data.
    *
-   * @param startDate      YYYY-MM-DD HH:MM:SS
-   * @param endDate        YYYY-MM-DD HH:MM:SS
-   * @param fields        No value returns default fields, "*"
-   *                    returns all available fields,
-   *                    or provide specific fields.
-   * @param filter        Filter the results and apply conditions
-   *                    that must be met for records to be
-   *                    included in data.
-   * @param limit         Limit number of results, default 10,
-   *                    0 shows all.
-   * @param page          Pagination, default 1.
-   * @param sort          Expression defining sorting found
-   *                    records in result set base upon provided
-   *                    fields and its modifier (ASC or DESC).
-   * @param responseTimezone   Setting expected timezone for results,
-   *                    default is set in account.
+   * @param strAuthKey   API Key or Session Token
+   * @param strAuthType  "api_key" or "session_token"
+   * @param mapParams    Mapping of: <p><dl>
+   * <dt>start_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>end_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>fields</dt><dd>Present results using these endpoint's fields.</dd>
+   * <dt>filter</dt><dd>Apply constraints based upon values associated with
+   *                    this endpoint's fields.</dd>
+   * <dt>limit</dt><dd>Limit number of results, default 10, 0 shows all</dd>
+   * <dt>page</dt><dd>Pagination, default 1.</dd>
+   * <dt>sort</dt><dd>Sort results using this endpoint's fields.
+   *                    Directions: DESC, ASC</dd>
+   * <dt>response_timezone</dt><dd>Setting expected timezone for results,
+   *                          default is set in account.</dd>
+   * </dl><p>
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final TuneManagementResponse find(
-      final String startDate,
-      final String endDate,
-      final String fields,
-      final String filter,
-      final int limit,
-      final int page,
-      final Map<String, String> sort,
-      final String responseTimezone
+  @SuppressWarnings("unchecked")
+  public final TuneServiceResponse find(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
   ) throws  TuneSdkException,
             TuneServiceException {
+
+    if (!mapParams.containsKey("start_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'start_date' is not defined."
+      );
+    }
+    final String startDate = (String) mapParams.get("start_date");
+
+    if (!mapParams.containsKey("end_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'end_date' is not defined."
+      );
+    }
+    final String endDate = (String) mapParams.get("end_date");
+
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
-    String fieldsV = null;
     String filterV = null;
-
-    if ((null != filter) && !filter.isEmpty()) {
-      filterV = super.validateFilter(filter);
+    if (mapParams.containsKey("filter")) {
+      String filter = (String) mapParams.get("filter");
+      if ((null != filter) && !filter.isEmpty()) {
+        filterV = super.validateFilter(strAuthKey, strAuthType, filter);
+      }
     }
-    if ((null != fields) && !fields.isEmpty()) {
-      fieldsV = super.validateFields(fields);
+
+    String fieldsV = null;
+    String fields = null;
+    if (mapParams.containsKey("fields")) {
+      fields = (String) mapParams.get("fields");
+      if ((null != fields) && !fields.isEmpty()) {
+        fieldsV = super.validateFields(strAuthKey, strAuthType, fields);
+      }
     }
 
     String strSort = null;
-    if ((null != sort) && !sort.isEmpty()) {
-      Set<String> setFields = null;
-      if ((null != fields) && !fields.isEmpty()) {
-        setFields = EndpointBase.explode(fields, "\\,");
-      }
-      strSort = super.validateSort(setFields, sort);
+    if (mapParams.containsKey("sort")) {
+      Map<String, String> sort = (HashMap<String, String>) mapParams.get("sort");
+      if ((null != sort) && !sort.isEmpty()) {
+        Set<String> setFields = null;
+        if ((null != fields) && !fields.isEmpty()) {
+          setFields = EndpointBase.explode(fields, "\\,");
+        }
+        strSort = super.validateSort(strAuthKey, strAuthType, setFields, sort);
 
-      if ((null != setFields) && !setFields.isEmpty()) {
-        fieldsV = EndpointBase.implode(setFields, ",");
+        if ((null != setFields) && !setFields.isEmpty()) {
+          fieldsV = EndpointBase.implode(setFields, ",");
+        }
       }
+    }
+
+    Integer limit = 0;
+    if (mapParams.containsKey("limit")) {
+      limit = (Integer) mapParams.get("limit");
+    }
+
+    Integer page = 0;
+    if (mapParams.containsKey("page")) {
+      page = (Integer) mapParams.get("page");
+    }
+
+    String responseTimezone = null;
+    if (mapParams.containsKey("response_timezone")) {
+      responseTimezone = (String) mapParams.get("response_timezone");
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
@@ -193,6 +256,8 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
     mapQueryString.put("response_timezone", responseTimezone);
 
     return super.call(
+      strAuthKey,
+      strAuthType,
       "find",
       mapQueryString
     );
@@ -204,46 +269,78 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
    * identifier to be provided to action /export/download.json to download
    * completed report.
    *
-   * @param startDate      YYYY-MM-DD HH:MM:SS
-   * @param endDate        YYYY-MM-DD HH:MM:SS
-   * @param fields        Provide fields if format is 'csv'.
-   * @param filter        Filter the results and apply conditions
-   *                    that must be met for records to be
-   *                    included in data.
-   * @param format        Export format: csv, json
-   * @param responseTimezone   Setting expected timezone for results,
-   *                    default is set in account.
+   * @param strAuthKey   API Key or Session Token
+   * @param strAuthType  "api_key" or "session_token"
+   * @param mapParams    Mapping of: <p><dl>
+   * <dt>start_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>end_date</dt><dd>YYYY-MM-DD HH:MM:SS</dd>
+   * <dt>fields</dt><dd>Present results using these endpoint's fields.</dd>
+   * <dt>filter</dt><dd>Apply constraints based upon values associated with
+   *                    this endpoint's fields.</dd>
+   * <dt>format</dt><dd>Export format: csv, json</dd>
+   * <dt>response_timezone</dt><dd>Setting expected timezone for results,
+   *                          default is set in account.</dd>
+   * </dl><p>
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final TuneManagementResponse export(
-      final String startDate,
-      final String endDate,
-      final String fields,
-      final String filter,
-      final String format,
-      final String responseTimezone
+  public final TuneServiceResponse export(
+    final String strAuthKey,
+    final String strAuthType,
+    final Map<String, Object> mapParams
   ) throws  TuneSdkException,
             TuneServiceException {
+
+    if (!mapParams.containsKey("start_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'start_date' is not defined."
+      );
+    }
+    final String startDate = (String) mapParams.get("start_date");
+
+    if (!mapParams.containsKey("end_date")) {
+      throw new IllegalArgumentException(
+        "Parameter 'end_date' is not defined."
+      );
+    }
+    final String endDate = (String) mapParams.get("end_date");
+
     EndpointBase.validateDateTime("start_date", startDate);
     EndpointBase.validateDateTime("end_date", endDate);
 
-    String fieldsV = null;
     String filterV = null;
 
-    if ((null != filter) && !filter.isEmpty()) {
-      filterV = super.validateFilter(filter);
-    }
-    if ((null != fields) && !fields.isEmpty()) {
-      fieldsV = super.validateFields(fields);
+    if (mapParams.containsKey("filter")) {
+      String filter = (String) mapParams.get("filter");
+      if ((null != filter) && !filter.isEmpty()) {
+        filterV = super.validateFilter(strAuthKey, strAuthType, filter);
+      }
     }
 
-    if (!EndpointBase.REPORT_EXPORT_FORMATS.contains(format)) {
-      throw new IllegalArgumentException(
-      String.format("Parameter 'format' is invalid: '%s'.", format)
-     );
+    String fieldsV = null;
+    String fields = null;
+    if (mapParams.containsKey("fields")) {
+      fields = (String) mapParams.get("fields");
+      if ((null != fields) && !fields.isEmpty()) {
+        fieldsV = super.validateFields(strAuthKey, strAuthType, fields);
+      }
+    }
+
+    String responseTimezone = null;
+    if (mapParams.containsKey("response_timezone")) {
+      responseTimezone = (String) mapParams.get("response_timezone");
+    }
+
+    String format = "csv";
+    if (mapParams.containsKey("format")) {
+      if (!EndpointBase.REPORT_EXPORT_FORMATS.contains(format)) {
+        throw new IllegalArgumentException(
+        String.format("Parameter 'format' is invalid: '%s'.", format)
+       );
+      }
+      format = (String) mapParams.get("format");
     }
     if (format.equals("csv") && ((null == fields) || fields.isEmpty())) {
       throw new IllegalArgumentException(
@@ -262,8 +359,10 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
     mapQueryString.put("format", format);
     mapQueryString.put("response_timezone", responseTimezone);
 
-    return super.callRecords(
+    return super.callService(
       "find_export_queue",
+      strAuthKey,
+      strAuthType,
       mapQueryString
    );
   }
@@ -275,31 +374,37 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
    * @param jobId  Provided Job Identifier to reference
    *              requested report on export queue.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    */
-  public final TuneManagementResponse status(
-      final String jobId
+  public final TuneServiceResponse status(
+    final String strAuthKey,
+    final String strAuthType,
+    final String jobId
   ) throws TuneSdkException {
+    if ((null == strAuthKey) || strAuthKey.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthKey' is not defined.");
+    }
+    if ((null == strAuthType) || strAuthType.isEmpty()) {
+      throw new IllegalArgumentException("Parameter 'strAuthType' is not defined.");
+    }
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
-    }
-    if ((null == this.getAuthKey()) || this.getAuthKey().isEmpty()) {
-      throw new IllegalArgumentException("Parameter 'apiKey' is not defined.");
     }
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("job_id", jobId);
 
-    TuneManagementClient client = new TuneManagementClient(
-        "export",
-        "download",
-        this.getAuthKey(),
-        this.getAuthType(),
-        mapQueryString
+    TuneServiceClient client = new TuneServiceClient(
+      "export",
+      "download",
+      mapQueryString
     );
 
-    client.call();
+    client.call(
+      strAuthKey,
+      strAuthType
+    );
 
     return client.getResponse();
   }
@@ -309,17 +414,21 @@ public class AdvertiserReportLogBase extends AdvertiserReportBase {
    *
    * @param jobId       Job identifier assigned for report export.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException     If fails to post request.
    * @throws TuneServiceException If service fails to handle post request.
    */
-  public final TuneManagementResponse fetch(
-      final String jobId
+  public final TuneServiceResponse fetch(
+    final String strAuthKey,
+    final String strAuthType,
+    final String jobId
   ) throws TuneServiceException, TuneSdkException {
     if ((null == jobId) || jobId.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'jobId' is not defined.");
     }
     return super.fetchRecords(
+      strAuthKey,
+      strAuthType,
       "export",
       "download",
       jobId

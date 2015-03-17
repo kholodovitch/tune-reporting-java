@@ -40,7 +40,7 @@ package com.tune.reporting.helpers;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-03-05 23:27:46 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -55,7 +55,7 @@ import java.util.Map;
 public abstract class ReportReaderBase {
 
   /**
-   * Report URL provided by TUNE Management API export queue.
+   * Report URL provided by TUNE Service API export queue.
    */
   private String reportUrl = null;
 
@@ -68,7 +68,7 @@ public abstract class ReportReaderBase {
   /**
    * Constructor.
    *
-   * @param reportUrl Report URL provided by TUNE Management API export queue.
+   * @param reportUrl Report URL provided by TUNE Service API export queue.
    */
   public ReportReaderBase(
       final String reportUrl

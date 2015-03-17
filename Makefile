@@ -26,7 +26,7 @@
 # author    Jeff Tanner <jefft@tune.com>
 # copyright 2014 Tune (http://www.tune.com)
 # license   http://opensource.org/licenses/MIT The MIT License (MIT)
-# version   $Date: 2014-12-31 13:59:48 $
+# version   $Date: 2015-03-05 23:03:20 $
 # link      https://developers.mobileapptracking.com
 #
 
@@ -50,10 +50,10 @@ ant-lint:
 ant-build:
 	ant build
 
-ant-examples:
+ant-example:
 	ant example -DAPI_KEY=$(api_key)
 
-ant-tests:
+ant-test:
 	ant test -DAPI_KEY=$(api_key)
 
 # Maven sign java classes #1
@@ -71,7 +71,7 @@ mvn-clean:
 	find src/ -name \*.asc -exec rm {} \;
 	mvn clean
 
-mvn-tests:
+mvn-test:
 	mvn test -DAPI_KEY=$(api_key)
 
 mvn-package:

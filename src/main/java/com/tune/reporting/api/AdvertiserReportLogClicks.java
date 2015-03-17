@@ -40,7 +40,7 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 09:40:09 $
+ * @version   $Date: 2015-03-05 23:27:46 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
@@ -50,16 +50,18 @@ import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Map;
 
 /**
- * TUNE Management API endpoint 'advertiser/stats/clicks'.
+ * TUNE Service API endpoint 'advertiser/stats/clicks'.
  */
 public class AdvertiserReportLogClicks extends AdvertiserReportLogBase {
   /**
    * Constructor.
    *
    */
-  public AdvertiserReportLogClicks() throws TuneSdkException {
+  public AdvertiserReportLogClicks(
+  ) throws TuneSdkException {
     super(
       "advertiser/stats/clicks",
       true,

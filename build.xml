@@ -26,434 +26,551 @@ THE SOFTWARE.
 tune-reporting
 TUNE Reporting API SDK for Java 1.6
 Incorporate TUNE Reporting API services.
-Update:  $Date: 2015-01-05 22:52:04 $
-Version: 0.9.8
+Update:  $Date: 2015-03-06 12:26:07 $
+Version: 0.9.9
 -->
 <project basedir="."
-	default="build"
-	name="tune-reporting">
-	<property name="src" value="src" />
-	<property name="src.java" value="${src}/main" />
-	<property name="classes.dir" value="classes"/>
-	<property name="dist.dir" value="dist"/>
-	<property name="major-version-number" value="1" />
-	<property name="project-name" value="${ant.project.name}" />
-	<property environment="env"/>
-	<property name="junit.output.dir" value="junit"/>
-	<property name="debuglevel" value="source,lines,vars"/>
-	<property name="target" value="1.6"/>
-	<property name="source" value="1.6"/>
-	<property name="lint4j.level" value="3" />
-	<property name="lint4j.exact" value="false" />
+  default="build"
+  name="tune-reporting">
+  <property name="src.dir" value="src" />
+  <property name="src.java" value="${src.dir}/main" />
+  <property name="classes.dir" value="classes"/>
+  <property name="dist.dir" value="dist"/>
+  <property name="major-version-number" value="1" />
+  <property name="project-name" value="${ant.project.name}" />
+  <property environment="env"/>
+  <property name="junit.output.dir" value="junit"/>
+  <property name="debuglevel" value="source,lines,vars"/>
+  <property name="target" value="1.6"/>
+  <property name="source" value="1.6"/>
+  <property name="lint4j.level" value="3" />
+  <property name="lint4j.exact" value="false" />
 
-	<property name="dir.main" value="./src/main/java" />
-	<property name="dir.test" value="./src/test/java" />
-	<property name="dir.javadoc" value="./docs/javadoc" />
-	<property name="dir.lib" value="./lib" />
+  <property name="dir.main" value="./${src.dir}/main/java" />
+  <property name="dir.example" value="./${src.dir}/example/java" />
+  <property name="dir.test" value="./${src.dir}/test/java" />
+  <property name="dir.javadoc" value="./docs/javadoc" />
+  <property name="dir.lib" value="./lib" />
 
-	<property name="build.name" value="tune-reporting" />
-	<property name="build.major.number" value="0" />
-	<property name="build.minor.number" value="9" />
-	<property name="build.revision.number" value="8" />
+  <property name="build.name" value="tune-reporting" />
+  <property name="build.major.number" value="0" />
+  <property name="build.minor.number" value="9" />
+  <property name="build.revision.number" value="9" />
 
         <property name="javadoc.name" value="TUNE Reporting API SDK for Java" />
 
-	<path id="JUnit.libraryclasspath">
-		<pathelement location="lib/junit-4.10.jar"/>
-	</path>
-	<path id="Tune_Reporting.classpath">
-		<pathelement location="${classes.dir}"/>
-		<pathelement location="lib/json-20131018.jar"/>
-		<path refid="JUnit.libraryclasspath"/>
-	</path>
-	
-	<target name="run">
-		<echo message="ant.project.name=${ant.project.name}"/>
-	</target>
+  <path id="JUnit.libraryclasspath">
+    <pathelement location="lib/junit-4.10.jar"/>
+  </path>
+  <path id="Tune_Reporting.classpath">
+    <pathelement location="${classes.dir}"/>
+    <pathelement location="lib/json-20131018.jar"/>
+    <path refid="JUnit.libraryclasspath"/>
+  </path>
 
-	<target name="init">
-		<mkdir dir="${classes.dir}"/>
-		<mkdir dir="${dist.dir}"/>
-		<copy includeemptydirs="false" todir="${classes.dir}">
-			<fileset dir="${dir.main}" excludes="**/*.launch, **/*.java"/>
-		</copy>
-		<copy includeemptydirs="false" todir="${classes.dir}">
-			<fileset dir="${dir.test}" excludes="**/*.launch, **/*.java"/>
-		</copy>
-	</target>
-	<target name="clean">
-		<delete dir="${dist.dir}"/>
-		<delete dir="${classes.dir}"/>
-		<delete file="Tune_Reporting.jar"/>
-	</target>
-	<target name="cleanall" depends="clean" />
-	<target name="build" depends="cleanall,build-subprojects,build-project,compress,lint4j" />
-	<target name="build-subprojects"/>
-	<target name="compress" depends="build-project" >
-		<echo message="${dist.dir}/${build.name}-${build.major.number}.${build.minor.number}.${build.revision.number}.jar" />
-		<jar destfile="${dist.dir}/${build.name}-${build.major.number}.${build.minor.number}.${build.revision.number}.jar"
-		     basedir="${classes.dir}"
-		     excludes="**/*.java"
-		     >
-			<manifest>
-				<attribute name="Product-Name" value="tune-reporting"/>
-				<attribute name="Package-Title" value="com.tune.reporting"/>
-				<attribute name="Package-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
-				<attribute name="Specification-Title" value="TUNE Reporting API SDK"/>
-				<attribute name="Specification-Vendor" value="TUNE, Inc."/>
-				<attribute name="Specification-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
-				<attribute name="Implementation-Title" value="TUNE Reporting API SDK"/>
-				<attribute name="Implementation-Vendor" value="TUNE, Inc."/>
-				<attribute name="Implementation-Vendor-Id" value="com.tune.reporting"/>
-				<attribute name="Implementation-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
-			</manifest>
-		</jar>
-	</target>
-	<target name="build-project" depends="init">
-		<echo message="${ant.project.name}: ${ant.file}" />
-		<javac debug="true"
-		       debuglevel="${debuglevel}"
-		       destdir="${classes.dir}"
-		       source="${source}"
-		       target="${target}"
-		       includeantruntime="false" >
-			<src path="${dir.main}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<compilerarg value="-Xlint:all"/>
-		</javac>
-		<javac debug="true"
-		       debuglevel="${debuglevel}"
-		       destdir="${classes.dir}"
-		       source="${source}"
-		       target="${target}"
-		       includeantruntime="false" >
-			<src path="${dir.test}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<compilerarg value="-Xlint:all"/>
-		</javac>
-	</target>
-	<target description="Build all projects which reference this project. Useful to propagate changes."
-		name="build-refprojects"/>
-	<target description="copy Eclipse compiler jars to ant lib directory"
-		name="init-eclipse-compiler"
-		>
-		<copy todir="${ant.library.dir}">
-			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-		</copy>
-		<unzip dest="${ant.library.dir}">
-			<patternset includes="jdtCompilerAdapter.jar"/>
-			<fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
-		</unzip>
-	</target>
-	<target description="compile project with Eclipse compiler"
-		name="build-eclipse-compiler">
-		<property name="build.compiler"
-			  value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
-		<antcall target="build"/>
-	</target>
-	<!-- Run all example. -->
-	<target name="example">
-		<java classname="com.tune.reporting.examples.ExampleTuneManagementClient"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportActuals"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogClicks"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportCohortValue"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogEventItems"
-		      failonerror="true" fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogEvents"
-		      failonerror="true"
-		      fork="yes">
-		    <classpath refid="Tune_Reporting.classpath"/>
-		    <arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogInstalls"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogPostbacks"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportCohortRetention"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<!-- Run specific example. -->
-	<target name="ExampleTuneManagementClient">
-		<java classname="com.tune.reporting.examples.ExampleTuneManagementClient"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleItemsAccountUsers">
-		<java classname="com.tune.reporting.examples.ExampleItemsAccountUsers"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportActuals">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportActuals"
-		      failonerror="true"
-		      fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportLogClicks">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogClicks"
-		      failonerror="true" fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportCohortValue">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportCohortValue"
-		      failonerror="true" fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportLogEventItems">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogEventItems"
-		      failonerror="true" fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportLogEvents">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogEvents"
-		      failonerror="true" fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportLogInstalls">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogInstalls"
-		      failonerror="true"
-		      fork="yes"
-		      >
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportLogPostbacks">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportLogPostbacks"
-		      failonerror="true" fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<target name="ExampleAdvertiserReportCohortRetention">
-		<java classname="com.tune.reporting.examples.ExampleAdvertiserReportCohortRetention"
-		      failonerror="true" fork="yes">
-			<classpath refid="Tune_Reporting.classpath"/>
-			<arg value="${API_KEY}"/>
-		</java>
-	</target>
-	<!-- Run all unittest. -->
-	<target name="test">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit fork="no"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       showoutput="true"
-		       haltonfailure="yes"
-		       >
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<formatter type="xml"/>
-			<batchtest todir="${junit.output.dir}">
-		        <fileset dir="${dir.test}">
-		        	<include name="**/*Test*.java"/>
-		        </fileset>
-		    </batchtest>
-		</junit>
-	</target>
-	<!-- Run specific unittest. -->
-	<target name="TestTuneManagementClient">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000"
-		       >
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestTuneManagementClient" todir="${junit.output.dir}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportActuals">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000"
-		       >
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportActuals" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportLogClicks">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000">
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportLogClicks" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportCohortValue">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000"
-		       >
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportCohortValue" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportLogEventItems">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000"
-		       >
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportLogEventItems" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportLogEvents">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000"
-		       >
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportLogEvents" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportLogInstalls">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000"
-		       >
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportLogInstalls" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportLogPostbacks">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true"
-		       printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}"
-		       forkmode="once"
-		       haltonfailure="no"
-		       timeout="1800000"
-		       >
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportLogPostbacks" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
-	<target name="TestAdvertiserReportCohortRetention">
-		<mkdir dir="${junit.output.dir}"/>
-		<junit showoutput="true" printsummary="on"
-		       enabletestlistenerevents="true"
-		       fork="@{fork}" forkmode="once" haltonfailure="no" timeout="1800000">
-			<formatter type="xml"/>
-			<test name="com.tune.reporting.TestAdvertiserReportCohortRetention" todir="${junit.output.dir}"/>
-			<classpath refid="Tune_Reporting.classpath"/>
-			<sysproperty key="API_KEY" value="${API_KEY}"/>
-		</junit>
-	</target>
+  <target name="run">
+    <echo message="ant.project.name=${ant.project.name}"/>
+  </target>
 
-	<target name="junitreport">
-		<junitreport todir="${junit.output.dir}">
-			<fileset dir="${junit.output.dir}">
-				<include name="TEST-*.xml"/>
-			</fileset>
-			<report format="frames" todir="${junit.output.dir}"/>
-		</junitreport>
-	</target>
-	<!-- Generate javadocs for current project into ${dir.javadoc} -->
-	<target name="docs-javadoc" depends="init" description="Generate javadoc" >
-		<mkdir dir="${dir.javadoc}"/>
-		<javadoc use='true' author='true'  version='true'
+  <target name="init">
+    <mkdir dir="${classes.dir}"/>
+    <mkdir dir="${dist.dir}"/>
+    <copy includeemptydirs="false" todir="${classes.dir}">
+      <fileset dir="${dir.main}" excludes="**/*.launch, **/*.java"/>
+    </copy>
+    <copy includeemptydirs="false" todir="${classes.dir}">
+      <fileset dir="${dir.test}" excludes="**/*.launch, **/*.java"/>
+    </copy>
+  </target>
+  <target name="clean">
+    <delete dir="${dist.dir}"/>
+    <delete dir="${classes.dir}"/>
+    <delete file="Tune_Reporting.jar"/>
+  </target>
+  <target name="cleanall" depends="clean" />
+  <target name="build" depends="cleanall,build-subprojects,build-project,compress,compress-source,lint4j" />
+  <target name="build-subprojects"/>
+  <target name="compress" depends="build-project" >
+    <echo message="${dist.dir}/${build.name}-${build.major.number}.${build.minor.number}.${build.revision.number}.jar" />
+    <jar destfile="${dist.dir}/${build.name}-${build.major.number}.${build.minor.number}.${build.revision.number}.jar"
+      >
+      <fileset dir="${classes.dir}" />
+      <zipgroupfileset dir="lib" includes="json-20131018.jar"/>
+      <manifest>
+        <attribute name="Product-Name" value="tune-reporting"/>
+        <attribute name="Package-Title" value="com.tune.reporting"/>
+        <attribute name="Package-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
+        <attribute name="Specification-Title" value="TUNE Reporting API SDK"/>
+        <attribute name="Specification-Vendor" value="TUNE, Inc."/>
+        <attribute name="Specification-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
+        <attribute name="Implementation-Title" value="TUNE Reporting API SDK"/>
+        <attribute name="Implementation-Vendor" value="TUNE, Inc."/>
+        <attribute name="Implementation-Vendor-Id" value="com.tune.reporting"/>
+        <attribute name="Implementation-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
+      </manifest>
+    </jar>
+  </target>
+  <target name="compress-source" depends="build-project" >
+    <echo message="${dist.dir}/${build.name}-source-${build.major.number}.${build.minor.number}.${build.revision.number}.jar" />
+    <jar destfile="${dist.dir}/${build.name}-source-${build.major.number}.${build.minor.number}.${build.revision.number}.jar"
+      >
+      <fileset dir="${classes.dir}" />
+      <fileset dir="${src.dir}" includes="**/*.java" excludes="test/**" />
+      <zipgroupfileset dir="lib" includes="json-20131018.jar"/>
+      <manifest>
+        <attribute name="Product-Name" value="tune-reporting"/>
+        <attribute name="Package-Title" value="com.tune.reporting"/>
+        <attribute name="Package-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
+        <attribute name="Specification-Title" value="TUNE Reporting API SDK"/>
+        <attribute name="Specification-Vendor" value="TUNE, Inc."/>
+        <attribute name="Specification-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
+        <attribute name="Implementation-Title" value="TUNE Reporting API SDK"/>
+        <attribute name="Implementation-Vendor" value="TUNE, Inc."/>
+        <attribute name="Implementation-Vendor-Id" value="com.tune.reporting"/>
+        <attribute name="Implementation-Version" value="${build.major.number}.${build.minor.number}.${build.revision.number}"/>
+      </manifest>
+    </jar>
+  </target>
+  <target name="build-project" depends="init">
+    <echo message="${ant.project.name}: ${ant.file}" />
+    <javac debug="true"
+           debuglevel="${debuglevel}"
+           destdir="${classes.dir}"
+           source="${source}"
+           target="${target}"
+           includeantruntime="false" >
+      <src path="${dir.main}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <compilerarg value="-Xlint:all"/>
+    </javac>
+    <javac debug="true"
+           debuglevel="${debuglevel}"
+           destdir="${classes.dir}"
+           source="${source}"
+           target="${target}"
+           includeantruntime="false" >
+      <src path="${dir.example}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <compilerarg value="-Xlint:all"/>
+    </javac>
+    <javac debug="true"
+           debuglevel="${debuglevel}"
+           destdir="${classes.dir}"
+           source="${source}"
+           target="${target}"
+           includeantruntime="false" >
+      <src path="${dir.test}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <compilerarg value="-Xlint:all"/>
+    </javac>
+  </target>
+  <target description="Build all projects which reference this project. Useful to propagate changes."
+    name="build-refprojects"/>
+  <target description="copy Eclipse compiler jars to ant lib directory"
+    name="init-eclipse-compiler"
+    >
+    <copy todir="${ant.library.dir}">
+      <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+    </copy>
+    <unzip dest="${ant.library.dir}">
+      <patternset includes="jdtCompilerAdapter.jar"/>
+      <fileset dir="${ECLIPSE_HOME}/plugins" includes="org.eclipse.jdt.core_*.jar"/>
+    </unzip>
+  </target>
+  <target description="compile project with Eclipse compiler"
+    name="build-eclipse-compiler">
+    <property name="build.compiler"
+        value="org.eclipse.jdt.core.JDTCompilerAdapter"/>
+    <antcall target="build"/>
+  </target>
+  <!-- Run all example. -->
+  <target name="example">
+    <java classname="com.tune.reporting.example.ExampleTuneServiceClient"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportActuals"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogClicks"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportCohortValues"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogEventItems"
+          failonerror="true" fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogEvents"
+          failonerror="true"
+          fork="yes">
+        <classpath refid="Tune_Reporting.classpath"/>
+        <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogInstalls"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogPostbacks"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportCohortRetention"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <!-- Run specific example. -->
+  <target name="ExampleTuneServiceClient">
+    <java classname="com.tune.reporting.example.ExampleTuneServiceClient"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleItemsAccountUsers">
+    <java classname="com.tune.reporting.example.ExampleItemsAccountUsers"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportActuals">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportActuals"
+          failonerror="true"
+          fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportLogClicks">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogClicks"
+          failonerror="true" fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportCohortValues">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportCohortValues"
+          failonerror="true" fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportLogEventItems">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogEventItems"
+          failonerror="true" fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportLogEvents">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogEvents"
+          failonerror="true" fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportLogInstalls">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogInstalls"
+          failonerror="true"
+          fork="yes"
+          >
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportLogPostbacks">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportLogPostbacks"
+          failonerror="true" fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <target name="ExampleAdvertiserReportCohortRetention">
+    <java classname="com.tune.reporting.example.ExampleAdvertiserReportCohortRetention"
+          failonerror="true" fork="yes">
+      <classpath refid="Tune_Reporting.classpath"/>
+      <arg value="${API_KEY}"/>
+    </java>
+  </target>
+  <!-- Run all unittest. -->
+  <target name="test">
+    <delete dir="${junit.output.dir}"/>
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestTuneServiceClient" todir="${junit.output.dir}"/>
+    </junit>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportActuals" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogEventItems" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogEvents" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogInstalls" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogPostbacks" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportCohortValues" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportCohortRetention" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <!-- Run specific unittest. -->
+  <target name="TestTuneServiceClient">
+    <delete dir="${junit.output.dir}"/>
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestTuneServiceClient" todir="${junit.output.dir}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportActuals">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportActuals" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportLogClicks">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogClicks" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportCohortValues">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportCohortValues" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportLogEventItems">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogEventItems" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportLogEvents">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogEvents" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportLogInstalls">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogInstalls" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportLogPostbacks">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true"
+           printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}"
+           forkmode="once"
+           haltonfailure="no"
+           timeout="1800000"
+           >
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportLogPostbacks" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+  <target name="TestAdvertiserReportCohortRetention">
+    <mkdir dir="${junit.output.dir}"/>
+    <junit showoutput="true" printsummary="on"
+           enabletestlistenerevents="true"
+           fork="@{fork}" forkmode="once" haltonfailure="no" timeout="1800000">
+      <formatter type="xml"/>
+      <test name="com.tune.reporting.TestAdvertiserReportCohortRetention" todir="${junit.output.dir}"/>
+      <classpath refid="Tune_Reporting.classpath"/>
+      <sysproperty key="API_KEY" value="${API_KEY}"/>
+    </junit>
+  </target>
+
+  <target name="junitreport">
+    <junitreport todir="${junit.output.dir}">
+      <fileset dir="${junit.output.dir}">
+        <include name="TEST-*.xml"/>
+      </fileset>
+      <report format="frames" todir="${junit.output.dir}"/>
+    </junitreport>
+  </target>
+  <!-- Generate javadocs for current project into ${dir.javadoc} -->
+  <target name="docs-javadoc" depends="init" description="Generate javadoc" >
+    <mkdir dir="${dir.javadoc}"/>
+    <javadoc use='true' author='true'  version='true'
                          overview="README.html"
                          sourcepath="${dir.main}"
                          destdir="${dir.javadoc}"
@@ -467,65 +584,65 @@ Version: 0.9.8
                         <fileset dir="${dir.lib}">
                             <include name="json-20131018.jar"/>
                         </fileset>
-			<path location="${classes.dir}" />
+                        <path location="${classes.dir}" />
                     </classpath>
                     <link href='http://java.sun.com/javase/6/docs/api/'/>
                 </javadoc>
-	</target>
-	<taskdef name="lint4j"
-		classname="com.jutils.lint4j.ant.Lint4jAntTask">
-		<classpath><pathelement location="lib/lint4j/lint4j.jar"/></classpath>
-	</taskdef>
-	<target name="lint4j" description="Perform checks on Sources">
-		<echo message="ant.project.name=${ant.project.name}"/>
-		<echo message="dir.main=${dir.main}"/>
-		<mkdir dir="build/lint"/>
-		<lint4j packages="com.tune.reporting" level="${lint4j.level}" exact="${lint4j.exact}">
-			<sourcepath>
-				<dirset dir="${dir.main}">
-					<include name="**/src/main/java" />
-					<include name="**/src/test/java" />
-				</dirset>
-				<pathelement path="src/main/java/" />
-			</sourcepath>
-			<classpath>
-				<fileset dir="${dist.dir}">
-					<include name="**/*.jar" />
-				</fileset>
-				<fileset dir="lib">
-					<include name="**/*.jar" />
-				</fileset>
-			</classpath>
-			<formatters>
-				<formatter type="text" />
-				<formatter type="text" toFile="build/lint/tune_reporting.out"/>
-				<formatter type="xml" toFile="build/lint/tune_reporting.xml"/>
-			</formatters>
-		</lint4j>
-	</target>
-	
-	<taskdef resource="checkstyletask.properties"
-		 classpath="lib/checkstyle/checkstyle-6.1.1-all.jar">
-	</taskdef>
-	<target name="checkstyle"
-		description="Generates a report of code convention violations.">
-		<mkdir dir="build/checkstyle"/>
-	
-		<checkstyle config="checkstyle/google_checks.xml"
-			    failureProperty="checkstyle.failure"
-			    failOnViolation="false">
-			<formatter type="xml" tofile="build/checkstyle/checkstyle_report.xml"/>
-			<classpath>
-				<path location="${classes.dir}" />
-			</classpath>
-			<fileset dir="src/main/java" includes="**/*.java"/>
-			<fileset dir="src/test/java" includes="**/*.java"/>
-		</checkstyle>
-	
-	  <xslt in="build/checkstyle/checkstyle_report.xml"
-		 out="build/checkstyle/checkstyle_report.html"
-		 style="checkstyle/checkstyle-frames.xsl"/>
-	
-	</target>
+  </target>
+  <taskdef name="lint4j"
+    classname="com.jutils.lint4j.ant.Lint4jAntTask">
+    <classpath><pathelement location="lib/lint4j/lint4j.jar"/></classpath>
+  </taskdef>
+  <target name="lint4j" description="Perform checks on Sources">
+    <echo message="ant.project.name=${ant.project.name}"/>
+    <echo message="dir.main=${dir.main}"/>
+    <mkdir dir="build/lint"/>
+    <lint4j packages="com.tune.reporting" level="${lint4j.level}" exact="${lint4j.exact}">
+      <sourcepath>
+        <dirset dir="${dir.main}">
+          <include name="**/src/main/java" />
+          <include name="**/src/test/java" />
+        </dirset>
+        <pathelement path="src/main/java/" />
+      </sourcepath>
+      <classpath>
+        <fileset dir="${dist.dir}">
+          <include name="**/*.jar" />
+        </fileset>
+        <fileset dir="lib">
+          <include name="**/*.jar" />
+        </fileset>
+      </classpath>
+      <formatters>
+        <formatter type="text" />
+        <formatter type="text" toFile="build/lint/tune_reporting.out"/>
+        <formatter type="xml" toFile="build/lint/tune_reporting.xml"/>
+      </formatters>
+    </lint4j>
+  </target>
+
+  <taskdef resource="checkstyletask.properties"
+     classpath="lib/checkstyle/checkstyle-6.1.1-all.jar">
+  </taskdef>
+  <target name="checkstyle"
+    description="Generates a report of code convention violations.">
+    <mkdir dir="build/checkstyle"/>
+
+    <checkstyle config="checkstyle/google_checks.xml"
+          failureProperty="checkstyle.failure"
+          failOnViolation="false">
+      <formatter type="xml" tofile="build/checkstyle/checkstyle_report.xml"/>
+      <classpath>
+        <path location="${classes.dir}" />
+      </classpath>
+      <fileset dir="src/main/java" includes="**/*.java"/>
+      <fileset dir="src/test/java" includes="**/*.java"/>
+    </checkstyle>
+
+    <xslt in="build/checkstyle/checkstyle_report.xml"
+     out="build/checkstyle/checkstyle_report.html"
+     style="checkstyle/checkstyle-frames.xsl"/>
+
+  </target>
 
 </project>

@@ -40,20 +40,20 @@ package com.tune.reporting.api;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 22:52:04 $
+ * @version   $Date: 2015-03-05 23:27:46 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
 import com.tune.reporting.base.endpoints.EndpointBase;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceResponse;
 import com.tune.reporting.helpers.TuneSdkException;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * TUNE Management API endpoint '/export/'.
+ * TUNE Service API endpoint '/export/'.
  *
  */
 public class SessionAuthenticate extends EndpointBase {
@@ -62,10 +62,10 @@ public class SessionAuthenticate extends EndpointBase {
    * Constructor.
    *
    */
-  public SessionAuthenticate() throws TuneSdkException {
+  public SessionAuthenticate(
+  ) throws TuneSdkException {
     super(
-      "session/authenticate",
-      true
+      "session/authenticate"
     );
   }
 
@@ -74,11 +74,11 @@ public class SessionAuthenticate extends EndpointBase {
    *
    * @param apiKeys Generate 'session token' for this api_keys.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    * @throws TuneSdkException If fails to post request.
    */
-  public final TuneManagementResponse apiKey(
-      final String apiKeys
+  public final TuneServiceResponse apiKey(
+    final String apiKeys
   ) throws TuneSdkException {
     if ((null == apiKeys) || apiKeys.isEmpty()) {
       throw new IllegalArgumentException("Parameter 'apiKeys' is not defined.");

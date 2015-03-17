@@ -1,8 +1,8 @@
 <h2>tune-reporting-java</h2>
 <h2>TUNE Reporting SDK for Java 1.6</h2>
 <h3>Incorporate TUNE Reporting services.</h3>
-<h4>Update:  $Date: 2015-01-05 22:52:04 $</h4>
-<h4>Version: 0.9.8</h4>
+<h4>Update:  $Date: 2015-03-06 12:26:07 $</h4>
+<h4>Version: 0.9.9</h4>
 ===
 
 <a id="TOP"></a>
@@ -60,7 +60,7 @@
 
     <li><a href="#sdk_classes">SDK Classes</a>
         <ul>
-            <li><a href="#sdk_classes_service">TUNE Management Service Classes</a></li>
+            <li><a href="#sdk_classes_service">TUNE Service Service Classes</a></li>
             <li><a href="#sdk_report_readers">Helper Classes</a></li>
             <li><a href="#sdk_classes_exceptions">Exception Classes</a></li>
         </ul>
@@ -110,7 +110,7 @@
 <a id="sdk_overview" name="sdk_overview"></a>
 ### Overview
 
-The **TUNE Reporting SDKs** addressed in this posting are for creating hosted applications which require handling requests to **TUNE Management API services** with utility focus is upon Advertiser Reporting endpoints.
+The **TUNE Reporting SDKs** addressed in this posting are for creating hosted applications which require handling requests to **TUNE Service API services** with utility focus is upon Advertiser Reporting endpoints.
 
 Even though the the breadth of the Management API goes beyond just reports, it is these reporting endpoints that our customers primarily access.
 
@@ -174,7 +174,7 @@ These are the basic requirements to use this SDK:
 <a id="sdk_install_prereq_apikey" name="sdk_install_prereq_apikey"></a>
 ##### Generate API Key
 
-To use SDK to access Advertiser Reporting endpoints of TUNE Management API, it requires a MobileAppTracking API Key: [Generate API Key](http://developers.mobileapptracking.com/generate-api-key/).
+To use SDK to access Advertiser Reporting endpoints of TUNE Service API, it requires a MobileAppTracking API Key: [Generate API Key](http://developers.mobileapptracking.com/generate-api-key/).
 
 <a id="sdk_install_choices" name="sdk_install_choices"></a>
 #### Installation Choices
@@ -194,7 +194,7 @@ Use the following dependency in your project:
     <dependency>
        <groupId>com.tune.reporting</groupId>
        <artifactId>tune-reporting</artifactId>
-       <version>0.9.8</version>
+       <version>0.9.9</version>
        <scope>compile</scope>
     </dependency>
 ```
@@ -221,20 +221,18 @@ You may need to run the above commands with `sudo`.
 
 In the root folder, the TUNE Reporting SDK configuration is set within file ```./config/tune_reporting_sdk_config.properties```.
 
-With generated API_KEY from TUNE MobileAppTracking Platform account, replace `API_KEY`.
+With generated API Key from TUNE MobileAppTracking Platform account, replace `UNDEFINED`.
 
 ```
 [TUNE_REPORTING]
 # TUNE MobileAppTracking Platform generated API Key. Replace UNDEFINED.
-tune_reporting_auth_key_string=UNDEFINED
-# TUNE Reporting Authentication Type: api_key OR session_token.
-tune_reporting_auth_type_string=api_key
-# Validate use TUNE Management API fields used within action parameters.
+tune_reporting_api_key_string=UNDEFINED
+# Validate use TUNE Service API fields used within action parameters.
 tune_reporting_validate_fields_boolean=false
 # TUNE reporting export status sleep (seconds).
 tune_reporting_export_status_sleep_seconds=10
 # TUNE reporting export fetch timeout (seconds).
-tune_reporting_export_status_timeout_seconds=240
+tune_reporting_export_status_timeout_seconds=600
 # Verbose output for debugging purposes when fetching report download url.
 tune_reporting_export_status_verbose_boolean=false
 ```
@@ -266,7 +264,7 @@ If you wish to generate your own session_token, class ```SessionAuthentication``
 
 ```java
     SessionAuthenticate sessionAuthenticate = new SessionAuthenticate();
-    TuneManagementResponse response = sessionAuthenticate.apiKey(apiKey);
+    TuneServiceResponse response = sessionAuthenticate.apiKey(apiKey);
     String sessonToken = response.getData().toString();
 ```
 
@@ -363,7 +361,7 @@ The Cohort report analyzes user behavior back to click date time (Cohort by Clic
 
 Advertiser Reporting class that perform Cohort Reports is:
 <ul>
-    <li><code>AdvertiserReportCohortValue</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__ltv">/advertiser/stats/ltv</a></li>
+    <li><code>AdvertiserReportCohortValues</code>: <a href="http://developers.mobileapptracking.com/management-api/explorer/root/endpoint/#/advertiser__stats__ltv">/advertiser/stats/ltv</a></li>
 </ul>
 </dd>
 <dt>Retention Report</dt>
@@ -439,7 +437,7 @@ File **TuneReporting.java** is the root of this Library.
 
 Library folder **src** contains the key functionality related to **Advertiser Reporting classes** are defined within folder **com.tune.reporting.api**.
 
-Client classes that connect with the **TUNE Management API Service** are defined within folder **com.tune.reporting.base.service**.
+Client classes that connect with the **TUNE Service API Service** are defined within folder **com.tune.reporting.base.service**.
 
 Helper class for both the Library and Examples are defined within folder **com.tune.reporting.helpers**.
 ```
@@ -450,7 +448,7 @@ src/main/java/
             ├── api
             │   ├── AdvertiserReportActuals.java
             │   ├── AdvertiserReportCohortRetention.java
-            │   ├── AdvertiserReportCohortValue.java
+            │   ├── AdvertiserReportCohortValues.java
             │   ├── AdvertiserReportLogClicks.java
             │   ├── AdvertiserReportLogEventItems.java
             │   ├── AdvertiserReportLogEvents.java
@@ -468,20 +466,20 @@ src/main/java/
             │   │   └── ReportExportWorker.java
             │   └── service
             │       ├── QueryStringBuilder.java
-            │       ├── TuneManagementClient.java
-            │       ├── TuneManagementProxy.java
-            │       ├── TuneManagementRequest.java
-            │       └── TuneManagementResponse.java
+            │       ├── TuneServiceClient.java
+            │       ├── TuneServiceProxy.java
+            │       ├── TuneServiceRequest.java
+            │       └── TuneServiceResponse.java
             ├── examples
             │   ├── ExampleAdvertiserReportActuals.java
             │   ├── ExampleAdvertiserReportCohortRetention.java
-            │   ├── ExampleAdvertiserReportCohortValue.java
+            │   ├── ExampleAdvertiserReportCohortValues.java
             │   ├── ExampleAdvertiserReportLogClicks.java
             │   ├── ExampleAdvertiserReportLogEventItems.java
             │   ├── ExampleAdvertiserReportLogEvents.java
             │   ├── ExampleAdvertiserReportLogInstalls.java
             │   ├── ExampleAdvertiserReportLogPostbacks.java
-            │   └── ExampleTuneManagementClient.java
+            │   └── ExampleTuneServiceClient.java
             └── helpers
                 ├── ReportReaderBase.java
                 ├── ReportReaderCsv.java
@@ -509,13 +507,13 @@ src/test/java/
             └── examples
                 ├── ExampleAdvertiserReportActuals.java
                 ├── ExampleAdvertiserReportLogClicks.java
-                ├── ExampleAdvertiserReportCohortValue.java
+                ├── ExampleAdvertiserReportCohortValues.java
                 ├── ExampleAdvertiserReportLogEventItems.java
                 ├── ExampleAdvertiserReportLogEvents.java
                 ├── ExampleAdvertiserReportLogInstalls.java
                 ├── ExampleAdvertiserReportLogPostbacks.java
                 ├── ExampleAdvertiserReportCohortRetention.java
-                └── ExampleTuneManagementClient.java
+                └── ExampleTuneServiceClient.java
 ```
 
 <a id="sdk_sources_tests" name="sdk_sources_tests"></a>
@@ -536,13 +534,13 @@ src/test/java/
         └── reporting
             ├── TestAdvertiserReportActuals.java
             ├── TestAdvertiserReportLogClicks.java
-            ├── TestAdvertiserReportCohortValue.java
+            ├── TestAdvertiserReportCohortValues.java
             ├── TestAdvertiserReportLogEventItems.java
             ├── TestAdvertiserReportLogEvents.java
             ├── TestAdvertiserReportLogInstalls.java
             ├── TestAdvertiserReportLogPostbacks.java
             ├── TestAdvertiserReportCohortRetention.java
-            └── TestTuneManagementClient.java
+            └── TestTuneServiceClient.java
 ```
 
 <p>
@@ -555,13 +553,13 @@ src/test/java/
 <a id="sdk_classes" name="sdk_classes"></a>
 ### SDK Classes
 
-<!-- TUNE Management API Service -->
+<!-- TUNE Service API Service -->
 <a id="sdk_classes_service" name="sdk_classes_service"></a>
-#### TUNE Management API Service Classes
+#### TUNE Service API Service Classes
 
 <ul>
-    <li><code>TuneManagementClient</code> - Connects with <a href="http://developers.mobileapptracking.com/management-api/" target="_blank">TUNE Management API Service</a></li>
-    <li><code>TuneManagementRequest</code> - Defines request to TUNE Management API Service containing:
+    <li><code>TuneServiceClient</code> - Connects with <a href="http://developers.mobileapptracking.com/management-api/" target="_blank">TUNE Service API Service</a></li>
+    <li><code>TuneServiceRequest</code> - Defines request to TUNE Service API Service containing:
         <ul>
             <li>Controller / Endpoint</li>
             <li>Action</li>
@@ -572,7 +570,7 @@ src/test/java/
             </li>
         </ul>
     </li>
-    <li><code>TuneManagementResponse</code> - Complete response from TUNE Management API Service containing:
+    <li><code>TuneServiceResponse</code> - Complete response from TUNE Service API Service containing:
         <ul>
             <li>Status Code</li>
             <li>Data</li>
@@ -582,7 +580,7 @@ src/test/java/
 </ul>
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_service_classes.png">
-<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_service_classes.png" alt="TUNE Management Service Classes" width="217" height="163" /></a>
+<img src="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_service_classes.png" alt="TUNE Service Service Classes" width="217" height="163" /></a>
 
 <!-- Example Helpers -->
 <a id="sdk_report_readers" name="sdk_report_readers"></a>
@@ -602,7 +600,7 @@ src/test/java/
 
 <ul>
     <li><code>TuneSdkException</code> - Exception thrown if error occurs within TUNE Reporting SDK.</li>
-    <li><code>TuneServiceException</code> - Exception thrown if error condition is returned from TUNE Management Service.</li>
+    <li><code>TuneServiceException</code> - Exception thrown if error condition is returned from TUNE Service Service.</li>
 </ul>
 
 <a href="https://raw.githubusercontent.com/MobileAppTracking/tune-reporting-java/master/docs/images/tune_reporting_exceptions.png">
@@ -632,7 +630,7 @@ Finds all existing records matching provided filter criteria and returns total c
     AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
 
-    TuneManagementResponse response = advertiserReport.count(
+    TuneServiceResponse response = advertiserReport.count(
         startDate,
         endDate,
         null,     // filter
@@ -678,7 +676,7 @@ Gathers all existing records that match filter criteria and returns an array of 
     String strFieldsRecommended
         = advertiserReport.getFields(EndpointBase.TUNE_FIELDS_RECOMMENDED);
 
-    TuneManagementResponse response = advertiserReport.find(
+    TuneServiceResponse response = advertiserReport.find(
         startDate,
         endDate,
         strFieldsRecommended,  // fields
@@ -697,7 +695,7 @@ Gathers all existing records that match filter criteria and returns an array of 
       );
     }
 
-    System.out.println(" TuneManagementResponse:");
+    System.out.println(" TuneServiceResponse:");
     System.out.println(response.toString());
 ```
 
@@ -713,7 +711,7 @@ Provides the same signature as function find(), accept parameters <code>limit</c
 ```java
     AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
-    TuneManagementResponse response = advertiserReport.export(
+    TuneServiceResponse response = advertiserReport.export(
         startDate,
         endDate,
         strFieldsRecommended,     // fields
@@ -730,7 +728,7 @@ Provides the same signature as function find(), accept parameters <code>limit</c
      );
     }
 
-    System.out.println(" TuneManagementResponse:");
+    System.out.println(" TuneServiceResponse:");
     System.out.println(response.toString());
 
     String csvJobId = AdvertiserReportLogClicks.parseResponseReportJobId(response);
@@ -754,7 +752,7 @@ A helper function that creates a threaded worker that handles the status request
 ```java
     AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
-    TuneManagementResponse response = advertiserReport.fetch(
+    TuneServiceResponse response = advertiserReport.fetch(
         csvJobId,     // Job ID
         true,         // verbose
         10            // sleep in seconds
@@ -768,7 +766,7 @@ A helper function that creates a threaded worker that handles the status request
       );
     }
 
-    System.out.println(" TuneManagementResponse:");
+    System.out.println(" TuneServiceResponse:");
     System.out.println(response.toString());
 
     String csvReportUrl = AdvertiserReportLogClicks.parseResponseReportUrl(response);
@@ -812,8 +810,8 @@ Method <strong>define()</strong> returns the complete meta-data of an endpoint. 
 ```java
     AdvertiserReportLogClicks advertiserReport
         = new AdvertiserReportLogClicks(apiKey, true);
-    TuneManagementResponse response = advertiserReport.define()
-    System.out.println(" TuneManagementResponse:");
+    TuneServiceResponse response = advertiserReport.define()
+    System.out.println(" TuneServiceResponse:");
     System.out.println(response.toString());
 ```
 

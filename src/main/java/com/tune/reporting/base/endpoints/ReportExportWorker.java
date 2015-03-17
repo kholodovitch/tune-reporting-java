@@ -40,13 +40,13 @@ package com.tune.reporting.base.endpoints;
  * @author    Jeff Tanner jefft@tune.com
  * @copyright 2015 TUNE, Inc. (http://www.tune.com)
  * @license   http://opensource.org/licenses/MIT The MIT License (MIT)
- * @version   $Date: 2015-01-05 22:52:04 $
+ * @version   $Date: 2015-03-05 23:27:46 $
  * @link      https://developers.mobileapptracking.com @endlink
  * </p>
  */
 
-import com.tune.reporting.base.service.TuneManagementClient;
-import com.tune.reporting.base.service.TuneManagementResponse;
+import com.tune.reporting.base.service.TuneServiceClient;
+import com.tune.reporting.base.service.TuneServiceResponse;
 import com.tune.reporting.helpers.TuneSdkException;
 import com.tune.reporting.helpers.TuneServiceException;
 
@@ -117,9 +117,9 @@ public class ReportExportWorker {
 
   /**
    * Response pertaining to last export status request.
-   * @var object @see TuneManagementResponse
+   * @var object @see TuneServiceResponse
    */
-  private TuneManagementResponse response = null;
+  private TuneServiceResponse response = null;
 
   /**
    * Constructor.
@@ -191,21 +191,19 @@ public class ReportExportWorker {
     throws  TuneSdkException,
             TuneServiceException {
     String status = null;
-    TuneManagementResponse response = null;
+    TuneServiceResponse response = null;
     int attempt = 0;
     int timeout = 0;
 
     Map<String, String> mapQueryString = new HashMap<String, String>();
     mapQueryString.put("job_id", jobId);
 
-    TuneManagementClient client = null;
+    TuneServiceClient client = null;
     try {
-      client = new TuneManagementClient(
-          this.exportController,
-          this.exportAction,
-          this.authKey,
-          this.authType,
-          mapQueryString
+      client = new TuneServiceClient(
+        this.exportController,
+        this.exportAction,
+        mapQueryString
      );
     } catch (IllegalArgumentException e1) {
       // TODO Auto-generated catch block
@@ -219,16 +217,23 @@ public class ReportExportWorker {
       if (this.timeout > 0) {
         if (timeout >= this.timeout) {
           throw new TuneSdkException(
-              String.format(
-                "Fetch request has timed out."
-              )
+            String.format(
+              "Fetch request for Job ID '%s' has expired after '%d' seconds. Service request URL: %s",
+              jobId,
+              timeout,
+              client.getServiceUrl()
+            )
           );
         }
 
         timeout += sleep;
       }
+
       try {
-        client.call();
+        client.call(
+          this.authKey,
+          this.authType
+        );
       } catch (Exception e1) {
         // TODO Auto-generated catch block
         e1.printStackTrace();
@@ -286,11 +291,12 @@ public class ReportExportWorker {
       attempt += 1;
       if (this.verbose) {
         System.out.println(
-            String.format(
-              "= attempt: %d, response: %s",
-              attempt,
-              response.toString()
-            )
+          String.format(
+            "= attempt: %d\n= timeout: %d\n= response: %s",
+            attempt,
+            timeout,
+            response.toString()
+          )
         );
       }
 
@@ -311,11 +317,12 @@ public class ReportExportWorker {
 
     if (this.verbose) {
       System.out.println(
-          String.format(
-            "= attempt: %d, response: %s",
-            attempt,
-            response.toString()
-          )
+        String.format(
+          "= attempt: %d\n= timeout: %d\n= response: %s",
+          attempt,
+          timeout,
+          response.toString()
+        )
       );
     }
 
@@ -328,9 +335,9 @@ public class ReportExportWorker {
    * Property that will hold completed report downloaded
    * from Management API service.
    *
-   * @return TuneManagementResponse
+   * @return TuneServiceResponse
    */
-  public final TuneManagementResponse getResponse() {
+  public final TuneServiceResponse getResponse() {
     return this.response;
   }
 }
